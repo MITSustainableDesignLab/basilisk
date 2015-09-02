@@ -1,0 +1,11 @@
+﻿<DataGrid x:Class="Basilisk.Controls.SettingsGrid"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          ItemsSource="{Binding Settings}"
+          AutoGenerateColumns="False"
+          CanUserReorderColumns="False">
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="Setting" Binding="{Binding DisplayName}" IsReadOnly="True" />
+        <DataGridTextColumn Header="Value" Binding="{Binding Value}" />
+    </DataGrid.Columns>
+</DataGrid>
