@@ -30,13 +30,13 @@ namespace Basilisk.Controls
             {
                 if (type == typeof(double) || type == typeof(double?))
                 {
-                    double parsed;
-                    return Double.TryParse((string)value, out parsed) ? parsed : Activator.CreateInstance(type);
+                    var entry = (string)value;
+                    return String.IsNullOrEmpty(entry) ? default(double?) : Double.Parse(entry);
                 }
                 else if (type == typeof(int) || type == typeof(int?))
                 {
-                    int parsed;
-                    return Int32.TryParse((string)value, out parsed) ? parsed : Activator.CreateInstance(type);
+                    var entry = (string)value;
+                    return String.IsNullOrEmpty(entry) ? default(int?) : Int32.Parse(entry);
                 }
                 else if (type.IsEnum) { return Enum.Parse(type, (string)value); }
                 else

@@ -55,17 +55,27 @@ namespace Basilisk.Controls
                 }
             }
             SettingType = type;
-            if (SettingType == SettingType.Enum) { Choices = Enum.GetNames(enumType); }
+            if (SettingType == SettingType.Enum)
+            {
+                Choices = Enum.GetNames(enumType);
+                Value = Choices[0];
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public string[] Choices { get; private set; }
         public string DisplayName { get; private set; }
+        public bool ExposeAsComboBox { get { return Choices != null; } }
+        public bool ExposeAsTextBox { get { return Choices == null; } }
         public string PropertyName { get { return prop.Name; } }
 
         public object Value
         {
-            get { return prop.GetValue(obj); }
+            get
+            {
+                return prop.GetValue(obj);
+            }
             set
             {
                 prop.SetValue(obj, value, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);
@@ -73,40 +83,13 @@ namespace Basilisk.Controls
             }
         }
 
-        internal string[] Choices { get; private set; }
+        public string ValueText
+        {
+            get { return Value == null ? null : Value.ToString(); }
+            set { Value = value; }
+        }
+
         internal SettingType SettingType { get; private set; }
-
-        internal Visibility EnumVisibility
-        {
-            get
-            {
-                return SettingType == SettingType.Enum ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        internal Visibility IntegerVisibility
-        {
-            get
-            {
-                return SettingType == SettingType.Integer ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        internal Visibility RealVisibility
-        {
-            get
-            {
-                return SettingType == SettingType.Real ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        internal Visibility StringVisibility
-        {
-            get
-            {
-                return SettingType == SettingType.String ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
 
         public void Update()
         {

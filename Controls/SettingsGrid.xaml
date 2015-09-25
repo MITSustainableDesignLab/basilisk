@@ -4,8 +4,38 @@
           ItemsSource="{Binding Settings}"
           AutoGenerateColumns="False"
           CanUserReorderColumns="False">
+    <DataGrid.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <DataTemplate x:Key="SettingValueCellTemplate">
+            <Grid>
+                <TextBlock Text="{Binding Path=Value, ValidatesOnDataErrors=True}"
+                           Margin="2,0,2,0"
+                           Padding="1,2,1,2"
+                           HorizontalAlignment="Right"
+                           Visibility="{Binding Path=ExposeAsTextBox, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <ComboBox ItemsSource="{Binding Path=Choices, Mode=OneTime}"
+                          SelectedItem="{Binding Path=ValueText}"
+                          Visibility="{Binding Path=ExposeAsComboBox, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="SettingValueCellEditingTemplate">
+            <TextBox Text="{Binding Path=Value, ValidatesOnDataErrors=True}"
+                     BorderThickness="0"
+                     Padding="1,2,1,2"
+                     HorizontalContentAlignment="Right"
+                     Visibility="{Binding Path=ExposeAsTextBox, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        </DataTemplate>
+    </DataGrid.Resources>
     <DataGrid.Columns>
-        <DataGridTextColumn Header="Setting" Binding="{Binding DisplayName}" IsReadOnly="True" />
-        <DataGridTextColumn Header="Value" Binding="{Binding Value}" />
+        <DataGridTextColumn Header="Setting" Binding="{Binding DisplayName}" IsReadOnly="True">
+            <DataGridTextColumn.ElementStyle>
+                <Style TargetType="TextBlock">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="4,2,4,2" />
+                </Style>
+            </DataGridTextColumn.ElementStyle>
+        </DataGridTextColumn>
+        <DataGridTemplateColumn CellTemplate="{StaticResource SettingValueCellTemplate}"
+                                CellEditingTemplate="{StaticResource SettingValueCellEditingTemplate}" />
     </DataGrid.Columns>
 </DataGrid>

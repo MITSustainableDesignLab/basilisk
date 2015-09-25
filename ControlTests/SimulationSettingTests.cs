@@ -11,6 +11,24 @@ namespace Basilisk.ControlTests
     public class SimulationSettingTests
     {
         [TestMethod]
+        public void DefaultValue_UnspecifiedEnum_UsesFirstChoice()
+        {
+            var vm = new TestVM();
+            var wrapped = new SettingsGridViewModel<TestVM>(vm);
+            var setting = wrapped.Settings.Single(s => s.PropertyName == "EnumSetting");
+            Assert.AreEqual(Enum.GetNames(typeof(TestVM.TestEnum))[0], setting.Value.ToString());
+        }
+
+        [TestMethod]
+        public void DisplayMode_ImplicitEnum_AsComboBox()
+        {
+            var vm = new TestVM();
+            var wrapped = new SettingsGridViewModel<TestVM>(vm);
+            var setting = wrapped.Settings.Single(s => s.PropertyName == "EnumSetting");
+            Assert.IsTrue(setting.ExposeAsComboBox);
+        }
+
+        [TestMethod]
         public void DisplayName_NoneSpecified_PropertyNameUsed()
         {
             var vm = new TestVM();

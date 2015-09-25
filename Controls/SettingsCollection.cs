@@ -14,6 +14,11 @@ namespace Basilisk.Controls
 
         public bool TryGetValue(string propertyName, out SimulationSetting value)
         {
+            if (this.Dictionary == null)
+            {
+                value = null;
+                return false;
+            }
             return this.Dictionary.TryGetValue(propertyName, out value);
         }
 

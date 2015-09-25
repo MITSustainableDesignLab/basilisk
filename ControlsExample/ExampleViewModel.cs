@@ -11,8 +11,11 @@ namespace Basilisk.ControlsExample
 {
     public class ExampleViewModel : INotifyPropertyChanged
     {
+        private ExampleEnum enumValue;
+        private int integer;
         private double real1;
         private double real2;
+        private string text;
 
         public ExampleViewModel()
         {
@@ -20,6 +23,28 @@ namespace Basilisk.ControlsExample
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        [SimulationSetting]
+        public ExampleEnum EnumProperty
+        {
+            get { return enumValue; }
+            set
+            {
+                enumValue = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("EnumProperty"));
+            }
+        }
+
+        [SimulationSetting]
+        public int IntegerProperty
+        {
+            get { return integer; }
+            set
+            {
+                integer = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("IntegerProperty"));
+            }
+        }
 
         [SimulationSetting(DisplayName = "Real Property 1")]
         public double RealProperty1
@@ -41,6 +66,23 @@ namespace Basilisk.ControlsExample
                 real2 = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("RealProperty2"));
             }
+        }
+
+        [SimulationSetting]
+        public string TextProperty
+        {
+            get { return text; }
+            set
+            {
+                text = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("TextProperty"));
+            }
+        }
+
+        public enum ExampleEnum
+        {
+            EnumValue1,
+            EnumValue2
         }
     }
 }
