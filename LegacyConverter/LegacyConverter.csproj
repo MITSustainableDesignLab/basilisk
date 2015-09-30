@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{42344A7E-CB0E-4205-8E55-337E19740E55}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{F30D59A7-7E1D-4FAA-B29E-D0286E114160}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Basilisk.Core</RootNamespace>
-    <AssemblyName>Core</AssemblyName>
+    <RootNamespace>Basilisk.LegacyConverter</RootNamespace>
+    <AssemblyName>Basilisk.LegacyConverter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -44,32 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildingTemplate.cs" />
-    <Compile Include="ConstructionBase.cs" />
-    <Compile Include="DaySchedule.cs" />
-    <Compile Include="GasMaterial.cs" />
-    <Compile Include="GlazingMaterial.cs" />
-    <Compile Include="Legacy\BaseMaterial.cs" />
-    <Compile Include="Legacy\GasMaterial.cs" />
-    <Compile Include="Legacy\GlazingMaterial.cs" />
-    <Compile Include="Legacy\Library.cs" />
-    <Compile Include="Legacy\OpaqueMaterial.cs" />
-    <Compile Include="MaterialBase.cs" />
-    <Compile Include="LibraryComponent.cs" />
-    <Compile Include="OpaqueConstruction.cs" />
-    <Compile Include="MaterialLayer.cs" />
-    <Compile Include="OpaqueMaterial.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Library.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="WeekSchedule.cs" />
-    <Compile Include="WindowConstruction.cs" />
-    <Compile Include="WindowMaterialBase.cs" />
-    <Compile Include="YearSchedule.cs" />
-    <Compile Include="YearSchedulePart.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{42344a7e-cb0e-4205-8e55-337e19740e55}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

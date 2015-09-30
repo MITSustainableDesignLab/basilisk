@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTests", "ControlTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlsExample", "ControlsExample\ControlsExample.csproj", "{2BB32DFD-E046-4B81-8C5F-29FBCEFAE6D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegacyConverter", "LegacyConverter\LegacyConverter.csproj", "{F30D59A7-7E1D-4FAA-B29E-D0286E114160}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2BB32DFD-E046-4B81-8C5F-29FBCEFAE6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BB32DFD-E046-4B81-8C5F-29FBCEFAE6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BB32DFD-E046-4B81-8C5F-29FBCEFAE6D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F30D59A7-7E1D-4FAA-B29E-D0286E114160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30D59A7-7E1D-4FAA-B29E-D0286E114160}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F30D59A7-7E1D-4FAA-B29E-D0286E114160}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F30D59A7-7E1D-4FAA-B29E-D0286E114160}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

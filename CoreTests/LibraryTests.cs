@@ -14,6 +14,13 @@ namespace CoreTests
     public class LibraryTests
     {
         [TestMethod]
+        public void Creation_DefaultConstructorOnly_NonNullTemplateList()
+        {
+            var lib = new Library();
+            Assert.AreNotEqual(null, lib.Templates);
+        }
+
+        [TestMethod]
         public void JsonRoundtrip_Valid_OpaqueMaterialsMatch()
         {
             var opaqueMats = new List<OpaqueMaterial>() { Dummies.OpaqueMaterial };
