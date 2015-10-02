@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Basilisk.Core.Legacy
+namespace Basilisk.Legacy
 {
     [Serializable]
     [XmlRoot("LibSerializable", Namespace = "", IsNullable = false)]
@@ -16,6 +16,7 @@ namespace Basilisk.Core.Legacy
         {
             GasMaterials = new List<GasMaterial>();
             GlazingMaterials = new List<GlazingMaterial>();
+            OpaqueConstructions = new List<OpaqueConstruction>();
             OpaqueMaterials = new List<OpaqueMaterial>();
         }
 
@@ -24,8 +25,14 @@ namespace Basilisk.Core.Legacy
         [XmlArrayItem("GasMaterial")]
         public List<GasMaterial> GasMaterials { get; set; }
 
+        [XmlArrayItem("GlazingConstruction")]
+        public List<GlazingConstruction> GlazingConstructions { get; set; }
+
         [XmlArrayItem("GlazingMaterial")]
         public List<GlazingMaterial> GlazingMaterials { get; set; }
+
+        [XmlArrayItem("OpaqueConstruction")]
+        public List<OpaqueConstruction> OpaqueConstructions { get; set; }
 
         [XmlArrayItem("OpaqueMaterial")]
         public List<OpaqueMaterial> OpaqueMaterials { get; set; }

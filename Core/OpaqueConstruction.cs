@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Basilisk.Core
 {
     [DataContract(IsReference = true)]
-    public class OpaqueConstruction : ConstructionBase
+    public class OpaqueConstruction : LayeredConstruction<OpaqueMaterial>
     {
         public OpaqueConstruction()
         {
@@ -16,7 +16,7 @@ namespace Basilisk.Core
         }
 
         [DataMember]
-        public IList<MaterialLayer<OpaqueMaterial>> Layers { get; set; }
+        public override IList<MaterialLayer<OpaqueMaterial>> Layers { get; set; }
 
         public override string ToString()
         {

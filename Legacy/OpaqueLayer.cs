@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Basilisk.Core.Legacy
+namespace Basilisk.Legacy
 {
-    public class GasMaterial : LibraryComponent
+    public class OpaqueLayer : BaseLayer
     {
-        public string Type { get; set; }
     }
 }

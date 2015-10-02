@@ -37,16 +37,9 @@ namespace CoreTests
                 Name = "Test Construction",
                 Layers = layers
             };
-            var dcs = new DataContractSerializer(typeof(OpaqueConstruction));
-            using (var mem = new MemoryStream())
-            using (var reader = new StreamReader(mem))
-            {
-                dcs.WriteObject(mem, c);
-                mem.Position = 0;
-                var json = reader.ReadToEnd();
-                var m = Regex.Matches(json, mat.Name);
-                Assert.AreEqual(1, m.Count);
-            }
+            var json = JsonSerialization.Serialize(c);
+            var m = Regex.Matches(json, mat.Name);
+            Assert.AreEqual(1, m.Count);
         }
 
         [TestMethod]

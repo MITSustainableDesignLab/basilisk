@@ -24,5 +24,16 @@ namespace CoreTests
                 Assert.AreEqual(x.S.Thickness, x.D.Thickness);
             }
         }
+
+        [TestMethod]
+        public void JsonSerialize_Layers_Exist()
+        {
+            var c = Dummies.OpaqueConstruction;
+            var json = JsonSerialization.Serialize(c);
+            foreach (var layer in c.Layers)
+            {
+                Assert.IsTrue(json.Contains(layer.Material.Name));
+            }
+        }
     }
 }

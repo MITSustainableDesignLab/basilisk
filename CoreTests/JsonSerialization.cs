@@ -20,7 +20,7 @@ namespace CoreTests
 
         public static string Serialize<ComponentT>(ComponentT component)
         {
-            return JsonConvert.SerializeObject(component);
+            return JsonConvert.SerializeObject(component, Formatting.Indented);
         }
 
         public static ComponentT Deserialize<ComponentT>(string json)

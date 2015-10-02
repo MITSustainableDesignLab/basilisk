@@ -28,6 +28,8 @@ namespace Basilisk.Core
         public ICollection<BuildingTemplate> Templates { get; set; }
 
         #region Constructions and materials
+        public IEnumerable<WindowMaterialBase> AllWindowMaterials { get { return GlazingMaterials.Cast<WindowMaterialBase>().Concat(GasMaterials); } }
+
         [DataMember]
         public ICollection<GasMaterial> GasMaterials { get; set; }
 

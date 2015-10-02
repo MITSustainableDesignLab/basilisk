@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Basilisk.Core.Legacy
+namespace Basilisk.Legacy
 {
     public class OpaqueMaterial : BaseMaterial
     {

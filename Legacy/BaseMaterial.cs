@@ -5,9 +5,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Basilisk.Core.Legacy
+namespace Basilisk.Legacy
 {
-    public class BaseMaterial
+    public abstract class BaseMaterial
     {
         public string Comments { get; set; }
         public double Conductivity { get; set; }
