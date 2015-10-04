@@ -25,11 +25,6 @@ namespace Basilisk.Core
         [DataMember]
         public double VisibleAbsorptance { get; set; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
-
         #region Equality
         public bool Equals(OpaqueMaterial other)
         {

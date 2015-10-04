@@ -6,8 +6,8 @@
     <ProjectGuid>{D512923D-90EB-43B6-941D-42C8FFA4B5FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoreTests</RootNamespace>
-    <AssemblyName>CoreTests</AssemblyName>
+    <RootNamespace>Basilisk.Tests.Core</RootNamespace>
+    <AssemblyName>Basilisk.Tests.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -51,7 +51,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -63,6 +65,10 @@
     <Compile Include="OpaqueConstructionTests.cs" />
     <Compile Include="LibraryTests.cs" />
     <Compile Include="DayScheduleTests.cs" />
+    <Compile Include="BuildingTemplateTests.cs" />
+    <Compile Include="GasMaterialTests.cs" />
+    <Compile Include="WindowMaterialBaseTests.cs" />
+    <Compile Include="XmlSerialization.cs" />
     <Compile Include="YearScheduleTests.cs" />
     <Compile Include="WeekScheduleTests.cs" />
     <Compile Include="JsonSerialization.cs" />

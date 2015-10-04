@@ -24,5 +24,6 @@ namespace Basilisk.Legacy
         public double TransportCarbon { get; set; }
         public double TransportDist { get; set; }
         public double TransportEnergy { get; set; }
+        public string Type { get; set; }
     }
 }

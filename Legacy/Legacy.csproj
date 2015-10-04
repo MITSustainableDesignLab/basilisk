@@ -46,7 +46,11 @@
     <Compile Include="BaseConstruction.cs" />
     <Compile Include="BaseLayer.cs" />
     <Compile Include="BaseMaterial.cs" />
+    <Compile Include="BlindType.cs" />
+    <Compile Include="BuildingTemplate.cs" />
     <Compile Include="Conversion.cs" />
+    <Compile Include="CoreLookupLibrary.cs" />
+    <Compile Include="DaySchedule.cs" />
     <Compile Include="GasMaterial.cs" />
     <Compile Include="GlazingConstruction.cs" />
     <Compile Include="GlazingLayer.cs" />
@@ -56,6 +60,8 @@
     <Compile Include="OpaqueLayer.cs" />
     <Compile Include="OpaqueMaterial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeekSchedule.cs" />
+    <Compile Include="YearSchedule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

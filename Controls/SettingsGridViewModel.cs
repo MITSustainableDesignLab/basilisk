@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace Basilisk.Controls
 {
     public class SettingsGridViewModel<SourceVMT> : INotifyPropertyChanged
-        where SourceVMT : INotifyPropertyChanged
     {
         private readonly SourceVMT source;
 
@@ -17,7 +16,8 @@ namespace Basilisk.Controls
         {
             PropertyChanged += (s, e) => { };
             this.source = source;
-            source.PropertyChanged += OnSourceUpdated;
+            var sourceVM = source as INotifyPropertyChanged;
+            if (sourceVM != null) { sourceVM.PropertyChanged += OnSourceUpdated; }
             Settings = new SettingsCollection();
             RefreshSettingsList();
         }
@@ -40,8 +40,9 @@ namespace Basilisk.Controls
                         var displayName = x.Att.DisplayName == null ? x.Prop.Name : x.Att.DisplayName;
                         return new SimulationSetting(source, x.Prop, displayName);
                     });
-            Settings.Clear();
+            Settings = new SettingsCollection();
             foreach (var s in settings) { Settings.Add(s); }
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Settings)));
         }
 
         private void OnSourceUpdated(object sender, PropertyChangedEventArgs e)

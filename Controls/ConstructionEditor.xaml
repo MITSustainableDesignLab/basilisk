@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Basilisk.Controls.ConstructionEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Basilisk.Controls"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             xmlns:models="clr-namespace:Basilisk.Controls.InterfaceModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="top">
+    <!-- HOW TO USE BINDING DIAGNOSTICS:
+         Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <GroupBox Header="Material Layers">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Up" Click="MoveSelectedLayerUp" />
+                    <Button Content="Down" Click="MoveSelectedLayerDown" />
+                    <Button Content="Delete" Click="DeleteSelectedLayer" />
+                </StackPanel>
+                <DataGrid ItemsSource="{Binding ElementName=top, Path=Layers}"
+                          x:Name="layersGrid"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeRows="False"
+                          CanUserSortColumns="False"
+                          CanUserAddRows="True"
+                          CanUserDeleteRows="True"
+                          BeginningEdit="BeginEdit">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Material"
+                                        Binding="{Binding Material.Name}" />
+                        <DataGridTextColumn Header="Thickness"
+                                        Binding="{Binding Thickness}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="1"
+                  Header="Assembly Properties">
+            <local:SettingsGrid Settings="{Binding ElementName=top, Path=Settings}" />
+        </GroupBox>
+    </Grid>
+</UserControl>

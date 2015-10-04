@@ -24,5 +24,10 @@ namespace Basilisk.Core
 
         [DataMember]
         public WeekSchedule Schedule { get; set; }
+
+        public override string ToString()
+        {
+            return Schedule.Name;
+        }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Basilisk.Core;
 
-namespace CoreTests
+namespace Basilisk.Tests.Core
 {
     [TestClass]
     public class LibraryTests
@@ -17,7 +17,7 @@ namespace CoreTests
         public void Creation_DefaultConstructorOnly_NonNullTemplateList()
         {
             var lib = new Library();
-            Assert.AreNotEqual(null, lib.Templates);
+            Assert.AreNotEqual(null, lib.BuildingTemplates);
         }
 
         [TestMethod]

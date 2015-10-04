@@ -12,7 +12,13 @@ namespace Basilisk.Core
     public class GasMaterial : WindowMaterialBase, IEquatable<GasMaterial>
     {
         [DataMember]
-        [DefaultValue("AIR")]
+        public override string Category
+        {
+            get { return "Gases"; }
+            set { /* I'd throw, but then deserialization wouldn't work */ }
+        }
+
+        [DataMember, DefaultValue("AIR")]
         public string Type { get; set; }
 
         #region Equality

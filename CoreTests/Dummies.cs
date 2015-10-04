@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Basilisk.Core;
 
-namespace CoreTests
+namespace Basilisk.Tests.Core
 {
     internal static class Dummies
     {

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlindType.cs" />
     <Compile Include="BuildingTemplate.cs" />
     <Compile Include="ConstructionBase.cs" />
     <Compile Include="DaySchedule.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="WindowMaterialBase.cs" />
     <Compile Include="YearSchedule.cs" />
     <Compile Include="YearSchedulePart.cs" />
+    <Compile Include="ZoneDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

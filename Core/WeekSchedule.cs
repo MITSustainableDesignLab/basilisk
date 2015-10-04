@@ -12,6 +12,13 @@ namespace Basilisk.Core
     public class WeekSchedule : LibraryComponent
     {
         [DataMember]
+        public override string Category
+        {
+            get { return "Week"; }
+            set { /* I'd throw, but then deserialization wouldn't work */ }
+        }
+
+        [DataMember]
         public DaySchedule[] Days { get; set; }
 
         [DataMember, DefaultValue("Fraction")]

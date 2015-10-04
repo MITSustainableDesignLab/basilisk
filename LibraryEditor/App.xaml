@@ -1,7 +1,9 @@
-﻿<Application x:Class="ControlsExample.App"
+﻿<Application x:Class="Basilisk.LibraryEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Basilisk.LibraryEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+         
     </Application.Resources>
 </Application>

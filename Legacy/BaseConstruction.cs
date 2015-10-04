@@ -16,6 +16,7 @@ namespace Basilisk.Legacy
         public double DisassemblyCarbon { get; set; }
         public double DisassemblyEnergy { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
 
         public abstract List<LayerT> Layers { get; set; }
     }

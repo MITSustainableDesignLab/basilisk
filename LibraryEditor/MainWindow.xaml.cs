@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using Basilisk.Controls;
+using Basilisk.LibraryEditor.ViewModels;
 
-namespace Basilisk.ControlsExample
+namespace Basilisk.LibraryEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -25,10 +25,12 @@ namespace Basilisk.ControlsExample
         public MainWindow()
         {
             InitializeComponent();
+        }
 
-            var sourceVM = new ExampleViewModel();
-            var wrapped = new SettingsGridViewModel<ExampleViewModel>(sourceVM);
-            DataContext = wrapped;
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var window = (MainWindowViewModel)DataContext;
+            e.Cancel = !window.ConfirmWindowClosing();
         }
     }
 }

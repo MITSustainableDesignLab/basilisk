@@ -12,6 +12,9 @@ namespace Basilisk.Core
     [DataContract(IsReference = true)]
     public abstract class LibraryComponent
     {
+        [DataMember, DefaultValue("Uncategorized")]
+        public virtual string Category { get; set; }
+
         [DataMember]
         public string Comments { get; set; }
 
@@ -20,6 +23,11 @@ namespace Basilisk.Core
 
         [DataMember]
         public string Name { get; set; }
+
+        public LibraryComponent()
+        {
+            Category = "Uncategorized";
+        }
 
         [OnDeserializing]
         public void OnDeserializing(StreamingContext context)
@@ -30,6 +38,11 @@ namespace Basilisk.Core
                 if (att == null) { continue; }
                 prop.SetValue(this, att.Value);
             }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

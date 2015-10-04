@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,9 +13,18 @@ namespace Basilisk.Legacy
 {
     public static class Conversion
     {
+        private const string OpaqueMaterialsMappingKey = "MappedOpaqueMaterials";
+        private const string WindowMaterialsMappingKey = "MappedWindowMaterials";
+
+        private const string OpaqueConstructionsMappingKey = "MappedOpaqueConstructions";
+        private const string WindowConstructionsMappingKey = "MappedWindowConstructions";
+
+        private const string DaySchedulesMappingKey = "MappedDaySchedules";
+        private const string WeekSchedulesMappingKey = "MappedWeekSchedules";
+        private const string YearSchedulesMappingKey = "MappedYearSchedules";
+
         static Conversion()
         {
-
             Mapper
                 .CreateMap<Legacy.BaseMaterial, Core.MaterialBase>()
                 .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.MapFrom(src => src.ECStandardDev))
@@ -22,75 +32,256 @@ namespace Basilisk.Legacy
                 .ForMember(dest => dest.SubstitutionTimestep, opt => opt.MapFrom(src => src.SubstituionTimeStep))
                 .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.MapFrom(src => src.SubstituionRatePattern));
             Mapper
-                .CreateMap<Legacy.OpaqueMaterial, Core.OpaqueMaterial>();
+                .CreateMap<Legacy.OpaqueMaterial, Core.OpaqueMaterial>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
             Mapper
-                .CreateMap<Legacy.GlazingMaterial, Core.GlazingMaterial>();
+                .CreateMap<Legacy.GlazingMaterial, Core.GlazingMaterial>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
             Mapper
                 .CreateMap<Legacy.GasMaterial, Core.GasMaterial>();
-
+            
             Mapper
                 .CreateMap<Legacy.OpaqueConstruction, Core.OpaqueConstruction>()
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Layers, opt => opt.ResolveUsing(ResolveOpaqueMaterialLayers));
             Mapper
                 .CreateMap<Legacy.GlazingConstruction, Core.WindowConstruction>()
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Layers, opt => opt.ResolveUsing(ResolveWindowMaterialLayers));
 
             Mapper
-                .CreateMap<Library, Core.Library>()
-                .ForMember(dest => dest.OpaqueConstructions, opt => opt.Ignore());
+                .CreateMap<Legacy.DaySchedule, Core.DaySchedule>();
+            Mapper
+                .CreateMap<Legacy.WeekSchedule, Core.WeekSchedule>()
+                .ForMember(dest => dest.Days, opt => opt.ResolveUsing(ResolveWeekScheduleDays));
+            Mapper
+                .CreateMap<Legacy.YearSchedule, Core.YearSchedule>()
+                .ForMember(dest => dest.Parts, opt => opt.ResolveUsing(ResolveYearScheduleParts));
+
+            Mapper
+                .CreateMap<Legacy.BuildingTemplate, Core.ZoneDefinition>()
+                .ForMember(dest => dest.Basement, opt => opt.ResolveUsing(OpaqueConstructionResolver(template => template.BasementWl)))
+                .ForMember(dest => dest.ExteriorFloor, opt => opt.ResolveUsing(OpaqueConstructionResolver(template => template.ExteriorFl)))
+                .ForMember(dest => dest.Facade, opt => opt.ResolveUsing(OpaqueConstructionResolver(template => template.FacadeWl)))
+                .ForMember(dest => dest.Ground, opt => opt.ResolveUsing(OpaqueConstructionResolver(template => template.GroundFl)))
+                .ForMember(dest => dest.InteriorFloor, opt => opt.ResolveUsing(OpaqueConstructionResolver(template => template.InteriorFl)))
+                .ForMember(dest => dest.Roof, opt => opt.ResolveUsing(OpaqueConstructionResolver(template => template.RoofFl)))
+                .ForMember(dest => dest.Window, opt => opt.ResolveUsing(WindowConstructionResolver(template => template.Glazing)))
+                .ForMember(dest => dest.EquipmentDensity, opt => opt.MapFrom(src => src.EquipDnst))
+                .ForMember(dest => dest.LightingDensity, opt => opt.MapFrom(src => src.LightDnst))
+                .ForMember(dest => dest.OccupancyDensity, opt => opt.MapFrom(src => src.EquipDnst))
+                .ForMember(dest => dest.CoolingCoeffOfPerf, opt => opt.MapFrom(src => src.CoolingCoP))
+                .ForMember(dest => dest.CoolingSetpoint, opt => opt.MapFrom(src => src.CoolingSet))
+                .ForMember(dest => dest.HeatingCoeffOfPerf, opt => opt.MapFrom(src => src.HeatingCoP))
+                .ForMember(dest => dest.HeatingSetpoint, opt => opt.MapFrom(src => src.HeatingSet))
+                .ForMember(dest => dest.NatVentMinRelHumidity, opt => opt.MapFrom(src => src.NatVMinRH))
+                .ForMember(dest => dest.NatVentMinTempIn, opt => opt.MapFrom(src => src.NatVMinTin))
+                .ForMember(dest => dest.NatVentMinTempOut, opt => opt.MapFrom(src => src.NatVMinTout))
+                .ForMember(dest => dest.NatVentRate, opt => opt.MapFrom(src => src.NatVent))
+                .ForMember(dest => dest.WaterTempSupply, opt => opt.MapFrom(src => src.WaterTempSup))
+                .ForMember(dest => dest.BlindsOn, opt => opt.MapFrom(src => src.BlindOn))
+                .ForMember(dest => dest.BlindTrans, opt => opt.MapFrom(src => src.BlindTrns))
+                .ForMember(dest => dest.BlindType, opt => opt.MapFrom(src => src.BlindT))
+                .ForMember(dest => dest.EquipmentSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.EquipSchd)))
+                .ForMember(dest => dest.LightingSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.LightSchd)))
+                .ForMember(dest => dest.OccupancySchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.OccupSchd)))
+                .ForMember(dest => dest.HeatingSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.HeatingSchd)))
+                .ForMember(dest => dest.CoolingSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.CoolingSchd)))
+                .ForMember(dest => dest.MechVentSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.MechVentSchd)))
+                .ForMember(dest => dest.NatVentSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.NatVentSchd)))
+                .ForMember(dest => dest.BlindSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.BlindSchd)))
+                .ForMember(dest => dest.WaterSchedule, opt => opt.ResolveUsing(YearScheduleResolver(template => template.WaterSchd)));
+
+            Mapper
+                .CreateMap<Legacy.BuildingTemplate, Core.BuildingTemplate>()
+                .ForMember(dest => dest.Core, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.Perimeter, opt => opt.MapFrom(src => src));
+
+            Mapper
+                .CreateMap<Legacy.Library, CoreLookupLibrary>()
+                .ForMember(dest => dest.OpaqueMaterials, opt => opt.SetMappingOrder(10))
+                .ForMember(dest => dest.GlazingMaterials, opt => opt.SetMappingOrder(10))
+                .ForMember(dest => dest.GasMaterials, opt => opt.SetMappingOrder(10))
+                .ForMember(dest => dest.OpaqueConstructions, opt => opt.SetMappingOrder(20))
+                .ForMember(dest => dest.WindowConstructions, opt =>
+                {
+                    opt.SetMappingOrder(20);
+                    opt.MapFrom(src => src.GlazingConstructions);
+                })
+                .ForMember(dest => dest.DaySchedules, opt => opt.SetMappingOrder(30))
+                .ForMember(dest => dest.WeekSchedules, opt => opt.SetMappingOrder(40))
+                .ForMember(dest => dest.YearSchedules, opt => opt.SetMappingOrder(50))
+                .ForMember(dest => dest.BuildingTemplates, opt => opt.SetMappingOrder(1000));
         }
 
         public static Core.Library Convert(Library legacyLib)
         {
-            var newLib = Mapper.Map<Core.Library>(legacyLib);
-            newLib.GasMaterials = newLib.GasMaterials.Where(m => m.Name != null).ToList();
-            newLib.GlazingMaterials = newLib.GlazingMaterials.Where(m => m.Name != null).ToList();
-            newLib.OpaqueMaterials = newLib.OpaqueMaterials.Where(m => m.Name != null).ToList();
-            newLib.OpaqueConstructions = Convert<
-                Legacy.BaseConstruction<Legacy.OpaqueLayer>,
-                Legacy.OpaqueLayer,
-                Core.OpaqueConstruction,
-                Core.OpaqueMaterial>(legacyLib.OpaqueConstructions, newLib.OpaqueMaterials).ToList();
-            newLib.WindowConstructions = Convert<
-                Legacy.BaseConstruction<Legacy.GlazingLayer>,
-                Legacy.GlazingLayer,
-                Core.WindowConstruction,
-                Core.WindowMaterialBase>(legacyLib.GlazingConstructions, newLib.AllWindowMaterials).ToList();
-            return newLib;
+            return Mapper.Map<CoreLookupLibrary>(legacyLib);
         }
 
-        public static IEnumerable<NewConstructionT> Convert<LegacyConstructionT, LegacyLayerT, NewConstructionT, NewMaterialT>(
-            IEnumerable<LegacyConstructionT> constructions,
-            IEnumerable<NewMaterialT> materials)
-            where LegacyConstructionT : Legacy.BaseConstruction<LegacyLayerT>
-            where LegacyLayerT : Legacy.BaseLayer
-            where NewConstructionT : Core.LayeredConstruction<NewMaterialT>
-            where NewMaterialT : Core.MaterialBase
+        private static CoreLookupLibrary GetDestinationLibrary(ResolutionContext ctx)
         {
-            var matLookup = materials.ToDictionary(m => m.Name);
-            foreach (var legacyConstruction in constructions)
+            if (ctx.Parent == null)
             {
-                var newLayers =
-                    legacyConstruction
-                    .Layers
-                    .Select(layer =>
+                // Just using DestinationValue doesn't work (https://github.com/AutoMapper/AutoMapper/issues/873)
+                var res = (CoreLookupLibrary)
+                    ctx
+                    .InstanceCache
+                    .Single(kvp => kvp.Key.DestinationType == typeof(CoreLookupLibrary))
+                    .Value;
+                System.Diagnostics.Debug.Assert(res != null);
+                return res;
+            }
+            else
+            {
+                return GetDestinationLibrary(ctx.Parent);
+            }
+        }
+
+        private static Func<ResolutionResult, object> OpaqueConstructionResolver(Func<BuildingTemplate, string> sourceProp)
+        {
+            return res =>
+            {
+                var library = GetDestinationLibrary(res.Context);
+                var lookup = library.OpaqueConstructionLookup;
+                var legacyTemplate = (Legacy.BuildingTemplate)res.Context.SourceValue;
+                var name = sourceProp(legacyTemplate);
+                var newConstruction = default(Core.OpaqueConstruction);
+                lookup.TryGetValue(name, out newConstruction);
+                return newConstruction;
+            };
+        }
+
+        private static IList<Core.MaterialLayer<Core.OpaqueMaterial>> ResolveOpaqueMaterialLayers(ResolutionResult res)
+        {
+            var library = GetDestinationLibrary(res.Context);
+            var lookup = library.OpaqueMaterialLookup;
+            var legacyConstruction = (Legacy.OpaqueConstruction)res.Context.SourceValue;
+            return
+                legacyConstruction
+                .Layers
+                .Select(layer =>
+                {
+                    var newMat = default(Core.OpaqueMaterial);
+                    if (lookup.TryGetValue(layer.MaterialName, out newMat))
                     {
-                        NewMaterialT mat = null;
-                        matLookup.TryGetValue(layer.MaterialName, out mat);
-                        return new Core.MaterialLayer<NewMaterialT>()
+                        return new Core.MaterialLayer<Core.OpaqueMaterial>()
                         {
-                            Material = mat,
+                            Material = newMat,
                             Thickness = layer.Thickness
                         };
-                    })
-                    .ToList();
-                if (!newLayers.Any(layer => layer.Material == null))
+                    }
+                    else { return null; }
+                })
+                .ToList();
+        }
+
+        private static IList<Core.MaterialLayer<Core.WindowMaterialBase>> ResolveWindowMaterialLayers(ResolutionResult res)
+        {
+            var library = GetDestinationLibrary(res.Context);
+            var lookup = library.WindowMaterialLookup;
+            var legacyConstruction = (Legacy.GlazingConstruction)res.Context.SourceValue;
+            return
+                legacyConstruction
+                .Layers
+                .Select(layer =>
                 {
-                    var c = Mapper.Map<NewConstructionT>(legacyConstruction);
-                    c.Layers = newLayers;
-                    yield return c;
-                }
+                    var newMat = default(Core.WindowMaterialBase);
+                    if (lookup.TryGetValue(layer.MaterialName, out newMat))
+                    {
+                        return new Core.MaterialLayer<Core.WindowMaterialBase>()
+                        {
+                            Material = newMat,
+                            Thickness = layer.Thickness
+                        };
+                    }
+                    else { return null; }
+                })
+                .ToList();
+        }
+
+        private static Core.DaySchedule[] ResolveWeekScheduleDays(ResolutionResult res)
+        {
+            var library = GetDestinationLibrary(res.Context);
+            var lookup = library.DayScheduleLookup;
+            var legacyWeek = (Legacy.WeekSchedule)res.Context.SourceValue;
+            return
+                legacyWeek
+                .Days
+                .Select(dayName =>
+                {
+                    var newDay = default(Core.DaySchedule);
+                    lookup.TryGetValue(dayName, out newDay);
+                    return newDay;
+                })
+                .ToArray();
+        }
+        
+        private static IList<Core.YearSchedulePart> ResolveYearScheduleParts(ResolutionResult res)
+        {
+            var library = GetDestinationLibrary(res.Context);
+            var lookup = library.WeekScheduleLookup;
+            var legacyYear = (Legacy.YearSchedule)res.Context.SourceValue;
+            var weekCount = legacyYear.WeekScheduleNames.Count;
+            if (legacyYear.MonthFrom.Count != weekCount ||
+                legacyYear.DayFrom.Count != weekCount ||
+                legacyYear.MonthTill.Count != weekCount ||
+                legacyYear.DayTill.Count != weekCount)
+            {
+                return null;
             }
+            var newWeeks =
+                legacyYear
+                .WeekScheduleNames
+                .Select(name =>
+                {
+                    var newWeek = default(Core.WeekSchedule);
+                    lookup.TryGetValue(name, out newWeek);
+                    return newWeek;
+                })
+                .ToArray();
+            if (newWeeks.Any(w => w == null)) { return null; }
+            var parts = new List<Core.YearSchedulePart>();
+            for (var i = 0; i < weekCount; ++i)
+            {
+                parts.Add(new Core.YearSchedulePart()
+                {
+                    Schedule = newWeeks[i],
+                    FromDay = legacyYear.DayFrom[i],
+                    FromMonth = legacyYear.MonthFrom[i],
+                    ToDay = legacyYear.DayTill[i],
+                    ToMonth = legacyYear.MonthTill[i]
+                });
+            }
+            return parts;
+        }
+
+        private static Func<ResolutionResult, Core.WindowConstruction> WindowConstructionResolver(Func<BuildingTemplate, string> sourceProp)
+        {
+            return res =>
+            {
+                var library = GetDestinationLibrary(res.Context);
+                var lookup = library.WindowConstructionLookup;
+                var legacyTemplate = (Legacy.BuildingTemplate)res.Context.SourceValue;
+                var name = sourceProp(legacyTemplate);
+                var newConstruction = default(Core.WindowConstruction);
+                lookup.TryGetValue(name, out newConstruction);
+                return newConstruction;
+            };
+        }
+
+        private static Func<ResolutionResult, Core.YearSchedule> YearScheduleResolver(Func<BuildingTemplate, string> sourceProp)
+        {
+            return res =>
+            {
+                var library = GetDestinationLibrary(res.Context);
+                var lookup = library.YearScheduleLookup;
+                var legacyTemplate = (Legacy.BuildingTemplate)res.Context.SourceValue;
+                var name = sourceProp(legacyTemplate);
+                var newSchedule = default(Core.YearSchedule);
+                lookup.TryGetValue(name, out newSchedule);
+                return newSchedule;
+            };
         }
     }
 }

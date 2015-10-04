@@ -34,6 +34,10 @@ namespace Basilisk.LegacyConverter
                 Console.WriteLine("Mapped {0} of {1} gas materials", newLib.GasMaterials.Count, legacy.GasMaterials.Count);
                 Console.WriteLine("Mapped {0} of {1} opaque constructions", newLib.OpaqueConstructions.Count, legacy.OpaqueConstructions.Count);
                 Console.WriteLine("Mapped {0} of {1} window constructions", newLib.WindowConstructions.Count, legacy.GlazingConstructions.Count);
+                Console.WriteLine("Mapped {0} of {1} day schedules", newLib.DaySchedules.Count, legacy.DaySchedules.Count);
+                Console.WriteLine("Mapped {0} of {1} week schedules", newLib.WeekSchedules.Count, legacy.WeekSchedules.Count);
+                Console.WriteLine("Mapped {0} of {1} year schedules", newLib.YearSchedules.Count, legacy.YearSchedules.Count);
+                Console.WriteLine("Mapped {0} of {1} building templates", newLib.BuildingTemplates.Count, legacy.BuildingTemplates.Count);
             }
         }
     }

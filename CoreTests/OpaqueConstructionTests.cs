@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Basilisk.Core;
 
-namespace CoreTests
+namespace Basilisk.Tests.Core
 {
     [TestClass]
     public class OpaqueConstructionTests

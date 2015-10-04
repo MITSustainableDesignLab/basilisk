@@ -14,13 +14,23 @@ namespace Basilisk.Legacy
     {
         public Library()
         {
+            BuildingTemplates = new List<BuildingTemplate>();
+            DaySchedules = new List<DaySchedule>();
             GasMaterials = new List<GasMaterial>();
             GlazingMaterials = new List<GlazingMaterial>();
             OpaqueConstructions = new List<OpaqueConstruction>();
             OpaqueMaterials = new List<OpaqueMaterial>();
+            WeekSchedules = new List<WeekSchedule>();
+            YearSchedules = new List<YearSchedule>();
         }
 
         public DateTime TimeStamp { get; set; }
+
+        [XmlArrayItem("BuildingTemplate")]
+        public List<BuildingTemplate> BuildingTemplates { get; set; }
+
+        [XmlArrayItem("DaySchedule")]
+        public List<DaySchedule> DaySchedules { get; set; }
 
         [XmlArrayItem("GasMaterial")]
         public List<GasMaterial> GasMaterials { get; set; }
@@ -36,5 +46,11 @@ namespace Basilisk.Legacy
 
         [XmlArrayItem("OpaqueMaterial")]
         public List<OpaqueMaterial> OpaqueMaterials { get; set; }
+
+        [XmlArrayItem("WeekSchedule")]
+        public List<WeekSchedule> WeekSchedules { get; set; }
+
+        [XmlArrayItem("YearSchedule")]
+        public List<YearSchedule> YearSchedules { get; set; }
     }
 }

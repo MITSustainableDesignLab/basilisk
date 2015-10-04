@@ -9,13 +9,14 @@ using System.Windows;
 
 namespace Basilisk.Controls
 {
-    public class SimulationSetting : INotifyPropertyChanged, IEditableObject
+    public class SimulationSetting : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
     {
         private readonly object obj;
         private readonly PropertyInfo prop;
 
         private object backupVal;
         private bool inTxn = false;
+        private string error = String.Empty;
 
         public SimulationSetting(
             object obj,
@@ -67,7 +68,6 @@ namespace Basilisk.Controls
         public string[] Choices { get; private set; }
         public string DisplayName { get; private set; }
         public bool ExposeAsComboBox { get { return Choices != null; } }
-        public bool ExposeAsTextBox { get { return Choices == null; } }
         public string PropertyName { get { return prop.Name; } }
 
         public object Value
@@ -78,8 +78,16 @@ namespace Basilisk.Controls
             }
             set
             {
-                prop.SetValue(obj, value, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);
-                Update();
+                try
+                {
+                    prop.SetValue(obj, value, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);
+                    Update();
+                    error = String.Empty;
+                }
+                catch (Exception e)
+                {
+                    error = e.Message;
+                }
             }
         }
 
@@ -124,5 +132,25 @@ namespace Basilisk.Controls
             }
         }
         #endregion
+
+        #region IDataErrorInfo
+        public string Error
+        {
+            get
+            {
+                // lol unused by WPF
+                throw new NotImplementedException();
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                return error;
+            }
+        }
+        #endregion
+
     }
 }

@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Basilisk.Controls.DayScheduleFractionEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Basilisk.Controls"
+             xmlns:chart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+             mc:Ignorable="d">
+    <Grid>
+        <WindowsFormsHost HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          x:Name="host">
+            <chart:Chart x:Name="chart"
+                         MouseMove="chart_MouseMove"
+                         MouseDown="chart_MouseDown"
+                         MouseUp="chart_MouseUp">
+                <chart:Chart.ChartAreas>
+                    <chart:ChartArea />
+                </chart:Chart.ChartAreas>
+            </chart:Chart>
+        </WindowsFormsHost>
+    </Grid>
+</UserControl>
