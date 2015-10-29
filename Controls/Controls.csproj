@@ -91,7 +91,6 @@
       <DependentUpon>ConstructionEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsCollection.cs" />
-    <Compile Include="SettingsGridViewModel.cs" />
     <Compile Include="SettingsGrid.xaml.cs">
       <DependentUpon>SettingsGrid.xaml</DependentUpon>
     </Compile>
