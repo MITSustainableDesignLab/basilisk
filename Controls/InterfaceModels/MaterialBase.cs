@@ -49,5 +49,21 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Transportation Energy")]
         public double TransportEnergy { get; set; }
+
+        protected void CopyBasePropertiesFrom(MaterialBase source)
+        {
+            Conductivity = source.Conductivity;
+            Cost = source.Cost;
+            Density = source.Density;
+            EmbodiedCarbon = source.EmbodiedCarbon;
+            EmbodiedCarbonStdDev = source.EmbodiedCarbonStdDev;
+            EmbodiedEnergy = source.EmbodiedEnergy;
+            EmbodiedEnergyStdDev = source.EmbodiedEnergyStdDev;
+            SubstitutionTimestep = source.SubstitutionTimestep;
+            TransportCarbon = source.TransportCarbon;
+            TransportDistance = source.TransportDistance;
+            TransportEnergy = source.TransportEnergy;
+            CopyBasePropertiesFrom((LibraryComponent)source);
+        }
     }
 }

@@ -43,5 +43,15 @@ namespace Basilisk.Controls.InterfaceModels
         {
             PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
         }
+
+        public abstract LibraryComponent Duplicate();
+
+        protected void CopyBasePropertiesFrom(LibraryComponent source)
+        {
+            Category = source.Category;
+            Comments = source.Comments;
+            DataSource = source.DataSource;
+            Name = source.Name;
+        }
     }
 }

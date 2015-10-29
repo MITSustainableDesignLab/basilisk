@@ -21,5 +21,17 @@ namespace Basilisk.Controls.InterfaceModels
         public string Type { get; set; }
 
         public ObservableCollection<DaySchedule> Days { get; set; }
+
+        public override LibraryComponent Duplicate()
+        {
+            var res = new WeekSchedule()
+            {
+                Type = Type
+            };
+            var days = Days.Select(d => d.Duplicate()).Cast<DaySchedule>();
+            res.Days = new ObservableCollection<DaySchedule>(days);
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

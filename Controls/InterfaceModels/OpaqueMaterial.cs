@@ -29,5 +29,18 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Visible Absorptance")]
         public double VisibleAbsorptance { get; set; }
+
+        public override LibraryComponent Duplicate()
+        {
+            var res = new OpaqueMaterial()
+            {
+                SolarAbsorptance = SolarAbsorptance,
+                SpecificHeat = SpecificHeat,
+                ThermalEmittance = ThermalEmittance,
+                VisibleAbsorptance = VisibleAbsorptance
+            };
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

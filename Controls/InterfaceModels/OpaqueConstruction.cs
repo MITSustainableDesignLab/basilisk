@@ -11,5 +11,11 @@ namespace Basilisk.Controls.InterfaceModels
     [UseDefaultValuesOf(typeof(Core.OpaqueConstruction))]
     public class OpaqueConstruction : ConstructionBase
     {
+        public override LibraryComponent Duplicate()
+        {
+            var res = new OpaqueConstruction();
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

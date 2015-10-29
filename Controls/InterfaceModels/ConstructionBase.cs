@@ -56,6 +56,25 @@ namespace Basilisk.Controls.InterfaceModels
             }
         }
 
+        protected void CopyBasePropertiesFrom(ConstructionBase source)
+        {
+            AssemblyCarbon = source.AssemblyCarbon;
+            AssemblyCost = source.AssemblyCost;
+            AssemblyEnergy = source.AssemblyEnergy;
+            DisassemblyCarbon = source.DisassemblyCarbon;
+            DisassemblyCost = source.DisassemblyCost;
+            var layers =
+                source
+                .Layers
+                .Select(layer => new MaterialLayer()
+                {
+                    Material = layer.Material,
+                    Thickness = layer.Thickness
+                });
+            Layers = new ObservableCollection<MaterialLayer>(layers);
+            CopyBasePropertiesFrom((LibraryComponent)source);
+        }
+
         private void OnLayersChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged(sender, nameof(Layers));

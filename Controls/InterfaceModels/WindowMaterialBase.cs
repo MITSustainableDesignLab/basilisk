@@ -8,5 +8,11 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public class WindowMaterialBase : MaterialBase
     {
+        public override LibraryComponent Duplicate()
+        {
+            var res = new WindowMaterialBase();
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

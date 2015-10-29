@@ -24,6 +24,7 @@ namespace Basilisk.LibraryEditor.ViewModels
     {
         private readonly RelayCommand createNewComponentCommand;
         private readonly RelayCommand deleteComponentCommand;
+        private readonly RelayCommand duplicateComponentCommand;
         private readonly RelayCommand editSelectedItemMetadataCommand;
 
         private ComponentCategoryCollection currentlyCategorizedComponents;
@@ -38,6 +39,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         {
             createNewComponentCommand = new RelayCommand(CreateNewComponent, _ => IsAnyLibraryLoaded);
             deleteComponentCommand = new RelayCommand(DeleteComponent, c => c != null);
+            duplicateComponentCommand = new RelayCommand(DuplicateComponent, c => c != null);
             editSelectedItemMetadataCommand = new RelayCommand(EditComponentMetadata, o => o is LibraryComponent);
             NewLibraryCommand = new RelayCommand(NewLibrary);
             OpenLibraryCommand = new RelayCommand(OpenLibrary);
@@ -56,6 +58,7 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         public ICommand CreateNewComponentCommand => createNewComponentCommand;
         public ICommand DeleteComponentCommand => deleteComponentCommand;
+        public ICommand DuplicateComponentCommand => duplicateComponentCommand;
         public ICommand EditSelectedItemMetadataCommand => editSelectedItemMetadataCommand;
         public ICommand NewLibraryCommand { get; }
         public ICommand OpenLibraryCommand { get; }
@@ -163,6 +166,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
                 editSelectedItemMetadataCommand.RaiseCanExecuteChanged();
                 deleteComponentCommand.RaiseCanExecuteChanged();
+                duplicateComponentCommand.RaiseCanExecuteChanged();
                 SelectedComponentLayers = (selectedComponent as ConstructionBase)?.Layers;
             }
         }
@@ -269,10 +273,13 @@ namespace Basilisk.LibraryEditor.ViewModels
         private void CreateNewComponent(object componentType)
         {
             var cType = (Type)componentType;
-            var vm = new MetadataEditorViewModel();
             var newComponent = CreateComponentWithDefaults(cType);
-            vm.Category = newComponent.Category;
-            vm.IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null;
+            var vm = new MetadataEditorViewModel()
+            {
+                Category = newComponent.Category,
+                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
+                ValidateName = name => !CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
+            };
             var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
             var res = editWindow.ShowDialog();
             if (res.HasValue && res.Value)
@@ -293,9 +300,40 @@ namespace Basilisk.LibraryEditor.ViewModels
             HasUnsavedChanges = true;
         }
 
+        private void DuplicateComponent(object component)
+        {
+            var cType = component.GetType();
+            var newComponent = ((LibraryComponent)component).Duplicate();
+            var vm = new MetadataEditorViewModel(newComponent)
+            {
+                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
+                ValidateName = name => !CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
+            };
+            var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
+            var res = editWindow.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                newComponent.Name = vm.Name;
+                newComponent.Category = vm.Category;
+                newComponent.Comments = vm.Comments;
+                newComponent.DataSource = vm.DataSource;
+                CurrentCategorizedComponents.AddComponent(newComponent);
+                newComponent.PropertyChanged += SetUnsavedChangesOnPropertyChange;
+                HasUnsavedChanges = true;
+            }
+        }
+
         private void EditComponentMetadata(object component)
         {
-            var vm = new MetadataEditorViewModel((LibraryComponent)component);
+            var cType = component.GetType();
+            var original = (LibraryComponent)component;
+            var vm = new MetadataEditorViewModel((LibraryComponent)component)
+            {
+                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
+                ValidateName = name =>
+                    name == original.Name ||
+                    !CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
+            };
             var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
             var res = editWindow.ShowDialog();
             if (res.HasValue && res.Value)

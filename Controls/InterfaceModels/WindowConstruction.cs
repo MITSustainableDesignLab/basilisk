@@ -9,5 +9,11 @@ namespace Basilisk.Controls.InterfaceModels
     [UseDefaultValuesOf(typeof(Core.WindowConstruction))]
     public class WindowConstruction : ConstructionBase
     {
+        public override LibraryComponent Duplicate()
+        {
+            var res = new WindowConstruction();
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

@@ -50,6 +50,9 @@
             <Button Content="AddComponent"
                     Command="{Binding CreateNewComponentCommand}"
                     CommandParameter="{Binding ElementName=editorTabs, Path=CurrentComponentType}" />
+            <Button Content="DuplicateComponent"
+                    Command="{Binding DuplicateComponentCommand}"
+                    CommandParameter="{Binding SelectedComponent}" />
             <Button Content="DeleteComponent"
                     Command="{Binding DeleteComponentCommand}"
                     CommandParameter="{Binding SelectedComponent}" />

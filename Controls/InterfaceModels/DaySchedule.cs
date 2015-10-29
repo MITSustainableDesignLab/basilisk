@@ -25,5 +25,16 @@ namespace Basilisk.Controls.InterfaceModels
         public string Type { get; set; }
 
         public IList<double> Values { get; set; }
+
+        public override LibraryComponent Duplicate()
+        {
+            var res = new DaySchedule()
+            {
+                Type = Type,
+                Values = Values
+            };
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

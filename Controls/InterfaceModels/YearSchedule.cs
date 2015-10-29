@@ -18,5 +18,24 @@ namespace Basilisk.Controls.InterfaceModels
         }
 
         public ObservableCollection<YearSchedulePart> Parts { get; set; }
+
+        public override LibraryComponent Duplicate()
+        {
+            var parts =
+                Parts
+                .Select(part =>
+                    new YearSchedulePart()
+                    {
+                        Schedule = (WeekSchedule)part.Schedule.Duplicate(),
+                        FromDay = part.FromDay,
+                        ToDay = part.ToDay,
+                        FromMonth = part.FromMonth,
+                        ToMonth = part.ToMonth
+                    });
+            return new YearSchedule()
+            {
+                Parts = new ObservableCollection<YearSchedulePart>(parts)
+            };
+        }
     }
 }

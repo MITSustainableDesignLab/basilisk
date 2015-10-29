@@ -21,14 +21,20 @@ namespace Basilisk.LibraryEditor.ViewModels
         {
             confirmCommand = new RelayCommand(
                 () => DialogResult = true,
-                () => !String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(Category));
+                () =>
+                    !String.IsNullOrWhiteSpace(Name) &&
+                    !String.IsNullOrWhiteSpace(Category) &&
+                    ValidateName(Name));
         }
 
         public MetadataEditorViewModel(LibraryComponent component)
         {
             confirmCommand = new RelayCommand(
                 () => DialogResult = true,
-                () => !String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(Category));
+                () =>
+                    !String.IsNullOrWhiteSpace(Name) &&
+                    !String.IsNullOrWhiteSpace(Category) &&
+                    ValidateName(Name));
             Category = component.Category;
             Comments = component.Comments;
             DataSource = component.DataSource;
@@ -75,5 +81,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         }
 
         public bool IsCategoryReadOnly { get; set; }
+
+        public Func<string, bool> ValidateName { get; set; } = _ => true;
     }
 }
