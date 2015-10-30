@@ -41,6 +41,9 @@ namespace Basilisk.Core
         [DataMember, DefaultValue(0.898)]
         public double VisibleTransmittance { get; set; }
 
+        internal override IEnumerable<LibraryComponent> ReferencedComponents =>
+            Enumerable.Empty<LibraryComponent>();
+
         #region Equality
         public bool Equals(GlazingMaterial other)
         {

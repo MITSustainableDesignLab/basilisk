@@ -25,6 +25,9 @@ namespace Basilisk.Core
         [DataMember]
         public IList<double> Values { get; set; }
 
+        internal override IEnumerable<LibraryComponent> ReferencedComponents =>
+            Enumerable.Empty<LibraryComponent>();
+
         public static bool ValuesMatch(DaySchedule a, DaySchedule b)
         {
             if (a == null) { throw new ArgumentNullException("a"); }

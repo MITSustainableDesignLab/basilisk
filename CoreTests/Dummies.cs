@@ -28,5 +28,13 @@ namespace Basilisk.Tests.Core
                 return new OpaqueMaterial() { Name= "Test Opaque Material", SpecificHeat = 1.0 };
             }
         }
+
+        public static WindowConstruction WindowConstruction
+        {
+            get
+            {
+                return new WindowConstruction() { Name = "Empty Window Construction" };
+            }
+        }
     }
 }

@@ -19,5 +19,15 @@ namespace Basilisk.Core
 
         [DataMember]
         public ZoneDefinition Perimeter { get; set; }
+
+        internal override IEnumerable<LibraryComponent> ReferencedComponents
+        {
+            get
+            {
+                var core = Core?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
+                var perim = Perimeter?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
+                return core.Concat(perim);
+            }
+        }
     }
 }

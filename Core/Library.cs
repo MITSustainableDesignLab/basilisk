@@ -110,52 +110,21 @@ namespace Basilisk.Core
 
         public IEnumerable<LibraryComponent> GetOrphanedComponents()
         {
-            var referenceableComponents =
+            var known =
                 OpaqueMaterials
                 .Cast<LibraryComponent>()
                 .Concat(GlazingMaterials)
                 .Concat(GasMaterials)
                 .Concat(OpaqueConstructions)
+                .Concat(WindowConstructions)
                 .Concat(DaySchedules)
                 .Concat(WeekSchedules)
-                .Concat(YearSchedules);
-
-            var referencedOpaqueMaterials =
-                OpaqueConstructions
-                .SelectMany(c => c.Layers)
-                .Select(layer => layer.Material)
-                .Cast<LibraryComponent>();
-            var referencedWindowMaterials =
-                WindowConstructions
-                .SelectMany(c => c.Layers)
-                .Select(layer => layer.Material)
-                .Cast<LibraryComponent>();
-            var referencedDaySchedules =
-                WeekSchedules
-                .SelectMany(w => w.Days)
-                .Cast<LibraryComponent>();
-            var referencedWeekSchedules =
-                YearSchedules
-                .SelectMany(year => year.Parts)
-                .Select(part => part.Schedule)
-                .Cast<LibraryComponent>();
-            var referencedFromTemplates =
-                BuildingTemplates
-                .SelectMany(t =>
-                    t
-                    .GetType()
-                    .GetProperties()
-                    .Where(prop => prop.PropertyType.IsSubclassOf(typeof(LibraryComponent)))
-                    .Select(prop => prop.GetValue(t))
-                    .Cast<LibraryComponent>());
-
+                .Concat(YearSchedules)
+                .Concat(BuildingTemplates);
             return
-                referencedOpaqueMaterials
-                .Concat(referencedWindowMaterials)
-                .Concat(referencedDaySchedules)
-                .Concat(referencedWeekSchedules)
-                .Concat(referencedFromTemplates)
-                .Except(referenceableComponents);
+                known
+                .SelectMany(c => c.ReferencedComponents)
+                .Except(known);
         }
     }
 }

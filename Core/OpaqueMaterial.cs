@@ -25,6 +25,9 @@ namespace Basilisk.Core
         [DataMember]
         public double VisibleAbsorptance { get; set; }
 
+        internal override IEnumerable<LibraryComponent> ReferencedComponents =>
+            Enumerable.Empty<LibraryComponent>();
+
         #region Equality
         public bool Equals(OpaqueMaterial other)
         {

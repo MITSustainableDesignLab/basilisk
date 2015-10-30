@@ -23,5 +23,7 @@ namespace Basilisk.Core
 
         [DataMember, DefaultValue("Fraction")]
         public string Type { get; set; }
+
+        internal override IEnumerable<LibraryComponent> ReferencedComponents => Days;
     }
 }

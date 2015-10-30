@@ -21,6 +21,9 @@ namespace Basilisk.Core
         [DataMember, DefaultValue("AIR")]
         public string Type { get; set; }
 
+        internal override IEnumerable<LibraryComponent> ReferencedComponents =>
+            Enumerable.Empty<LibraryComponent>();
+
         #region Equality
         public bool Equals(GasMaterial other)
         {

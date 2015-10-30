@@ -44,5 +44,7 @@ namespace Basilisk.Core
         {
             return Name;
         }
+
+        internal abstract IEnumerable<LibraryComponent> ReferencedComponents { get; }
     }
 }

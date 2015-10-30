@@ -155,5 +155,32 @@ namespace Basilisk.Core
         [DataMember]
         public double LuxTarget { get; set; }
         #endregion
+
+        internal IEnumerable<LibraryComponent> ReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    Basement,
+                    ExteriorFloor,
+                    Facade,
+                    Ground,
+                    InteriorFloor,
+                    Roof,
+                    Window,
+                    EquipmentSchedule,
+                    LightingSchedule,
+                    OccupancySchedule,
+                    CoolingSchedule,
+                    HeatingSchedule,
+                    MechVentSchedule,
+                    NatVentSchedule,
+                    WaterSchedule,
+                    BlindSchedule
+                }.Where(c => c != null);
+                return direct.Concat(direct.SelectMany(c => c.ReferencedComponents));
+            }
+        }
     }
 }
