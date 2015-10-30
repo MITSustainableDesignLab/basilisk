@@ -54,7 +54,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ComponentDuplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Controls\Controls.csproj">
