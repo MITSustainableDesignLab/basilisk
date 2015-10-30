@@ -51,6 +51,7 @@
     <Compile Include="GasMaterial.cs" />
     <Compile Include="GlazingMaterial.cs" />
     <Compile Include="LayeredConstruction.cs" />
+    <Compile Include="MassRatios.cs" />
     <Compile Include="MaterialBase.cs" />
     <Compile Include="LibraryComponent.cs" />
     <Compile Include="OpaqueConstruction.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="OpaqueMaterial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="StructureInformation.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="WeekSchedule.cs" />
     <Compile Include="WindowConstruction.cs" />

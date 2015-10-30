@@ -104,7 +104,7 @@
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:OpaqueConstruction}">
                             <basilisk:ConstructionEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
                                                          Layers="{Binding SelectedComponentLayers}"
-                                                         PickMaterial="{Binding PickMaterialForLayer}"
+                                                         PickMaterial="{Binding PickMaterial}"
                                                          LayerMaterialChoices="{Binding LoadedOpaqueMaterials}" />
                         </TabItem>
                         <TabItem Header="Window"
@@ -112,8 +112,17 @@
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:WindowConstruction}">
                             <basilisk:ConstructionEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
                                                          Layers="{Binding SelectedComponentLayers}"
-                                                         PickMaterial="{Binding PickMaterialForLayer}"
+                                                         PickMaterial="{Binding PickMaterial}"
                                                          LayerMaterialChoices="{Binding LoadedWindowMaterials}" />
+                        </TabItem>
+                        <TabItem Header="Structure"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedStructureDefinitions}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:StructureInformation}">
+                            <basilisk:StructureEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                      Ratios="{Binding SelectedComponentMassRatios}"
+                                                      PickMaterial="{Binding PickMaterial}"
+                                                      MaterialChoices="{Binding LoadedOpaqueMaterials}" />
+                                                      
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>
                 </TabItem>

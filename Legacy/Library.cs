@@ -47,6 +47,9 @@ namespace Basilisk.Legacy
         [XmlArrayItem("OpaqueMaterial")]
         public List<OpaqueMaterial> OpaqueMaterials { get; set; }
 
+        [XmlArrayItem("StructureType")]
+        public List<StructureType> StructureTypes { get; set; }
+
         [XmlArrayItem("WeekSchedule")]
         public List<WeekSchedule> WeekSchedules { get; set; }
 

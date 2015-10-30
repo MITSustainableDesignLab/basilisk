@@ -73,12 +73,15 @@
     <Compile Include="InterfaceModels\DaySchedule.cs" />
     <Compile Include="InterfaceModels\GasMaterial.cs" />
     <Compile Include="InterfaceModels\GlazingMaterial.cs" />
+    <Compile Include="InterfaceModels\IMaterialPickable.cs" />
+    <Compile Include="InterfaceModels\LayeredConstruction.cs" />
     <Compile Include="InterfaceModels\Library.cs" />
     <Compile Include="InterfaceModels\LibraryComponent.cs" />
     <Compile Include="InterfaceModels\MaterialBase.cs" />
     <Compile Include="InterfaceModels\OpaqueConstruction.cs" />
     <Compile Include="InterfaceModels\OpaqueMaterial.cs" />
     <Compile Include="InterfaceModels\MaterialLayer.cs" />
+    <Compile Include="InterfaceModels\StructureInformation.cs" />
     <Compile Include="InterfaceModels\WeekSchedule.cs" />
     <Compile Include="InterfaceModels\WindowConstruction.cs" />
     <Compile Include="InterfaceModels\WindowMaterialBase.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="ConstructionEditor.xaml.cs">
       <DependentUpon>ConstructionEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InterfaceModels\MassRatios.cs" />
     <Compile Include="SettingsCollection.cs" />
     <Compile Include="SettingsGrid.xaml.cs">
       <DependentUpon>SettingsGrid.xaml</DependentUpon>
@@ -99,6 +103,9 @@
     <Compile Include="SimulationSetting.cs" />
     <Compile Include="SimulationSettingAttribute.cs" />
     <Compile Include="SimulationSettingsCreator.cs" />
+    <Compile Include="StructureEditor.xaml.cs">
+      <DependentUpon>StructureEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TypeMatchConverter.cs" />
     <Compile Include="UseDefaultValuesOfAttribute.cs" />
     <Compile Include="WeekScheduleEditor.xaml.cs">
@@ -158,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SettingsGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StructureEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

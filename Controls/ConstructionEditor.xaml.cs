@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 using Basilisk.Controls.InterfaceModels;
 
-using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.MaterialLayer, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
+using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialPickable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
 
 namespace Basilisk.Controls
 {
@@ -34,8 +34,12 @@ namespace Basilisk.Controls
         {
             if ((string)e.Column.Header != "Material") { return; }
             var layer = (MaterialLayer)e.Row.DataContext;
-            var cancel = PickMaterial?.Invoke(layer, LayerMaterialChoices);
-            e.Cancel = !cancel.HasValue || !cancel.Value;
+            var success = PickMaterial?.Invoke(layer, LayerMaterialChoices);
+            if (success.HasValue && success.Value)
+            {
+                ((DataGrid)sender).CommitEdit();
+            }
+            e.Cancel = true;
         }
 
         private void DeleteSelectedLayer(object sender, RoutedEventArgs e)

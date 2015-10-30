@@ -56,10 +56,12 @@
     <Compile Include="GlazingLayer.cs" />
     <Compile Include="GlazingMaterial.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="MaterialComp.cs" />
     <Compile Include="OpaqueConstruction.cs" />
     <Compile Include="OpaqueLayer.cs" />
     <Compile Include="OpaqueMaterial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructureType.cs" />
     <Compile Include="WeekSchedule.cs" />
     <Compile Include="YearSchedule.cs" />
   </ItemGroup>

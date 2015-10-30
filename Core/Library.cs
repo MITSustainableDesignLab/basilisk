@@ -21,47 +21,40 @@ namespace Basilisk.Core
             Formatting = Newtonsoft.Json.Formatting.Indented
         };
 
-        public Library()
-        {
-            BuildingTemplates = new List<BuildingTemplate>();
-            GasMaterials = new List<GasMaterial>();
-            GlazingMaterials = new List<GlazingMaterial>();
-            OpaqueConstructions = new List<OpaqueConstruction>();
-            OpaqueMaterials = new List<OpaqueMaterial>();
-            WindowConstructions = new List<WindowConstruction>();
-        }
-
         [DataMember]
-        public ICollection<BuildingTemplate> BuildingTemplates { get; set; }
+        public ICollection<BuildingTemplate> BuildingTemplates { get; set; } = new List<BuildingTemplate>();
 
         #region Constructions and materials
-        public IEnumerable<WindowMaterialBase> AllWindowMaterials { get { return GlazingMaterials.Cast<WindowMaterialBase>().Concat(GasMaterials); } }
+        public IEnumerable<WindowMaterialBase> AllWindowMaterials => GlazingMaterials.Cast<WindowMaterialBase>().Concat(GasMaterials);
 
         [DataMember]
-        public ICollection<GasMaterial> GasMaterials { get; set; }
+        public ICollection<GasMaterial> GasMaterials { get; set; } = new List<GasMaterial>();
 
         [DataMember]
-        public ICollection<GlazingMaterial> GlazingMaterials { get; set; }
+        public ICollection<GlazingMaterial> GlazingMaterials { get; set; } = new List<GlazingMaterial>();
 
         [DataMember]
-        public ICollection<OpaqueConstruction> OpaqueConstructions { get; set; }
+        public ICollection<OpaqueConstruction> OpaqueConstructions { get; set; } = new List<OpaqueConstruction>();
 
         [DataMember]
-        public ICollection<OpaqueMaterial> OpaqueMaterials { get; set; }
+        public ICollection<OpaqueMaterial> OpaqueMaterials { get; set; } = new List<OpaqueMaterial>();
 
         [DataMember]
-        public ICollection<WindowConstruction> WindowConstructions { get; set; }
+        public ICollection<WindowConstruction> WindowConstructions { get; set; } = new List<WindowConstruction>();
+
+        [DataMember]
+        public ICollection<StructureInformation> StructureDefinitions { get; set; } = new List<StructureInformation>();
         #endregion
 
         #region Schedules
         [DataMember]
-        public ICollection<DaySchedule> DaySchedules { get; set; }
+        public ICollection<DaySchedule> DaySchedules { get; set; } = new List<DaySchedule>();
 
         [DataMember]
-        public ICollection<WeekSchedule> WeekSchedules { get; set; }
+        public ICollection<WeekSchedule> WeekSchedules { get; set; } = new List<WeekSchedule>();
 
         [DataMember]
-        public ICollection<YearSchedule> YearSchedules { get; set; }
+        public ICollection<YearSchedule> YearSchedules { get; set; } = new List<YearSchedule>();
         #endregion
 
         public static Library FromJson(string json)
@@ -117,6 +110,7 @@ namespace Basilisk.Core
                 .Concat(GasMaterials)
                 .Concat(OpaqueConstructions)
                 .Concat(WindowConstructions)
+                .Concat(StructureDefinitions)
                 .Concat(DaySchedules)
                 .Concat(WeekSchedules)
                 .Concat(YearSchedules)

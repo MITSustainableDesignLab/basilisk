@@ -42,6 +42,10 @@ namespace Basilisk.Controls.InterfaceModels
                 .IncludeBase<Core.ConstructionBase, ConstructionBase>()
                 .ForMember(dest => dest.Layers, opt => opt.Ignore());
             Mapper
+                .CreateMap<Core.StructureInformation, StructureInformation>()
+                .IncludeBase<Core.ConstructionBase, ConstructionBase>()
+                .ForMember(dest => dest.MassRatios, opt => opt.Ignore());
+            Mapper
                 .CreateMap<Core.DaySchedule, DaySchedule>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
                 .ForMember(dest => dest.Category, opt => opt.Ignore());
@@ -103,6 +107,8 @@ namespace Basilisk.Controls.InterfaceModels
                 .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GlazingMaterial>>();
             Mapper
                 .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GasMaterial>>();
+            Mapper
+                .CreateMap<MassRatios, Core.MassRatios>();
 
             Mapper
                 .CreateMap<ConstructionBase, Core.ConstructionBase>()
@@ -113,16 +119,9 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<WindowConstruction, Core.WindowConstruction>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
-        }
-
-        public Library()
-        {
-            GasMaterials = new List<LibraryComponent>();
-            GlazingMaterials = new List<LibraryComponent>();
-            OpaqueConstructions = new List<LibraryComponent>();
-            OpaqueMaterials = new List<LibraryComponent>();
-            WindowConstructions = new List<LibraryComponent>();
-            Schedules = new List<LibraryComponent>();
+            Mapper
+                .CreateMap<StructureInformation, Core.StructureInformation>()
+                .IncludeBase<ConstructionBase, Core.ConstructionBase>();
         }
 
         public IEnumerable<LibraryComponent> AllComponents =>
@@ -131,16 +130,18 @@ namespace Basilisk.Controls.InterfaceModels
             .Concat(OpaqueMaterials)
             .Concat(OpaqueConstructions)
             .Concat(WindowConstructions)
+            .Concat(StructureDefinitions)
             .Concat(Schedules);
 
-        public ICollection<LibraryComponent> GasMaterials { get; set; }
-        public ICollection<LibraryComponent> GlazingMaterials { get; set; }
-        public ICollection<LibraryComponent> OpaqueMaterials { get; set; }
+        public ICollection<LibraryComponent> GasMaterials { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> OpaqueMaterials { get; set; } = new List<LibraryComponent>();
 
-        public ICollection<LibraryComponent> OpaqueConstructions { get; set; }
-        public ICollection<LibraryComponent> WindowConstructions { get; set; }
+        public ICollection<LibraryComponent> OpaqueConstructions { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> WindowConstructions { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> StructureDefinitions { get; set; } = new List<LibraryComponent>();
 
-        public ICollection<LibraryComponent> Schedules { get; set; }
+        public ICollection<LibraryComponent> Schedules { get; set; } = new List<LibraryComponent>();
 
         public static Library Create(Core.Library sourceLib)
         {
@@ -154,12 +155,17 @@ namespace Basilisk.Controls.InterfaceModels
             var opaqueConstructions =
                 sourceLib
                 .OpaqueConstructions
-                .Select(src => BuildConstruction<Core.OpaqueConstruction, OpaqueConstruction, Core.OpaqueMaterial>(src, opaqueMatDict))
+                .Select(src => BuildLayeredConstruction<Core.OpaqueConstruction, OpaqueConstruction, Core.OpaqueMaterial>(src, opaqueMatDict))
                 .ToList();
             var windowConstructions =
                 sourceLib
                 .WindowConstructions
-                .Select(src => BuildConstruction<Core.WindowConstruction, WindowConstruction, Core.WindowMaterialBase>(src, windowMatDict))
+                .Select(src => BuildLayeredConstruction<Core.WindowConstruction, WindowConstruction, Core.WindowMaterialBase>(src, windowMatDict))
+                .ToList();
+            var structureDefinitions =
+                sourceLib
+                .StructureDefinitions
+                .Select(src => BuildStructureDefinition(src, opaqueMatDict))
                 .ToList();
 
             var days =
@@ -225,6 +231,7 @@ namespace Basilisk.Controls.InterfaceModels
                 GasMaterials = gasMats,
                 OpaqueConstructions = opaqueConstructions,
                 WindowConstructions = windowConstructions,
+                StructureDefinitions = structureDefinitions,
                 Schedules = allSchedules
             };
         }
@@ -238,15 +245,16 @@ namespace Basilisk.Controls.InterfaceModels
                 GasMaterials = Mapper.Map<IEnumerable<Core.GasMaterial>>(GasMaterials.Cast<GasMaterial>()).ToList(),
                 OpaqueConstructions = Mapper.Map<IEnumerable<Core.OpaqueConstruction>>(OpaqueConstructions.Cast<OpaqueConstruction>()).ToList(),
                 WindowConstructions = Mapper.Map<IEnumerable<Core.WindowConstruction>>(WindowConstructions.Cast<WindowConstruction>()).ToList(),
+                StructureDefinitions = Mapper.Map<IEnumerable<Core.StructureInformation>>(StructureDefinitions.Cast<StructureInformation>()).ToList(),
                 DaySchedules = new List<Core.DaySchedule>(),
                 WeekSchedules = new List<Core.WeekSchedule>(),
                 YearSchedules = new List<Core.YearSchedule>()
             };
-            // There's a dummy layer at the end of each construction because of the DataGrid "new row" row.
-            // There's a probably a better way to avoid this, but for now I'll just strip them out. Also,
-            // we need to re-wire materials.
-            var knownOpaqueConstructions = newLib.OpaqueMaterials.ToDictionary(c => c.Name);
-            var knownWindowConstructions = newLib.AllWindowMaterials.ToDictionary(c => c.Name);
+            // These three loops do two things:
+            // 1) Remove "dummy" element at the end of the layer/mass ratios lists caused by DataGrids (maybe there's a better way to avoid this)
+            // 2) Re-wire materials to eliminate all the clones created by naive automapping
+            var knownOpaqueMaterials = newLib.OpaqueMaterials.ToDictionary(c => c.Name);
+            var knownWindowMaterials = newLib.AllWindowMaterials.ToDictionary(c => c.Name);
             foreach (var c in newLib.OpaqueConstructions)
             {
                 c.Layers =
@@ -255,7 +263,7 @@ namespace Basilisk.Controls.InterfaceModels
                     .Where(layer => layer.Material != null)
                     .Select(layer => new Core.MaterialLayer<Core.OpaqueMaterial>()
                     {
-                        Material = knownOpaqueConstructions[layer.Material.Name],
+                        Material = knownOpaqueMaterials[layer.Material.Name],
                         Thickness = layer.Thickness
                     })
                     .ToList();
@@ -268,8 +276,22 @@ namespace Basilisk.Controls.InterfaceModels
                     .Where(layer => layer.Material != null)
                     .Select(layer => new Core.MaterialLayer<Core.WindowMaterialBase>()
                     {
-                        Material = knownWindowConstructions[layer.Material.Name],
+                        Material = knownWindowMaterials[layer.Material.Name],
                         Thickness = layer.Thickness
+                    })
+                    .ToList();
+            }
+            foreach (var c in newLib.StructureDefinitions)
+            {
+                c.MassRatios =
+                    c
+                    .MassRatios
+                    .Where(ratios => ratios.Material != null)
+                    .Select(ratios => new Core.MassRatios()
+                    {
+                        Material = knownOpaqueMaterials[ratios.Material.Name],
+                        NormalRatio = ratios.NormalRatio,
+                        HighLoadRatio = ratios.HighLoadRatio
                     })
                     .ToList();
             }
@@ -324,9 +346,9 @@ namespace Basilisk.Controls.InterfaceModels
             return newLib;
         }
 
-        private static LibraryComponent BuildConstruction<SourceT, DestT, MaterialT>(SourceT src, Dictionary<string, LibraryComponent> matDict)
+        private static LibraryComponent BuildLayeredConstruction<SourceT, DestT, MaterialT>(SourceT src, Dictionary<string, LibraryComponent> matDict)
             where SourceT : Core.LayeredConstruction<MaterialT>
-            where DestT : ConstructionBase
+            where DestT : LayeredConstruction
             where MaterialT : Core.MaterialBase
         {
             var dest = Mapper.Map<DestT>(src);
@@ -348,6 +370,31 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .Where(layer => layer != null);
             dest.Layers = new ObservableCollection<MaterialLayer>(layers);
+            return dest;
+        }
+
+        private static LibraryComponent BuildStructureDefinition(Core.StructureInformation src, Dictionary<string, LibraryComponent> matDict)
+        {
+            var dest = Mapper.Map<StructureInformation>(src);
+            var massRatios =
+                src
+                .MassRatios
+                .Select(ratios =>
+                {
+                    var mappedMat = default(LibraryComponent);
+                    if (matDict.TryGetValue(ratios.Material.Name, out mappedMat))
+                    {
+                        return new MassRatios()
+                        {
+                            Material = mappedMat,
+                            NormalRatio = ratios.NormalRatio,
+                            HighLoadRatio = ratios.HighLoadRatio
+                        };
+                    }
+                    else { return null; }
+                })
+                .Where(layer => layer != null);
+            dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
             return dest;
         }
     }

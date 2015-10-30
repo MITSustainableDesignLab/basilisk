@@ -23,6 +23,6 @@ namespace Basilisk.Core
         public double DisassemblyCarbon { get; set; }
 
         [DataMember]
-        public double DisassemblyCost { get; set; }
+        public double DisassemblyEnergy { get; set; }
     }
 }

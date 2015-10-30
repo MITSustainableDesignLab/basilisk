@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WindowConstruction))]
-    public class WindowConstruction : ConstructionBase
+    public class WindowConstruction : LayeredConstruction
     {
         public override LibraryComponent Duplicate()
         {

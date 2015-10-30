@@ -34,6 +34,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         private Library loadedLibrary;
         private LibraryComponent selectedComponent;
         private ObservableCollection<MaterialLayer> selectedComponentLayers;
+        private ObservableCollection<MassRatios> selectedComponentMassRatios;
 
         public MainWindowViewModel()
         {
@@ -115,11 +116,12 @@ namespace Basilisk.LibraryEditor.ViewModels
         public ICollection<LibraryComponent> LoadedOpaqueConstructions => loadedLibrary?.OpaqueConstructions;
         public ICollection<LibraryComponent> LoadedOpaqueMaterials => loadedLibrary?.OpaqueMaterials;
         public ICollection<LibraryComponent> LoadedSchedules => loadedLibrary?.Schedules;
+        public ICollection<LibraryComponent> LoadedStructureDefinitions => loadedLibrary?.StructureDefinitions;
         public ICollection<LibraryComponent> LoadedWindowConstructions => loadedLibrary?.WindowConstructions;
         public ICollection<LibraryComponent> LoadedWindowMaterials => LoadedGlazingMaterials?.Concat(LoadedGasMaterials).ToArray();
 
-        public Func<MaterialLayer, ICollection<LibraryComponent>, bool> PickMaterialForLayer =>
-            (layer, components) =>
+        public Func<IMaterialPickable, ICollection<LibraryComponent>, bool> PickMaterial =>
+            (pickable, components) =>
             {
                 var categorized = new ComponentCategoryCollection(components);
                 var pickerVM = new ComponentPickerViewModel()
@@ -130,7 +132,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 var res = picker.ShowDialog();
                 if (res.HasValue && res.Value)
                 {
-                    layer.Material = pickerVM.SelectedComponent;
+                    pickable.Material = pickerVM.SelectedComponent;
                     return true;
                 }
                 return false;
@@ -167,7 +169,8 @@ namespace Basilisk.LibraryEditor.ViewModels
                 editSelectedItemMetadataCommand.RaiseCanExecuteChanged();
                 deleteComponentCommand.RaiseCanExecuteChanged();
                 duplicateComponentCommand.RaiseCanExecuteChanged();
-                SelectedComponentLayers = (selectedComponent as ConstructionBase)?.Layers;
+                SelectedComponentLayers = (selectedComponent as LayeredConstruction)?.Layers;
+                SelectedComponentMassRatios = (selectedComponent as StructureInformation)?.MassRatios;
             }
         }
 
@@ -178,6 +181,16 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 selectedComponentLayers = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedComponentLayers)));
+            }
+        }
+
+        public ObservableCollection<MassRatios> SelectedComponentMassRatios
+        {
+            get { return selectedComponentMassRatios; }
+            set
+            {
+                selectedComponentMassRatios = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentMassRatios)));
             }
         }
 

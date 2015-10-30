@@ -9,7 +9,7 @@ using AutoMapper;
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.OpaqueConstruction))]
-    public class OpaqueConstruction : ConstructionBase
+    public class OpaqueConstruction : LayeredConstruction
     {
         public override LibraryComponent Duplicate()
         {

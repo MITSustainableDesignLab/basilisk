@@ -14,47 +14,20 @@ namespace Basilisk.Controls.InterfaceModels
     [UseDefaultValuesOf(typeof(Core.ConstructionBase))]
     public abstract class ConstructionBase : LibraryComponent
     {
-        private ObservableCollection<MaterialLayer> layers;
-
-        static ConstructionBase()
-        {
-            Mapper
-                .CreateMap<Core.ConstructionBase, ConstructionBase>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>();
-        }
-
-        [SimulationSetting(DisplayName = "Assembly Carbon")]
+        [SimulationSetting(DisplayName = "Assembly Carbon (kgCO2/m2)")]
         public double AssemblyCarbon { get; set; }
 
-        [SimulationSetting(DisplayName = "Assembly Cost")]
-        public double AssemblyCost { get; set; }
-
-        [SimulationSetting(DisplayName = "Assembly Energy")]
+        [SimulationSetting(DisplayName = "Assembly Energy (MJ/m2)")]
         public double AssemblyEnergy { get; set; }
 
-        [SimulationSetting(DisplayName = "Disassembly Carbon")]
+        [SimulationSetting(DisplayName = "Disassembly Carbon (kgCO2/m2)")]
         public double DisassemblyCarbon { get; set; }
 
-        [SimulationSetting(DisplayName = "Disassembly Cost")]
-        public double DisassemblyCost { get; set; }
+        [SimulationSetting(DisplayName = "Disassembly Energy (MJ/m2)")]
+        public double DisassemblyEnergy { get; set; }
 
-        public ObservableCollection<MaterialLayer> Layers
-        {
-            get { return layers; }
-            set
-            {
-                if (layers == value) { return; }
-                if (layers != null)
-                {
-                    foreach (var layer in layers) { layer.PropertyChanged -= OnLayersChanged; }
-                    layers.CollectionChanged -= OnLayersChanged;
-                }
-                layers = value;
-                foreach (var layer in layers) { layer.PropertyChanged += OnLayersChanged; }
-                layers.CollectionChanged += OnLayersChanged;
-                RaisePropertyChanged(this, nameof(Layers));
-            }
-        }
+        [SimulationSetting(DisplayName = "Cost ($/m3)")]
+        public double AssemblyCost { get; set; }
 
         protected void CopyBasePropertiesFrom(ConstructionBase source)
         {
@@ -62,22 +35,8 @@ namespace Basilisk.Controls.InterfaceModels
             AssemblyCost = source.AssemblyCost;
             AssemblyEnergy = source.AssemblyEnergy;
             DisassemblyCarbon = source.DisassemblyCarbon;
-            DisassemblyCost = source.DisassemblyCost;
-            var layers =
-                source
-                .Layers
-                .Select(layer => new MaterialLayer()
-                {
-                    Material = layer.Material,
-                    Thickness = layer.Thickness
-                });
-            Layers = new ObservableCollection<MaterialLayer>(layers);
+            DisassemblyEnergy = source.DisassemblyEnergy;
             CopyBasePropertiesFrom((LibraryComponent)source);
-        }
-
-        private void OnLayersChanged(object sender, EventArgs e)
-        {
-            RaisePropertyChanged(sender, nameof(Layers));
         }
     }
 }

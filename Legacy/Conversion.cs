@@ -13,16 +13,6 @@ namespace Basilisk.Legacy
 {
     public static class Conversion
     {
-        private const string OpaqueMaterialsMappingKey = "MappedOpaqueMaterials";
-        private const string WindowMaterialsMappingKey = "MappedWindowMaterials";
-
-        private const string OpaqueConstructionsMappingKey = "MappedOpaqueConstructions";
-        private const string WindowConstructionsMappingKey = "MappedWindowConstructions";
-
-        private const string DaySchedulesMappingKey = "MappedDaySchedules";
-        private const string WeekSchedulesMappingKey = "MappedWeekSchedules";
-        private const string YearSchedulesMappingKey = "MappedYearSchedules";
-
         static Conversion()
         {
             Mapper
@@ -48,6 +38,10 @@ namespace Basilisk.Legacy
                 .CreateMap<Legacy.GlazingConstruction, Core.WindowConstruction>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Layers, opt => opt.ResolveUsing(ResolveWindowMaterialLayers));
+            Mapper
+                .CreateMap<Legacy.StructureType, Core.StructureInformation>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.MassRatios, opt => opt.ResolveUsing(ResolveMassRatios));
 
             Mapper
                 .CreateMap<Legacy.DaySchedule, Core.DaySchedule>();
@@ -97,6 +91,8 @@ namespace Basilisk.Legacy
                 .ForMember(dest => dest.Core, opt => opt.MapFrom(src => src))
                 .ForMember(dest => dest.Perimeter, opt => opt.MapFrom(src => src));
 
+            // The mapping order matters: Referenced component types must be mapped before the types that reference them.
+            // e.g. Materials before constructions before buildings
             Mapper
                 .CreateMap<Legacy.Library, CoreLookupLibrary>()
                 .ForMember(dest => dest.OpaqueMaterials, opt => opt.SetMappingOrder(10))
@@ -107,6 +103,11 @@ namespace Basilisk.Legacy
                 {
                     opt.SetMappingOrder(20);
                     opt.MapFrom(src => src.GlazingConstructions);
+                })
+                .ForMember(dest => dest.StructureDefinitions, opt =>
+                {
+                    opt.SetMappingOrder(20);
+                    opt.MapFrom(src => src.StructureTypes);
                 })
                 .ForMember(dest => dest.DaySchedules, opt => opt.SetMappingOrder(30))
                 .ForMember(dest => dest.WeekSchedules, opt => opt.SetMappingOrder(40))
@@ -150,6 +151,31 @@ namespace Basilisk.Legacy
                 lookup.TryGetValue(name, out newConstruction);
                 return newConstruction;
             };
+        }
+
+        private static IList<Core.MassRatios> ResolveMassRatios(ResolutionResult res)
+        {
+            var library = GetDestinationLibrary(res.Context);
+            var lookup = library.OpaqueMaterialLookup;
+            var legacyStructure = (Legacy.StructureType)res.Context.SourceValue;
+            return
+                legacyStructure
+                .Materials
+                .Select(comp =>
+                {
+                    var newMat = default(Core.OpaqueMaterial);
+                    if (lookup.TryGetValue(comp.MaterialName, out newMat))
+                    {
+                        return new Core.MassRatios()
+                        {
+                            Material = newMat,
+                            NormalRatio = comp.QuantRatio,
+                            HighLoadRatio = comp.QuantRatioHigh
+                        };
+                    }
+                    else { return null; }
+                })
+                .ToList();
         }
 
         private static IList<Core.MaterialLayer<Core.OpaqueMaterial>> ResolveOpaqueMaterialLayers(ResolutionResult res)

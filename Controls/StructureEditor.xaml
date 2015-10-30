@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Basilisk.Controls.ConstructionEditor"
+﻿<UserControl x:Class="Basilisk.Controls.StructureEditor"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,15 +16,13 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <GroupBox Header="Material Layers">
+        <GroupBox Header="Materials">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Up" Click="MoveSelectedLayerUp" />
-                    <Button Content="Down" Click="MoveSelectedLayerDown" />
-                    <Button Content="Delete" Click="DeleteSelectedLayer" />
+                    <Button Content="Delete" Click="DeleteSelectedRatios" />
                 </StackPanel>
-                <DataGrid ItemsSource="{Binding ElementName=top, Path=Layers}"
-                          x:Name="layersGrid"
+                <DataGrid ItemsSource="{Binding ElementName=top, Path=Ratios}"
+                          x:Name="ratiosGrid"
                           AutoGenerateColumns="False"
                           CanUserReorderColumns="False"
                           CanUserResizeRows="False"
@@ -35,8 +33,10 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Material"
                                             Binding="{Binding Material.Name}" />
-                        <DataGridTextColumn Header="Thickness"
-                                            Binding="{Binding Thickness}" />
+                        <DataGridTextColumn Header="Normal Ratio (kg/m2)"
+                                            Binding="{Binding NormalRatio}" />
+                        <DataGridTextColumn Header="High Load Ratio (kg/m2)"
+                                            Binding="{Binding HighLoadRatio}" />
                     </DataGrid.Columns>
                 </DataGrid>
 

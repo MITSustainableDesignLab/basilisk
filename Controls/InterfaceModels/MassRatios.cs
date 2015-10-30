@@ -7,10 +7,21 @@ using System.Threading.Tasks;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    public class MaterialLayer : INotifyPropertyChanged, IMaterialPickable
+    public class MassRatios : INotifyPropertyChanged, IMaterialPickable
     {
+        private double highLoadRatio;
         private LibraryComponent material;
-        private double thickness;
+        private double normalRatio;
+
+        public double HighLoadRatio
+        {
+            get { return highLoadRatio; }
+            set
+            {
+                highLoadRatio = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HighLoadRatio)));
+            }
+        }
 
         public LibraryComponent Material
         {
@@ -22,13 +33,13 @@ namespace Basilisk.Controls.InterfaceModels
             }
         }
 
-        public double Thickness
+        public double NormalRatio
         {
-            get { return thickness; }
+            get { return normalRatio; }
             set
             {
-                thickness = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Thickness)));
+                normalRatio = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NormalRatio)));
             }
         }
 
