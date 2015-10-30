@@ -27,5 +27,12 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public string Type { get; set; }
+
+        public override LibraryComponent Duplicate()
+        {
+            var res = new GasMaterial() { Type = Type };
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

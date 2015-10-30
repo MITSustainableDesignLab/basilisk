@@ -47,5 +47,24 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Visible Transmittance")]
         public double VisibleTransmittance { get; set; }
+
+        public override LibraryComponent Duplicate()
+        {
+            var res = new GlazingMaterial()
+            {
+                DirtFactor = DirtFactor,
+                IREmissivityBack = IREmissivityBack,
+                IREmissivityFront = IREmissivityFront,
+                IRTransmittance = IRTransmittance,
+                SolarReflectanceBack = SolarReflectanceBack,
+                SolarReflectanceFront = SolarReflectanceFront,
+                SolarTransmittance = SolarTransmittance,
+                VisibleReflectanceBack = VisibleReflectanceBack,
+                VisibleReflectanceFront = VisibleReflectanceFront,
+                VisibleTransmittance = VisibleTransmittance
+            };
+            res.CopyBasePropertiesFrom(this);
+            return res;
+        }
     }
 }

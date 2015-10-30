@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    public class WindowMaterialBase : MaterialBase
+    public abstract class WindowMaterialBase : MaterialBase
     {
-        public override LibraryComponent Duplicate()
+        protected void CopyBasePropertiesFrom(WindowMaterialBase source)
         {
-            var res = new WindowMaterialBase();
-            res.CopyBasePropertiesFrom(this);
-            return res;
+            CopyBasePropertiesFrom((LibraryComponent)source);
         }
     }
 }
