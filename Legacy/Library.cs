@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace Basilisk.Legacy
@@ -55,5 +52,14 @@ namespace Basilisk.Legacy
 
         [XmlArrayItem("YearSchedule")]
         public List<YearSchedule> YearSchedules { get; set; }
+
+        public static Library Load(string path)
+        {
+            using (var reader = new StreamReader(path))
+            {
+                var serializer = new XmlSerializer(typeof(Legacy.Library));
+                return (Library)serializer.Deserialize(reader);
+            }
+        }
     }
 }

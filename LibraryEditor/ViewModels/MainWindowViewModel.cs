@@ -258,15 +258,6 @@ namespace Basilisk.LibraryEditor.ViewModels
             return newComponent;
         }
 
-        private static Legacy.Library LoadLegacyLibrary(string path)
-        {
-            using (var reader = new StreamReader(path))
-            {
-                var serializer = new XmlSerializer(typeof(Legacy.Library));
-                return (Legacy.Library)serializer.Deserialize(reader);
-            }
-        }
-
         private bool CheckForSaveAndProceed()
         {
             var res = MessageBox.Show(
@@ -416,7 +407,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                     }
                     try
                     {
-                        var legacy = LoadLegacyLibrary(ofd.FileName);
+                        var legacy = Legacy.Library.Load(ofd.FileName);
                         newLib = Legacy.Conversion.Convert(legacy);
                     }
                     catch { }
