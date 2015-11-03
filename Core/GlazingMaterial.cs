@@ -12,34 +12,34 @@ namespace Basilisk.Core
     public class GlazingMaterial : WindowMaterialBase, IEquatable<GlazingMaterial>
     {
         [DataMember, DefaultValue(1.0)]
-        public double DirtFactor { get; set; }
+        public double DirtFactor { get; set; } = 1.0;
 
         [DataMember, DefaultValue(0.84)]
-        public double IREmissivityBack { get; set; }
+        public double IREmissivityBack { get; set; } = 0.84;
 
         [DataMember, DefaultValue(0.84)]
-        public double IREmissivityFront { get; set; }
+        public double IREmissivityFront { get; set; } = 0.84;
 
         [DataMember, DefaultValue(0.0)]
         public double IRTransmittance { get; set; }
 
         [DataMember, DefaultValue(0.075)]
-        public double SolarReflectanceBack { get; set; }
+        public double SolarReflectanceBack { get; set; } = 0.075;
 
         [DataMember, DefaultValue(0.075)]
-        public double SolarReflectanceFront { get; set; }
+        public double SolarReflectanceFront { get; set; } = 0.075;
 
         [DataMember, DefaultValue(0.837)]
-        public double SolarTransmittance { get; set; }
+        public double SolarTransmittance { get; set; } = 0.837;
 
         [DataMember, DefaultValue(0.081)]
-        public double VisibleReflectanceBack { get; set; }
+        public double VisibleReflectanceBack { get; set; } = 0.081;
 
         [DataMember, DefaultValue(0.081)]
-        public double VisibleReflectanceFront { get; set; }
+        public double VisibleReflectanceFront { get; set; } = 0.081;
 
         [DataMember, DefaultValue(0.898)]
-        public double VisibleTransmittance { get; set; }
+        public double VisibleTransmittance { get; set; } = 0.898;
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
             Enumerable.Empty<LibraryComponent>();

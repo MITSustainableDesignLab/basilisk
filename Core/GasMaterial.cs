@@ -19,7 +19,7 @@ namespace Basilisk.Core
         }
 
         [DataMember, DefaultValue("AIR")]
-        public string Type { get; set; }
+        public string Type { get; set; } = "AIR";
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
             Enumerable.Empty<LibraryComponent>();
