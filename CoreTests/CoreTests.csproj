@@ -67,6 +67,7 @@
     <Compile Include="DayScheduleTests.cs" />
     <Compile Include="BuildingTemplateTests.cs" />
     <Compile Include="GasMaterialTests.cs" />
+    <Compile Include="MaterialLayerTests.cs" />
     <Compile Include="WindowMaterialBaseTests.cs" />
     <Compile Include="XmlSerialization.cs" />
     <Compile Include="YearScheduleTests.cs" />
