@@ -462,7 +462,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 var coreLib = loadedLibrary.ToCoreLibrary();
 #if DEBUG
-                var orphanCount = coreLib.GetOrphanedComponents().Count();
+                var orphanCount = coreLib.OrphanedComponents().Count();
                 if (orphanCount > 0)
                 {
                     MessageBox.Show($"{orphanCount} orphaned component(s)");

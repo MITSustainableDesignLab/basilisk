@@ -101,7 +101,7 @@ namespace Basilisk.Core
             }
         }
 
-        public IEnumerable<LibraryComponent> GetOrphanedComponents()
+        public IEnumerable<LibraryComponent> OrphanedComponents()
         {
             var known =
                 OpaqueMaterials

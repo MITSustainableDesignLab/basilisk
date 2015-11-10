@@ -35,18 +35,5 @@ namespace Basilisk.Tests.Core
                 Assert.IsTrue(deserialized.OpaqueMaterials.Contains(m));
             }
         }
-
-        [TestMethod]
-        public void OrphanDetection_OrphanedWindowConstruction_Detected()
-        {
-            var w = Dummies.WindowConstruction;
-            var z = new ZoneDefinition() { Window = w };
-            var b = new BuildingTemplate() { Core = z };
-            var lib = new Library()
-            {
-                BuildingTemplates = new List<BuildingTemplate>() { b }
-            };
-            Assert.AreEqual(1, lib.GetOrphanedComponents().Count());
-        }
     }
 }
