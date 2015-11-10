@@ -10,17 +10,13 @@ using System.Xml;
 
 using Newtonsoft.Json;
 
+using JsonFormatting = Newtonsoft.Json.Formatting;
+
 namespace Basilisk.Core
 {
     [DataContract]
     public class Library
     {
-        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings()
-        {
-            TypeNameHandling = TypeNameHandling.Objects,
-            Formatting = Newtonsoft.Json.Formatting.Indented
-        };
-
         [DataMember]
         public ICollection<BuildingTemplate> BuildingTemplates { get; set; } = new List<BuildingTemplate>();
 
@@ -59,15 +55,12 @@ namespace Basilisk.Core
 
         public static Library FromJson(string json)
         {
-            return JsonConvert.DeserializeObject<Library>(json, JsonSettings);
+            return JsonConvert.DeserializeObject<Library>(json);
         }
 
         public static Task<Library> FromJsonAsync(string json)
         {
-            using (var reader = new StringReader(json))
-            {
-                return JsonConvert.DeserializeObjectAsync<Library>(json, JsonSettings);
-            }
+            return JsonConvert.DeserializeObjectAsync<Library>(json);
         }
 
         public static Library FromXml(string path)
@@ -82,16 +75,28 @@ namespace Basilisk.Core
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, JsonSettings);
+            if (OrphanedComponents().Any())
+            {
+                throw new InvalidOperationException("The component library has at least one orphaned component and cannot be serialized.");
+            }
+            return JsonConvert.SerializeObject(this, JsonFormatting.Indented);
         }
 
         public Task<string> ToJsonAsync()
         {
-            return JsonConvert.SerializeObjectAsync(this, Newtonsoft.Json.Formatting.Indented, JsonSettings);
+            if (OrphanedComponents().Any())
+            {
+                throw new InvalidOperationException("The component library has at least one orphaned component and cannot be serialized.");
+            }
+            return JsonConvert.SerializeObjectAsync(this, JsonFormatting.Indented);
         }
 
         public string ToXml()
         {
+            if (OrphanedComponents().Any())
+            {
+                throw new InvalidOperationException("The component library has at least one orphaned component and cannot be serialized.");
+            }
             using (var stringWriter = new StringWriter())
             using (var xml = XmlWriter.Create(stringWriter))
             {

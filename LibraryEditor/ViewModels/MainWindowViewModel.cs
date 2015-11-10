@@ -471,12 +471,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 var extension = Path.GetExtension(path);
                 if (extension == ".json")
                 {
-                    var settings = new JsonSerializerSettings()
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        Formatting = Newtonsoft.Json.Formatting.Indented
-                    };
-                    var json = JsonConvert.SerializeObject(loadedLibrary.ToCoreLibrary(), settings);
+                    var json = JsonConvert.SerializeObject(loadedLibrary.ToCoreLibrary(), Formatting.Indented);
                     File.WriteAllText(path, json);
                 }
                 else if (extension == ".xml")
