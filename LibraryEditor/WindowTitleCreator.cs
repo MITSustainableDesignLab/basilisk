@@ -25,7 +25,8 @@ namespace Basilisk.LibraryEditor
                 !isAnyLibraryLoaded ? "(no library loaded)" :
                 currentLibraryPath == null ? "(new library)" :
                 currentLibraryPath;
-            return prefix + payload + (unsavedChanges ? "*" : String.Empty);
+            var indicateChanges = currentLibraryPath != null && unsavedChanges;
+            return prefix + payload + (indicateChanges ? "*" : String.Empty);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
