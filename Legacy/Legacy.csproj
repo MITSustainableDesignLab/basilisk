@@ -49,7 +49,6 @@
     <Compile Include="BlindType.cs" />
     <Compile Include="BuildingTemplate.cs" />
     <Compile Include="Conversion.cs" />
-    <Compile Include="CoreLookupLibrary.cs" />
     <Compile Include="DaySchedule.cs" />
     <Compile Include="GasMaterial.cs" />
     <Compile Include="GlazingConstruction.cs" />

@@ -53,6 +53,29 @@ namespace Basilisk.Core
         public ICollection<YearSchedule> YearSchedules { get; set; } = new List<YearSchedule>();
         #endregion
 
+        #region Zone stuff
+        [DataMember]
+        public ICollection<DomesticHotWaterSettings> DomesticHotWaterSettings { get; set; } = new List<DomesticHotWaterSettings>();
+
+        [DataMember]
+        public ICollection<ZoneVentilation> VentilationSettings { get; set; }
+
+        [DataMember]
+        public ICollection<WindowSettings> WindowSettings { get; set; } = new List<WindowSettings>();
+
+        [DataMember]
+        public ICollection<ZoneConditioning> ZoneConditionings { get; set; } = new List<ZoneConditioning>();
+
+        [DataMember]
+        public ICollection<ZoneConstructions> ZoneConstructionSets { get; set; } = new List<ZoneConstructions>();
+
+        [DataMember]
+        public ICollection<ZoneLoads> ZoneLoads { get; set; } = new List<ZoneLoads>();
+
+        [DataMember]
+        public ICollection<ZoneDefinition> Zones { get; set; } = new List<ZoneDefinition>();
+        #endregion
+
         public static Library FromJson(string json)
         {
             return JsonConvert.DeserializeObject<Library>(json);
@@ -119,6 +142,13 @@ namespace Basilisk.Core
                 .Concat(DaySchedules)
                 .Concat(WeekSchedules)
                 .Concat(YearSchedules)
+                .Concat(DomesticHotWaterSettings)
+                .Concat(WindowSettings)
+                .Concat(ZoneConditionings)
+                .Concat(ZoneConstructionSets)
+                .Concat(ZoneLoads)
+                .Concat(VentilationSettings)
+                .Concat(Zones)
                 .Concat(BuildingTemplates);
             return
                 known

@@ -161,6 +161,46 @@
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>
                 </TabItem>
+                <TabItem Header="Zone Information">
+                    <basilisk:ComponentEditorTabControl>
+                        <TabItem Header="Zones"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZones}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneDefinition}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
+                        <TabItem Header="Loads"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneLoads}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneLoads}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
+                        <TabItem Header="Constructions"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneConstructions}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneConstructions}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
+                        <TabItem Header="Conditioning"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneConditionings}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneConditioning}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
+                        <TabItem Header="Ventilation"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneVentilations}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneVentilation}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
+                        <TabItem Header="Domestic Hot Water"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneHotWaters}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneHotWater}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
+                    </basilisk:ComponentEditorTabControl>
+                </TabItem>
             </basilisk:ComponentEditorTabControl>
         </Grid>
     </Grid>

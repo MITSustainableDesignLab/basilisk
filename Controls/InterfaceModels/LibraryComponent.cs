@@ -46,6 +46,8 @@ namespace Basilisk.Controls.InterfaceModels
 
         public abstract LibraryComponent Duplicate();
 
+        public override string ToString() => Name;
+
         protected void CopyBasePropertiesFrom(LibraryComponent source)
         {
             Category = source.Category;

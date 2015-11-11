@@ -48,6 +48,7 @@
     <Compile Include="BuildingTemplate.cs" />
     <Compile Include="ConstructionBase.cs" />
     <Compile Include="DaySchedule.cs" />
+    <Compile Include="DomesticHotWaterSettings.cs" />
     <Compile Include="GasMaterial.cs" />
     <Compile Include="GlazingMaterial.cs" />
     <Compile Include="LayeredConstruction.cs" />
@@ -64,9 +65,15 @@
     <Compile Include="WeekSchedule.cs" />
     <Compile Include="WindowConstruction.cs" />
     <Compile Include="WindowMaterialBase.cs" />
+    <Compile Include="WindowSettings.cs" />
+    <Compile Include="WindowType.cs" />
     <Compile Include="YearSchedule.cs" />
     <Compile Include="YearSchedulePart.cs" />
+    <Compile Include="ZoneConditioning.cs" />
+    <Compile Include="ZoneConstructions.cs" />
     <Compile Include="ZoneDefinition.cs" />
+    <Compile Include="ZoneLoads.cs" />
+    <Compile Include="ZoneVentilation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

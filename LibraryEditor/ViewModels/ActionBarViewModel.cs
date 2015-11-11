@@ -202,6 +202,10 @@ namespace Basilisk.LibraryEditor.ViewModels
                     catch { }
                     if (newLib != null)
                     {
+#if DEBUG
+                        var orphanCount = newLib.OrphanedComponents().Count();
+                        if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
+#endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
                         parent.CurrentLibraryPath = ofd.FileName;
                         parent.HasUnsavedChanges = false;
@@ -214,6 +218,10 @@ namespace Basilisk.LibraryEditor.ViewModels
                     catch { }
                     if (newLib != null)
                     {
+#if DEBUG
+                        var orphanCount = newLib.OrphanedComponents().Count();
+                        if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
+#endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
                         parent.CurrentLibraryPath = ofd.FileName;
                         parent.HasUnsavedChanges = false;
@@ -232,6 +240,10 @@ namespace Basilisk.LibraryEditor.ViewModels
                             "Legacy library loaded",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
+#if DEBUG
+                        var orphanCount = newLib.OrphanedComponents().Count();
+                        if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
+#endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
                         parent.CurrentLibraryPath = null;
                         parent.HasUnsavedChanges = false;

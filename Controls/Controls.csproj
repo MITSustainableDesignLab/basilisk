@@ -86,6 +86,12 @@
     <Compile Include="InterfaceModels\WindowMaterialBase.cs" />
     <Compile Include="InterfaceModels\YearSchedule.cs" />
     <Compile Include="InterfaceModels\YearSchedulePart.cs" />
+    <Compile Include="InterfaceModels\ZoneConditioning.cs" />
+    <Compile Include="InterfaceModels\ZoneConstructions.cs" />
+    <Compile Include="InterfaceModels\ZoneDefinition.cs" />
+    <Compile Include="InterfaceModels\ZoneHotWater.cs" />
+    <Compile Include="InterfaceModels\ZoneLoads.cs" />
+    <Compile Include="InterfaceModels\ZoneVentilation.cs" />
     <Compile Include="LibraryComponentTreeView.xaml.cs">
       <DependentUpon>LibraryComponentTreeView.xaml</DependentUpon>
     </Compile>
@@ -108,6 +114,7 @@
     </Compile>
     <Compile Include="TypeMatchConverter.cs" />
     <Compile Include="UseDefaultValuesOfAttribute.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="WeekScheduleEditor.xaml.cs">
       <DependentUpon>WeekScheduleEditor.xaml</DependentUpon>
     </Compile>

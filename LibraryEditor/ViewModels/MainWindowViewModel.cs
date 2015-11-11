@@ -20,6 +20,8 @@ namespace Basilisk.LibraryEditor.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private readonly Dictionary<Type, Func<IEnumerable<LibraryComponent>>> referenceTargets;
+
         private ComponentCategoryCollection currentlyCategorizedComponents;
         private string currentLibraryPath;
         private ICollection<LibraryComponent> currentlyListedComponents;
@@ -33,6 +35,18 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         public MainWindowViewModel()
         {
+            referenceTargets = new Dictionary<Type, Func<IEnumerable<LibraryComponent>>>()
+            {
+                [typeof(YearSchedule)] = () => LoadedYearSchedules,
+                [typeof(OpaqueConstruction)] = () => LoadedOpaqueConstructions,
+                [typeof(WindowConstruction)] = () => LoadedWindowConstructions,
+                [typeof(ZoneConstructions)] = () => LoadedZoneConstructions,
+                [typeof(ZoneLoads)] = () => LoadedZoneLoads,
+                [typeof(ZoneConditioning)] = () => LoadedZoneConditionings,
+                [typeof(ZoneVentilation)] = () => LoadedZoneVentilations,
+                [typeof(ZoneHotWater)] = () => LoadedZoneHotWaters,
+                [typeof(ZoneDefinition)] = () => LoadedZones,
+            };
             ActionBarViewModel = new ActionBarViewModel(this);
 #if DEBUG
             Instance = this;
@@ -109,6 +123,12 @@ namespace Basilisk.LibraryEditor.ViewModels
         public ICollection<LibraryComponent> LoadedStructureDefinitions => loadedLibrary?.StructureDefinitions;
         public ICollection<LibraryComponent> LoadedWindowConstructions => loadedLibrary?.WindowConstructions;
         public ICollection<LibraryComponent> LoadedWindowMaterials => LoadedGlazingMaterials?.Concat(LoadedGasMaterials).ToArray();
+        public ICollection<LibraryComponent> LoadedZoneConstructions => loadedLibrary?.ZoneConstructions;
+        public ICollection<LibraryComponent> LoadedZoneLoads => loadedLibrary?.ZoneLoads;
+        public ICollection<LibraryComponent> LoadedZoneConditionings => loadedLibrary?.ZoneConditionings;
+        public ICollection<LibraryComponent> LoadedZoneVentilations => loadedLibrary?.ZoneVentilations;
+        public ICollection<LibraryComponent> LoadedZoneHotWaters => loadedLibrary?.ZoneHotWaters;
+        public ICollection<LibraryComponent> LoadedZones => loadedLibrary?.Zones;
 
         public Func<IMaterialPickable, ICollection<LibraryComponent>, bool> PickMaterial =>
             (pickable, components) =>
@@ -151,24 +171,8 @@ namespace Basilisk.LibraryEditor.ViewModels
         public Func<SimulationSetting, bool> PickReferenceTarget =>
             setting =>
             {
-                IEnumerable<LibraryComponent> choices;
-                if (setting.TargetType == typeof(YearSchedule))
-                {
-                    choices = LoadedYearSchedules;
-                }
-                else if (setting.TargetType == typeof(OpaqueConstruction))
-                {
-                    choices = LoadedOpaqueConstructions;
-                }
-                else if (setting.TargetType == typeof(WindowConstruction))
-                {
-                    choices = LoadedWindowConstructions;
-                }
-                else
-                {
-                    throw new ArgumentException("Unknown simulation setting target type for picking");
-                }
-                var categorized = new ComponentCategoryCollection(choices.ToArray());
+                var choices = referenceTargets[setting.TargetType]().ToArray();
+                var categorized = new ComponentCategoryCollection(choices);
                 var pickerVM = new ComponentPickerViewModel()
                 {
                     Components = categorized

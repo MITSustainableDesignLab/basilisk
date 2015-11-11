@@ -59,9 +59,41 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Schedule, opt => opt.Ignore());
             Mapper
                 .CreateMap<Core.YearSchedule, YearSchedule>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
                 .ForMember(dest => dest.Category, opt => opt.Ignore())
                 .ForMember(dest => dest.Parts, opt => opt.Ignore());
+            Mapper.CreateMap<Core.ZoneConstructions, ZoneConstructions>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.Facade, opt => opt.Ignore())
+                .ForMember(dest => dest.Ground, opt => opt.Ignore())
+                .ForMember(dest => dest.Partition, opt => opt.Ignore())
+                .ForMember(dest => dest.Roof, opt => opt.Ignore())
+                .ForMember(dest => dest.Slab, opt => opt.Ignore());
+            Mapper.CreateMap<Core.ZoneLoads, ZoneLoads>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.OccupancySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.EquipmentAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.LightsAvailabilitySchedule, opt => opt.Ignore());
+            Mapper.CreateMap<Core.ZoneConditioning, ZoneConditioning>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.HeatingSchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.CoolingSchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.MechVentSchedule, opt => opt.Ignore());
+            Mapper.CreateMap<Core.ZoneVentilation, ZoneVentilation>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.VentSchedule, opt => opt.Ignore());
+            Mapper.CreateMap<Core.DomesticHotWaterSettings, ZoneHotWater>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
+            Mapper.CreateMap<Core.ZoneDefinition, ZoneDefinition>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.Constructions, opt => opt.Ignore())
+                .ForMember(dest => dest.Loads, opt => opt.Ignore())
+                .ForMember(dest => dest.Conditioning, opt => opt.Ignore())
+                .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
+                .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
+                .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
 
             Mapper
                 .CreateMap<LibraryComponent, Core.LibraryComponent>();
@@ -122,6 +154,39 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
+
+            Mapper.CreateMap<ZoneConstructions, Core.ZoneConstructions>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.Facade, opt => opt.Ignore())
+                .ForMember(dest => dest.Ground, opt => opt.Ignore())
+                .ForMember(dest => dest.Partition, opt => opt.Ignore())
+                .ForMember(dest => dest.Roof, opt => opt.Ignore())
+                .ForMember(dest => dest.Slab, opt => opt.Ignore());
+            Mapper.CreateMap<ZoneLoads, Core.ZoneLoads>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.OccupancySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.EquipmentAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.LightsAvailabilitySchedule, opt => opt.Ignore());
+            Mapper.CreateMap<ZoneConditioning, Core.ZoneConditioning>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.HeatingSchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.CoolingSchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.MechVentSchedule, opt => opt.Ignore());
+            Mapper.CreateMap<ZoneVentilation, Core.ZoneVentilation>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.VentSchedule, opt => opt.Ignore());
+            Mapper.CreateMap<ZoneHotWater, Core.DomesticHotWaterSettings>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
+            Mapper.CreateMap<ZoneDefinition, Core.ZoneDefinition>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.Constructions, opt => opt.Ignore())
+                .ForMember(dest => dest.Loads, opt => opt.Ignore())
+                .ForMember(dest => dest.Conditioning, opt => opt.Ignore())
+                .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
+                .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
+                .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
         }
 
         public IEnumerable<LibraryComponent> AllComponents =>
@@ -131,7 +196,13 @@ namespace Basilisk.Controls.InterfaceModels
             .Concat(OpaqueConstructions)
             .Concat(WindowConstructions)
             .Concat(StructureDefinitions)
-            .Concat(Schedules);
+            .Concat(Schedules)
+            .Concat(ZoneConstructions)
+            .Concat(ZoneLoads)
+            .Concat(ZoneConditionings)
+            .Concat(ZoneVentilations)
+            .Concat(ZoneHotWaters)
+            .Concat(Zones);
 
         public ICollection<LibraryComponent> GasMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
@@ -143,8 +214,16 @@ namespace Basilisk.Controls.InterfaceModels
 
         public ICollection<LibraryComponent> Schedules { get; set; } = new List<LibraryComponent>();
 
+        public ICollection<LibraryComponent> ZoneConstructions { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneLoads { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneConditionings { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneVentilations { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneHotWaters { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> Zones { get; set; } = new List<LibraryComponent>();
+
         public static Library Create(Core.Library sourceLib)
         {
+            System.Diagnostics.Debug.Assert(!sourceLib.OrphanedComponents().Any());
             var opaqueMats = Mapper.Map<ICollection<OpaqueMaterial>>(sourceLib.OpaqueMaterials).Cast<LibraryComponent>().ToList();
             var glazingMats = Mapper.Map<ICollection<GlazingMaterial>>(sourceLib.GlazingMaterials).Cast<LibraryComponent>().ToList();
             var gasMats = Mapper.Map<ICollection<GasMaterial>>(sourceLib.GasMaterials).Cast<LibraryComponent>().ToList();
@@ -156,7 +235,7 @@ namespace Basilisk.Controls.InterfaceModels
                 sourceLib
                 .OpaqueConstructions
                 .Select(src => BuildLayeredConstruction<Core.OpaqueConstruction, OpaqueConstruction, Core.OpaqueMaterial>(src, opaqueMatDict))
-                .ToList();
+                .ToDictionary(c => c.Name);
             var windowConstructions =
                 sourceLib
                 .WindowConstructions
@@ -214,25 +293,80 @@ namespace Basilisk.Controls.InterfaceModels
                     var year = Mapper.Map<YearSchedule>(coreYear);
                     year.Parts = new ObservableCollection<YearSchedulePart>(theseParts);
                     return year;
-                });
+                })
+                .ToDictionary(s => s.Name);
 
             var allSchedules =
                 days
                 .Values
                 .Cast<LibraryComponent>()
                 .Concat(weeks.Values)
-                .Concat(years)
+                .Concat(years.Values)
                 .ToList();
+
+            var zoneConstructions =
+                sourceLib
+                .ZoneConstructionSets
+                .Select(zc => BuildZoneConstructions(zc, opaqueConstructions))
+                .ToDictionary(zc => zc.Name);
+            var zoneLoads =
+                sourceLib
+                .ZoneLoads
+                .Select(zl => BuildZoneLoads(zl, years))
+                .ToDictionary(zl => zl.Name);
+            var zoneConditionings =
+                sourceLib
+                .ZoneConditionings
+                .Select(zc => BuildZoneConditionings(zc, years))
+                .ToDictionary(zc => zc.Name);
+            var zoneVentilations =
+                sourceLib
+                .VentilationSettings
+                .Select(v => BuildVentilation(v, years))
+                .ToDictionary(v => v.Name);
+            var zoneHotWaters =
+                sourceLib
+                .DomesticHotWaterSettings
+                .Select(hw => BuildHotWater(hw, years))
+                .ToDictionary(hw => hw.Name);
+            var zones =
+                sourceLib
+                .Zones
+                .Select(z =>
+                {
+                    var res = Mapper.Map<ZoneDefinition>(z);
+                    res.Constructions = zoneConstructions.GetValueOrDefault(z.Constructions?.Name);
+                    res.Loads = zoneLoads.GetValueOrDefault(z.Loads?.Name);
+                    res.Conditioning = zoneConditionings.GetValueOrDefault(z.Conditioning?.Name);
+                    res.Ventilation = zoneVentilations.GetValueOrDefault(z.Ventilation?.Name);
+                    res.DomesticHotWater = zoneHotWaters.GetValueOrDefault(z.DomesticHotWater?.Name);
+                    res.InternalMassConstruction = opaqueConstructions.GetValueOrDefault(z.InternalMassConstruction?.Name);
+                    return res;
+                })
+                .ToDictionary(z => z.Name);
+
+#if DEBUG
+            foreach (var z in zones.Values.Where(z => z.InternalMassConstruction != null))
+            {
+                System.Diagnostics.Debug.Assert(opaqueConstructions.ContainsValue(z.InternalMassConstruction));
+            }
+#endif
 
             return new Library()
             {
                 OpaqueMaterials = opaqueMats,
                 GlazingMaterials = glazingMats,
                 GasMaterials = gasMats,
-                OpaqueConstructions = opaqueConstructions,
-                WindowConstructions = windowConstructions,
+                OpaqueConstructions = opaqueConstructions.Values.Cast<LibraryComponent>().ToList(),
+                WindowConstructions = windowConstructions.Cast<LibraryComponent>().ToList(),
                 StructureDefinitions = structureDefinitions,
-                Schedules = allSchedules
+                Schedules = allSchedules,
+                ZoneConstructions = zoneConstructions.Values.Cast<LibraryComponent>().ToList(),
+                ZoneLoads = zoneLoads.Values.Cast<LibraryComponent>().ToList(),
+                ZoneConditionings = zoneConditionings.Values.Cast<LibraryComponent>().ToList(),
+                ZoneVentilations = zoneVentilations.Values.Cast<LibraryComponent>().ToList(),
+                ZoneHotWaters = zoneHotWaters.Values.Cast<LibraryComponent>().ToList(),
+                Zones = zones.Values.Cast<LibraryComponent>().ToList()
             };
         }
 
@@ -342,11 +476,94 @@ namespace Basilisk.Controls.InterfaceModels
                     })
                     .ToList();
             }
+            var knownSchedules = newLib.YearSchedules.ToDictionary(s => s.Name);
+
+            var knownOpaqueConstructions = newLib.OpaqueConstructions.ToDictionary(c => c.Name);
+            newLib.ZoneConstructionSets =
+                ZoneConstructions
+                .Cast<ZoneConstructions>()
+                .Select(zc =>
+                {
+                    var res = Mapper.Map<Core.ZoneConstructions>(zc);
+                    res.Facade = knownOpaqueConstructions.GetValueOrDefault(zc.Facade?.Name);
+                    res.Ground = knownOpaqueConstructions.GetValueOrDefault(zc.Ground?.Name);
+                    res.Partition = knownOpaqueConstructions.GetValueOrDefault(zc.Partition?.Name);
+                    res.Roof = knownOpaqueConstructions.GetValueOrDefault(zc.Roof?.Name);
+                    res.Slab = knownOpaqueConstructions.GetValueOrDefault(zc.Slab?.Name);
+                    return res;
+                })
+                .ToList();
+            newLib.ZoneLoads =
+                ZoneLoads
+                .Cast<ZoneLoads>()
+                .Select(zl =>
+                {
+                    var res = Mapper.Map<Core.ZoneLoads>(zl);
+                    res.OccupancySchedule = knownSchedules.GetValueOrDefault(zl.OccupancySchedule?.Name);
+                    res.LightsAvailabilitySchedule = knownSchedules.GetValueOrDefault(zl.LightsAvailabilitySchedule?.Name);
+                    res.EquipmentAvailabilitySchedule = knownSchedules.GetValueOrDefault(zl.EquipmentAvailabilitySchedule?.Name);
+                    return res;
+                })
+                .ToList();
+            newLib.ZoneConditionings =
+                ZoneConditionings
+                .Cast<ZoneConditioning>()
+                .Select(zc =>
+                {
+                    var res = Mapper.Map<Core.ZoneConditioning>(zc);
+                    res.HeatingSchedule = knownSchedules.GetValueOrDefault(zc.HeatingSchedule?.Name);
+                    res.CoolingSchedule = knownSchedules.GetValueOrDefault(zc.CoolingSchedule?.Name);
+                    res.MechVentSchedule = knownSchedules.GetValueOrDefault(zc.MechVentSchedule?.Name);
+                    return res;
+                })
+                .ToList();
+            newLib.VentilationSettings =
+                ZoneVentilations
+                .Cast<ZoneVentilation>()
+                .Select(v =>
+                {
+                    var res = Mapper.Map<Core.ZoneVentilation>(v);
+                    res.VentSchedule = knownSchedules.GetValueOrDefault(v.VentSchedule?.Name);
+                    res.NatVentSchedule = knownSchedules.GetValueOrDefault(v.NatVentSchedule?.Name);
+                    return res;
+                })
+                .ToList();
+            newLib.DomesticHotWaterSettings =
+                ZoneHotWaters
+                .Cast<ZoneHotWater>()
+                .Select(w =>
+                {
+                    var res = Mapper.Map<Core.DomesticHotWaterSettings>(w);
+                    res.WaterSchedule = knownSchedules.GetValueOrDefault(w.WaterSchedule?.Name);
+                    return res;
+                })
+                .ToList();
+
+            var knownConstructionSets = newLib.ZoneConstructionSets.ToDictionary(x => x.Name);
+            var knownLoads = newLib.ZoneLoads.ToDictionary(x => x.Name);
+            var knownConditionings = newLib.ZoneConditionings.ToDictionary(x => x.Name);
+            var knownVentilations = newLib.VentilationSettings.ToDictionary(x => x.Name);
+            var knownHotWaters = newLib.DomesticHotWaterSettings.ToDictionary(x => x.Name);
+            newLib.Zones =
+                Zones
+                .Cast<ZoneDefinition>()
+                .Select(z =>
+                {
+                    var res = Mapper.Map<Core.ZoneDefinition>(z);
+                    res.Constructions = knownConstructionSets.GetValueOrDefault(z.Constructions?.Name);
+                    res.Loads = knownLoads.GetValueOrDefault(z.Loads?.Name);
+                    res.Conditioning = knownConditionings.GetValueOrDefault(z.Conditioning?.Name);
+                    res.Ventilation = knownVentilations.GetValueOrDefault(z.Ventilation?.Name);
+                    res.DomesticHotWater = knownHotWaters.GetValueOrDefault(z.DomesticHotWater?.Name);
+                    res.InternalMassConstruction = knownOpaqueConstructions.GetValueOrDefault(z.InternalMassConstruction?.Name);
+                    return res;
+                })
+                .ToList();
 
             return newLib;
         }
 
-        private static LibraryComponent BuildLayeredConstruction<SourceT, DestT, MaterialT>(SourceT src, Dictionary<string, LibraryComponent> matDict)
+        private static DestT BuildLayeredConstruction<SourceT, DestT, MaterialT>(SourceT src, Dictionary<string, LibraryComponent> matDict)
             where SourceT : Core.LayeredConstruction<MaterialT>
             where DestT : LayeredConstruction
             where MaterialT : Core.MaterialBase
@@ -395,6 +612,50 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .Where(layer => layer != null);
             dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
+            return dest;
+        }
+
+        private static ZoneConstructions BuildZoneConstructions(Core.ZoneConstructions src, Dictionary<string, OpaqueConstruction> constructions)
+        {
+            var dest = Mapper.Map<ZoneConstructions>(src);
+            dest.Facade = constructions.GetValueOrDefault(src.Facade?.Name);
+            dest.Ground = constructions.GetValueOrDefault(src.Ground?.Name);
+            dest.Partition = constructions.GetValueOrDefault(src.Partition?.Name);
+            dest.Roof = constructions.GetValueOrDefault(src.Roof?.Name);
+            dest.Slab = constructions.GetValueOrDefault(src.Slab?.Name);
+            return dest;
+        }
+
+        private static ZoneLoads BuildZoneLoads(Core.ZoneLoads src, Dictionary<string, YearSchedule> schedules)
+        {
+            var dest = Mapper.Map<ZoneLoads>(src);
+            dest.OccupancySchedule = schedules.GetValueOrDefault(src.OccupancySchedule?.Name);
+            dest.LightsAvailabilitySchedule = schedules.GetValueOrDefault(src.LightsAvailabilitySchedule?.Name);
+            dest.EquipmentAvailabilitySchedule = schedules.GetValueOrDefault(src.EquipmentAvailabilitySchedule?.Name);
+            return dest;
+        }
+
+        private static ZoneConditioning BuildZoneConditionings(Core.ZoneConditioning src, Dictionary<string, YearSchedule> schedules)
+        {
+            var dest = Mapper.Map<ZoneConditioning>(src);
+            dest.HeatingSchedule = schedules.GetValueOrDefault(src.HeatingSchedule?.Name);
+            dest.CoolingSchedule = schedules.GetValueOrDefault(src.CoolingSchedule?.Name);
+            dest.MechVentSchedule = schedules.GetValueOrDefault(src.MechVentSchedule?.Name);
+            return dest;
+        }
+        
+        private static ZoneVentilation BuildVentilation(Core.ZoneVentilation src, Dictionary<string, YearSchedule> schedules)
+        {
+            var dest = Mapper.Map<ZoneVentilation>(src);
+            dest.VentSchedule = schedules.GetValueOrDefault(src.VentSchedule?.Name);
+            dest.NatVentSchedule = schedules.GetValueOrDefault(src.NatVentSchedule?.Name);
+            return dest;
+        }
+
+        private static ZoneHotWater BuildHotWater(Core.DomesticHotWaterSettings src, Dictionary<string, YearSchedule> schedules)
+        {
+            var dest = Mapper.Map<ZoneHotWater>(src);
+            dest.WaterSchedule = schedules.GetValueOrDefault(src.WaterSchedule?.Name);
             return dest;
         }
     }

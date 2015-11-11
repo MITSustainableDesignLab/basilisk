@@ -24,7 +24,7 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting]
         public string Type { get; set; }
 
-        public IList<double> Values { get; set; }
+        public IList<double> Values { get; set; } 
 
         public override LibraryComponent Duplicate()
         {
