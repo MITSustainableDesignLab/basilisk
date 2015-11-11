@@ -11,7 +11,9 @@ namespace Basilisk.Controls
         Unspecified,
         Real,
         Integer,
+        Bool,
         String,
-        Enum
+        Enum,
+        Reference
     }
 }

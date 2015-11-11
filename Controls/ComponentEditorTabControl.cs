@@ -34,8 +34,8 @@ namespace Basilisk.Controls
             }
             // This is here because tab controls will be notified about selection changes
             // if *any* subtab changes, and sometimes those subtabs will not have any
-            // directly-assigned propagation components (because their parents are taking)
-            // care of it. In this case the propagation set will always be null. I think
+            // directly-assigned propagation components (because their parents are taking
+            // care of it). In this case the propagation set will always be null. I think
             // it would be better to just ignore links that aren't directly from child to
             // parent, but this is working for now.
             if (GetComponentsToPropagateUpward(propagateFrom) == null) { return; }

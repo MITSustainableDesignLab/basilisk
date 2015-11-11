@@ -111,6 +111,7 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         public IEnumerable<DaySchedule> LoadedDaySchedules => LoadedSchedules?.Select(s => s as DaySchedule).Where(s => s != null);
         public IEnumerable<WeekSchedule> LoadedWeekSchedules => LoadedSchedules?.Select(s => s as WeekSchedule).Where(s => s != null);
+        public IEnumerable<YearSchedule> LoadedYearSchedules => LoadedSchedules?.Select(s => s as YearSchedule).Where(s => s != null);
         public ICollection<LibraryComponent> LoadedGasMaterials => loadedLibrary?.GasMaterials;
         public ICollection<LibraryComponent> LoadedGlazingMaterials => loadedLibrary?.GlazingMaterials;
         public ICollection<LibraryComponent> LoadedOpaqueConstructions => loadedLibrary?.OpaqueConstructions;
@@ -151,6 +152,43 @@ namespace Basilisk.LibraryEditor.ViewModels
                 if (res.HasValue && res.Value)
                 {
                     part.Schedule = (WeekSchedule)pickerVM.SelectedComponent;
+                    HasUnsavedChanges = true;
+                    return true;
+                }
+                return false;
+            };
+
+        public Func<SimulationSetting, bool> PickReferenceTarget =>
+            setting =>
+            {
+                IEnumerable<LibraryComponent> choices;
+                if (setting.TargetType == typeof(YearSchedule))
+                {
+                    choices = LoadedYearSchedules;
+                }
+                else if (setting.TargetType == typeof(OpaqueConstruction))
+                {
+                    choices = LoadedOpaqueConstructions;
+                }
+                else if (setting.TargetType == typeof(WindowConstruction))
+                {
+                    choices = LoadedWindowConstructions;
+                }
+                else
+                {
+                    throw new ArgumentException("Unknown simulation setting target type for picking");
+                }
+                var categorized = new ComponentCategoryCollection(choices.ToArray());
+                var pickerVM = new ComponentPickerViewModel()
+                {
+                    Components = categorized
+                };
+                var picker = new ComponentPicker() { DataContext = pickerVM };
+                var res = picker.ShowDialog();
+                if (res.HasValue && res.Value)
+                {
+                    setting.Value = pickerVM.SelectedComponent;
+                    HasUnsavedChanges = true;
                     return true;
                 }
                 return false;

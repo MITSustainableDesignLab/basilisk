@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Basilisk.Controls.InterfaceModels;
+
 namespace Basilisk.Controls
 {
     /// <summary>
@@ -25,15 +27,44 @@ namespace Basilisk.Controls
             InitializeComponent();
         }
 
+        private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            var setting = (SimulationSetting)e.Row.DataContext;
+            if (setting.SettingType != SettingType.Reference) { return; }
+            var success = PickReferencedComponent?.Invoke(setting);
+            if (success.HasValue && success.Value)
+            {
+                ((DataGrid)sender).CommitEdit();
+            }
+            e.Cancel = true;
+        }
+
+        public Func<SimulationSetting, bool> PickReferencedComponent
+        {
+            get { return (Func<SimulationSetting, bool>)GetValue(PickReferencedComponentProperty); }
+            set { SetValue(PickReferencedComponentProperty, value); }
+        }
+
         public IEnumerable<SimulationSetting> Settings
         {
             get { return (IEnumerable<SimulationSetting>)GetValue(SettingsProperty); }
             set { SetValue(SettingsProperty, value); }
         }
 
+        public static readonly DependencyProperty PickReferencedComponentProperty = DependencyProperty.Register(
+            nameof(PickReferencedComponent),
+            typeof(Func<SimulationSetting, bool>),
+            typeof(SettingsGrid));
+
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
-            "Settings",
+            nameof(Settings),
             typeof(IEnumerable<SimulationSetting>),
             typeof(SettingsGrid));
+
+        private void CheckBoxChanged(object sender, RoutedEventArgs e)
+        {
+            var cb = (CheckBox)sender;
+            cb.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateSource();
+        }
     }
 }

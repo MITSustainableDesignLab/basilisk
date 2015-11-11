@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+using Basilisk.Controls.InterfaceModels;
+
 namespace Basilisk.Controls
 {
     public class SimulationSetting : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
@@ -22,8 +24,7 @@ namespace Basilisk.Controls
             object obj,
             PropertyInfo prop,
             string displayName,
-            SettingType type = SettingType.Unspecified,
-            Type enumType = null)
+            SettingType type = SettingType.Unspecified)
         {
             PropertyChanged += (s, e) => { };
             this.obj = obj;
@@ -41,6 +42,10 @@ namespace Basilisk.Controls
                 {
                     type = SettingType.Integer;
                 }
+                else if (prop.PropertyType == typeof(bool) || prop.PropertyType == typeof(bool?))
+                {
+                    type = SettingType.Bool;
+                }
                 else if (prop.PropertyType == typeof(string))
                 {
                     type = SettingType.String;
@@ -48,7 +53,10 @@ namespace Basilisk.Controls
                 else if (prop.PropertyType.IsEnum)
                 {
                     type = SettingType.Enum;
-                    enumType = prop.PropertyType;
+                }
+                else if (!prop.PropertyType.IsValueType)
+                {
+                    type = SettingType.Reference;
                 }
                 else
                 {
@@ -58,17 +66,20 @@ namespace Basilisk.Controls
             SettingType = type;
             if (SettingType == SettingType.Enum)
             {
-                Choices = Enum.GetNames(enumType);
-                Value = Choices[0];
+                EnumChoices = Enum.GetNames(prop.PropertyType);
+                Value = EnumChoices[0];
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string[] Choices { get; private set; }
+        public string[] EnumChoices { get; private set; }
         public string DisplayName { get; private set; }
-        public bool ExposeAsComboBox { get { return Choices != null; } }
-        public string PropertyName { get { return prop.Name; } }
+        public bool ExposeAsCheckbox => SettingType == SettingType.Bool;
+        public bool ExposeAsComboBox => SettingType == SettingType.Enum;
+        public bool ExposeAsText => !ExposeAsCheckbox && !ExposeAsComboBox;
+        public string PropertyName => prop.Name;
+        public Type TargetType => prop.PropertyType;
 
         public object Value
         {
