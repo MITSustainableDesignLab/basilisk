@@ -10,7 +10,8 @@
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Height="500" Width="800"
-        d:DataContext="{d:DesignInstance {x:Type vm:DesignExample}, IsDesignTimeCreatable=True}" Closing="Window_Closing">
+        d:DataContext="{d:DesignInstance {x:Type vm:DesignExample}, IsDesignTimeCreatable=True}" Closing="Window_Closing"
+        x:Name="top">
     <!-- HOW TO USE BINDING DIAGNOSTICS:
          Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
     <Window.DataContext>
@@ -30,12 +31,21 @@
             <Binding Path="HasUnsavedChanges" />
         </MultiBinding>
     </Window.Title>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding ActionBarViewModel.NewLibraryCommand}"
+                    Gesture="CTRL+N" />
+        <KeyBinding Command="{Binding ActionBarViewModel.OpenLibraryCommand}"
+                    Gesture="CTRL+O" />
+        <KeyBinding Command="{Binding ActionBarViewModel.SaveCommand}"
+                    Gesture="CTRL+S" />
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal"
+                    DataContext="{Binding ActionBarViewModel, Mode=OneTime}">
             <Button Content="NewLib"
                     Command="{Binding NewLibraryCommand}" />
             <Button Content="Open"
@@ -46,16 +56,16 @@
                     Command="{Binding SaveAsCommand}" />
             <Button Content="EditMetadata"
                     Command="{Binding EditSelectedItemMetadataCommand}"
-                    CommandParameter="{Binding SelectedComponent}" />
+                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}" />
             <Button Content="AddComponent"
                     Command="{Binding CreateNewComponentCommand}"
                     CommandParameter="{Binding ElementName=editorTabs, Path=CurrentComponentType}" />
             <Button Content="DuplicateComponent"
                     Command="{Binding DuplicateComponentCommand}"
-                    CommandParameter="{Binding SelectedComponent}" />
+                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}" />
             <Button Content="DeleteComponent"
                     Command="{Binding DeleteComponentCommand}"
-                    CommandParameter="{Binding SelectedComponent}" />
+                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}" />
         </StackPanel>
         <TextBlock Grid.Row="1"
                    Text="no library loaded"

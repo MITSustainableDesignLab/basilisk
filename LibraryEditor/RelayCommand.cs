@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Basilisk.LibraryEditor
 {
-    internal class RelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
         private Func<object, bool> canExecute = _ => true;
         private Action<object> execute;
@@ -20,6 +20,12 @@ namespace Basilisk.LibraryEditor
         public RelayCommand(Action<object> a)
         {
             this.execute = a;
+        }
+
+        public RelayCommand(Action<object> a, Func<bool> canExecute)
+        {
+            this.execute = a;
+            this.canExecute = _ => canExecute();
         }
 
         public RelayCommand(Action a, Func<bool> canExecute)

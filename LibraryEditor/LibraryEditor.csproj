@@ -67,6 +67,7 @@
       <DependentUpon>ComponentPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="DialogCloser.cs" />
+    <Compile Include="ViewModels\ActionBarViewModel.cs" />
     <Compile Include="ViewModels\ComponentPickerViewModel.cs" />
     <Compile Include="ViewModels\MetadataEditorViewModel.cs" />
     <Compile Include="WindowTitleCreator.cs" />

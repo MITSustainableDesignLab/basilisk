@@ -8,8 +8,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml;
-using System.Xml.Serialization;
 
 using Microsoft.Win32;
 
@@ -22,11 +20,6 @@ namespace Basilisk.LibraryEditor.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private readonly RelayCommand createNewComponentCommand;
-        private readonly RelayCommand deleteComponentCommand;
-        private readonly RelayCommand duplicateComponentCommand;
-        private readonly RelayCommand editSelectedItemMetadataCommand;
-
         private ComponentCategoryCollection currentlyCategorizedComponents;
         private string currentLibraryPath;
         private ICollection<LibraryComponent> currentlyListedComponents;
@@ -36,16 +29,11 @@ namespace Basilisk.LibraryEditor.ViewModels
         private ObservableCollection<MaterialLayer> selectedComponentLayers;
         private ObservableCollection<MassRatios> selectedComponentMassRatios;
 
+        public ActionBarViewModel ActionBarViewModel { get; }
+
         public MainWindowViewModel()
         {
-            createNewComponentCommand = new RelayCommand(CreateNewComponent, _ => IsAnyLibraryLoaded);
-            deleteComponentCommand = new RelayCommand(DeleteComponent, c => c != null);
-            duplicateComponentCommand = new RelayCommand(DuplicateComponent, c => c != null);
-            editSelectedItemMetadataCommand = new RelayCommand(EditComponentMetadata, o => o is LibraryComponent);
-            NewLibraryCommand = new RelayCommand(NewLibrary);
-            OpenLibraryCommand = new RelayCommand(OpenLibrary);
-            SaveCommand = new RelayCommand(Save);
-            SaveAsCommand = new RelayCommand(SaveAs);
+            ActionBarViewModel = new ActionBarViewModel(this);
 #if DEBUG
             Instance = this;
 #endif
@@ -56,15 +44,6 @@ namespace Basilisk.LibraryEditor.ViewModels
 #endif
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public ICommand CreateNewComponentCommand => createNewComponentCommand;
-        public ICommand DeleteComponentCommand => deleteComponentCommand;
-        public ICommand DuplicateComponentCommand => duplicateComponentCommand;
-        public ICommand EditSelectedItemMetadataCommand => editSelectedItemMetadataCommand;
-        public ICommand NewLibraryCommand { get; }
-        public ICommand OpenLibraryCommand { get; }
-        public ICommand SaveCommand { get; }
-        public ICommand SaveAsCommand { get; }
 
         public bool IsAnyLibraryLoaded => loadedLibrary != null;
 
@@ -109,6 +88,16 @@ namespace Basilisk.LibraryEditor.ViewModels
             }
         }
 
+        public Library LoadedLibrary
+        {
+            get { return loadedLibrary; }
+            set
+            {
+                loadedLibrary = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(String.Empty));
+            }
+        }
+
         public IEnumerable<DaySchedule> LoadedDaySchedules => LoadedSchedules?.Select(s => s as DaySchedule).Where(s => s != null);
         public IEnumerable<WeekSchedule> LoadedWeekSchedules => LoadedSchedules?.Select(s => s as WeekSchedule).Where(s => s != null);
         public IEnumerable<YearSchedule> LoadedYearSchedules => LoadedSchedules?.Select(s => s as YearSchedule).Where(s => s != null);
@@ -134,6 +123,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 if (res.HasValue && res.Value)
                 {
                     pickable.Material = pickerVM.SelectedComponent;
+                    HasUnsavedChanges = true;
                     return true;
                 }
                 return false;
@@ -204,9 +194,9 @@ namespace Basilisk.LibraryEditor.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
-                editSelectedItemMetadataCommand.RaiseCanExecuteChanged();
-                deleteComponentCommand.RaiseCanExecuteChanged();
-                duplicateComponentCommand.RaiseCanExecuteChanged();
+                ActionBarViewModel.EditSelectedItemMetadataCommand.RaiseCanExecuteChanged();
+                ActionBarViewModel.DeleteComponentCommand.RaiseCanExecuteChanged();
+                ActionBarViewModel.DuplicateComponentCommand.RaiseCanExecuteChanged();
                 SelectedComponentLayers = (selectedComponent as LayeredConstruction)?.Layers;
                 SelectedComponentMassRatios = (selectedComponent as StructureInformation)?.MassRatios;
             }
@@ -264,304 +254,10 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         internal bool ConfirmWindowClosing()
         {
-            return !HasUnsavedChanges || CheckForSaveAndProceed();
+            return !HasUnsavedChanges || ActionBarViewModel.CheckForSaveAndProceed();
         }
-
-        private static LibraryComponent CreateComponentWithDefaults(Type type)
-        {
-            var newComponent = (LibraryComponent)Activator.CreateInstance(type);
-            var useDefaultsOf = type.GetCustomAttribute<UseDefaultValuesOfAttribute>();
-            if (useDefaultsOf != null)
-            {
-                var source =
-                    useDefaultsOf
-                    .SourceType
-                    .GetProperties()
-                    .Select(prop => new { Prop = prop, Default = prop.GetCustomAttribute<DefaultValueAttribute>() })
-                    .Where(x => x.Default != null)
-                    .Select(x => new { Name = x.Prop.Name, Value = x.Default.Value });
-                var matched =
-                    type
-                    .GetProperties()
-                    .Join(
-                        source,
-                        prop => prop.Name,
-                        x => x.Name,
-                        (prop, match) => new { Prop = prop, Value = match.Value });
-                foreach (var match in matched)
-                {
-                    match.Prop.SetValue(newComponent, match.Value);
-                }
-            }
-            return newComponent;
-        }
-
-        private bool CheckForSaveAndProceed()
-        {
-            var res = MessageBox.Show(
-                "Save changes?",
-                "Unsaved changes",
-                MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question);
-            if (res == MessageBoxResult.Yes)
-            {
-                Save();
-                return true;
-            }
-            else if (res == MessageBoxResult.No) { return true; }
-            else { return false; }
-        }
-
-        private void CreateNewComponent(object componentType)
-        {
-            var cType = (Type)componentType;
-            var newComponent = CreateComponentWithDefaults(cType);
-            var vm = new MetadataEditorViewModel()
-            {
-                Category = newComponent.Category,
-                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
-                ValidateName = name => !CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
-            };
-            var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
-            var res = editWindow.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                newComponent.Name = vm.Name;
-                newComponent.Category = vm.Category;
-                newComponent.Comments = vm.Comments;
-                newComponent.DataSource = vm.DataSource;
-                CurrentCategorizedComponents.AddComponent(newComponent);
-                newComponent.PropertyChanged += SetUnsavedChangesOnPropertyChange;
-                HasUnsavedChanges = true;
-            }
-        }
-
-        private void DeleteComponent(object component)
-        {
-            CurrentCategorizedComponents.RemoveComponent((LibraryComponent)component);
-            HasUnsavedChanges = true;
-        }
-
-        private void DuplicateComponent(object component)
-        {
-            var cType = component.GetType();
-            var newComponent = ((LibraryComponent)component).Duplicate();
-            var vm = new MetadataEditorViewModel(newComponent)
-            {
-                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
-                ValidateName = name => !CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
-            };
-            var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
-            var res = editWindow.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                newComponent.Name = vm.Name;
-                newComponent.Category = vm.Category;
-                newComponent.Comments = vm.Comments;
-                newComponent.DataSource = vm.DataSource;
-                CurrentCategorizedComponents.AddComponent(newComponent);
-                newComponent.PropertyChanged += SetUnsavedChangesOnPropertyChange;
-                HasUnsavedChanges = true;
-            }
-        }
-
-        private void EditComponentMetadata(object component)
-        {
-            var cType = component.GetType();
-            var original = (LibraryComponent)component;
-            var vm = new MetadataEditorViewModel((LibraryComponent)component)
-            {
-                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
-                ValidateName = name =>
-                    name == original.Name ||
-                    !CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
-            };
-            var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
-            var res = editWindow.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                var oldCategoryName = SelectedComponent.Category;
-                SelectedComponent.Name = vm.Name;
-                SelectedComponent.Category = vm.Category;
-                SelectedComponent.Comments = vm.Comments;
-                SelectedComponent.DataSource = vm.DataSource;
-                if (oldCategoryName != SelectedComponent.Category)
-                {
-                    var oldCategory = CurrentCategorizedComponents.Single(cat => cat.CategoryName == oldCategoryName);
-                    var newCategory = CurrentCategorizedComponents.Single(cat => cat.CategoryName == SelectedComponent.Category);
-                    oldCategory.RemoveComponent(SelectedComponent);
-                    newCategory.AddComponent(SelectedComponent);
-                }
-            }
-        }
-
-        private void NewLibrary()
-        {
-            SetActiveLibrary(new Library());
-            CurrentLibraryPath = null;
-            HasUnsavedChanges = false;
-        }
-
-        private void OpenLibrary()
-        {
-            try
-            {
-                if (HasUnsavedChanges && !CheckForSaveAndProceed()) { return; }
-                var ofd = new OpenFileDialog()
-                {
-                    Title = "Select library file",
-                    Filter = "Building template libraries|*.xml;*.json"
-                };
-                var res = ofd.ShowDialog();
-                if (res.HasValue && res.Value)
-                {
-                    // We could use the extension, but there's still no way to distinguish
-                    // between legacy XML libraries and new ones, so let's just try
-                    // everything.
-                    var newLib = default(Core.Library);
-                    try
-                    {
-                        newLib = Core.Library.FromJson(File.ReadAllText(ofd.FileName));
-                    }
-                    catch { }
-                    if (newLib != null)
-                    {
-                        SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
-                        CurrentLibraryPath = ofd.FileName;
-                        HasUnsavedChanges = false;
-                        return;
-                    }
-                    try
-                    {
-                        newLib = Core.Library.FromXml(ofd.FileName);
-                    }
-                    catch { }
-                    if (newLib != null)
-                    {
-                        SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
-                        CurrentLibraryPath = ofd.FileName;
-                        HasUnsavedChanges = false;
-                        return;
-                    }
-                    try
-                    {
-                        var legacy = Legacy.Library.Load(ofd.FileName);
-                        newLib = Legacy.Conversion.Convert(legacy);
-                    }
-                    catch { }
-                    if (newLib != null)
-                    {
-                        MessageBox.Show(
-                            "This is a legacy library. Any changes you make cannot be saved back to this library file - you will have to specify a location for a new, updated file.",
-                            "Legacy library loaded",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                        SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
-                        CurrentLibraryPath = null;
-                        HasUnsavedChanges = false;
-                        return;
-                    }
-                    throw new Exception("Unknown library format or corrupted library");
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(
-                    $"Error loading library: {e.Message}",
-                    "Error loading library",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-        }
-
-        private void Save()
-        {
-            if (CurrentLibraryPath == null) { SaveAs(); }
-            else { SaveTo(CurrentLibraryPath); }
-        }
-
-        private void SaveAs()
-        {
-            var sfd = new SaveFileDialog()
-            {
-                Title = "Select save location",
-                Filter = "JSON template library|*.json|XML template library|*.xml"
-            };
-            var res = sfd.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                SaveTo(sfd.FileName);
-            }
-        }
-
-        private void SaveTo(string path)
-        {
-            try
-            {
-                var coreLib = loadedLibrary.ToCoreLibrary();
-#if DEBUG
-                var orphanCount = coreLib.OrphanedComponents().Count();
-                if (orphanCount > 0)
-                {
-                    MessageBox.Show($"{orphanCount} orphaned component(s)");
-                }
-#endif
-                var extension = Path.GetExtension(path);
-                if (extension == ".json")
-                {
-                    var json = JsonConvert.SerializeObject(loadedLibrary.ToCoreLibrary(), Formatting.Indented);
-                    File.WriteAllText(path, json);
-                }
-                else if (extension == ".xml")
-                {
-                    using (var fs = new FileStream(path, FileMode.Create))
-                    {
-                        var serializer = new DataContractSerializer(typeof(Core.Library));
-                        serializer.WriteObject(fs, loadedLibrary.ToCoreLibrary());
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException("Unknown library format");
-                }
-                CurrentLibraryPath = path;
-                HasUnsavedChanges = false;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(
-                    $"Error saving library: {e.Message}",
-                    "Error saving library",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-        }
-
-        private void SetActiveLibrary(Library library, bool ignoreUnsavedChanges = false)
-        {
-            if (IsAnyLibraryLoaded)
-            {
-                if (HasUnsavedChanges && !ignoreUnsavedChanges && !CheckForSaveAndProceed())
-                {
-                    return;
-                }
-                foreach (var component in loadedLibrary.AllComponents)
-                {
-                    component.PropertyChanged -= SetUnsavedChangesOnPropertyChange;
-                }
-            }
-
-            loadedLibrary = library;
-            foreach (var component in loadedLibrary.AllComponents)
-            {
-                component.PropertyChanged += SetUnsavedChangesOnPropertyChange;
-            }
-            PropertyChanged(this, new PropertyChangedEventArgs(string.Empty));
-            createNewComponentCommand.RaiseCanExecuteChanged();
-            SelectedComponent = null;
-        }
-
-        private void SetUnsavedChangesOnPropertyChange(object sender, PropertyChangedEventArgs e)
+        
+        internal void SetUnsavedChangesOnPropertyChange(object sender, PropertyChangedEventArgs e)
         {
             HasUnsavedChanges = true;
         }
