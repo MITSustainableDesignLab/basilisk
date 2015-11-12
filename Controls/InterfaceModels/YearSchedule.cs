@@ -32,10 +32,12 @@ namespace Basilisk.Controls.InterfaceModels
                         FromMonth = part.FromMonth,
                         ToMonth = part.ToMonth
                     });
-            return new YearSchedule()
+            var res = new YearSchedule()
             {
                 Parts = new ObservableCollection<YearSchedulePart>(parts)
             };
+            res.CopyBasePropertiesFrom(this);
+            return res;
         }
     }
 }
