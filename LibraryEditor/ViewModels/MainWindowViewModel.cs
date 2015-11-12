@@ -46,6 +46,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 [typeof(ZoneVentilation)] = () => LoadedZoneVentilations,
                 [typeof(ZoneHotWater)] = () => LoadedZoneHotWaters,
                 [typeof(ZoneDefinition)] = () => LoadedZones,
+                [typeof(BuildingTemplate)] = () => LoadedTemplates,
             };
             ActionBarViewModel = new ActionBarViewModel(this);
 #if DEBUG
@@ -129,6 +130,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         public ICollection<LibraryComponent> LoadedZoneVentilations => loadedLibrary?.ZoneVentilations;
         public ICollection<LibraryComponent> LoadedZoneHotWaters => loadedLibrary?.ZoneHotWaters;
         public ICollection<LibraryComponent> LoadedZones => loadedLibrary?.Zones;
+        public ICollection<LibraryComponent> LoadedTemplates => loadedLibrary?.BuildingTemplates;
 
         public Func<IMaterialPickable, ICollection<LibraryComponent>, bool> PickMaterial =>
             (pickable, components) =>

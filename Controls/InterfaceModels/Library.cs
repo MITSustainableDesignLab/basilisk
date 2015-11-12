@@ -94,6 +94,10 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
                 .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
                 .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
+            Mapper.CreateMap<Core.BuildingTemplate, BuildingTemplate>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.Core, opt => opt.Ignore())
+                .ForMember(dest => dest.Perimeter, opt => opt.Ignore());
 
             Mapper
                 .CreateMap<LibraryComponent, Core.LibraryComponent>();
@@ -187,6 +191,10 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
                 .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
                 .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
+            Mapper.CreateMap<BuildingTemplate, Core.BuildingTemplate>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent > ()
+                .ForMember(dest => dest.Core, opt => opt.Ignore())
+                .ForMember(dest => dest.Perimeter, opt => opt.Ignore());
         }
 
         public IEnumerable<LibraryComponent> AllComponents =>
@@ -202,7 +210,8 @@ namespace Basilisk.Controls.InterfaceModels
             .Concat(ZoneConditionings)
             .Concat(ZoneVentilations)
             .Concat(ZoneHotWaters)
-            .Concat(Zones);
+            .Concat(Zones)
+            .Concat(BuildingTemplates);
 
         public ICollection<LibraryComponent> GasMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
@@ -220,6 +229,8 @@ namespace Basilisk.Controls.InterfaceModels
         public ICollection<LibraryComponent> ZoneVentilations { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> ZoneHotWaters { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> Zones { get; set; } = new List<LibraryComponent>();
+
+        public ICollection<LibraryComponent> BuildingTemplates { get; set; } = new List<LibraryComponent>();
 
         public static Library Create(Core.Library sourceLib)
         {
@@ -344,6 +355,16 @@ namespace Basilisk.Controls.InterfaceModels
                     return res;
                 })
                 .ToDictionary(z => z.Name);
+            var templates =
+                sourceLib
+                .BuildingTemplates
+                .Select(t =>
+                {
+                    var res = Mapper.Map<BuildingTemplate>(t);
+                    res.Core = zones.GetValueOrDefault(t.Core?.Name);
+                    res.Perimeter = zones.GetValueOrDefault(t.Perimeter?.Name);
+                    return res;
+                });
 
 #if DEBUG
             foreach (var z in zones.Values.Where(z => z.InternalMassConstruction != null))
@@ -366,7 +387,8 @@ namespace Basilisk.Controls.InterfaceModels
                 ZoneConditionings = zoneConditionings.Values.Cast<LibraryComponent>().ToList(),
                 ZoneVentilations = zoneVentilations.Values.Cast<LibraryComponent>().ToList(),
                 ZoneHotWaters = zoneHotWaters.Values.Cast<LibraryComponent>().ToList(),
-                Zones = zones.Values.Cast<LibraryComponent>().ToList()
+                Zones = zones.Values.Cast<LibraryComponent>().ToList(),
+                BuildingTemplates = templates.Cast<LibraryComponent>().ToList()
             };
         }
 
@@ -556,6 +578,19 @@ namespace Basilisk.Controls.InterfaceModels
                     res.Ventilation = knownVentilations.GetValueOrDefault(z.Ventilation?.Name);
                     res.DomesticHotWater = knownHotWaters.GetValueOrDefault(z.DomesticHotWater?.Name);
                     res.InternalMassConstruction = knownOpaqueConstructions.GetValueOrDefault(z.InternalMassConstruction?.Name);
+                    return res;
+                })
+                .ToList();
+
+            var knownZones = newLib.Zones.ToDictionary(z => z.Name);
+            newLib.BuildingTemplates =
+                BuildingTemplates
+                .Cast<BuildingTemplate>()
+                .Select(t =>
+                {
+                    var res = Mapper.Map<Core.BuildingTemplate>(t);
+                    res.Core = knownZones.GetValueOrDefault(t.Core?.Name);
+                    res.Perimeter = knownZones.GetValueOrDefault(t.Perimeter?.Name);
                     return res;
                 })
                 .ToList();

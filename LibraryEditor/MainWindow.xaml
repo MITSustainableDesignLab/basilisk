@@ -201,6 +201,12 @@
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>
                 </TabItem>
+                <TabItem Header="Building Templates"
+                         basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedTemplates}"
+                         basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:BuildingTemplate}">
+                    <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                           PickReferencedComponent="{Binding PickReferenceTarget}" />
+                </TabItem>
             </basilisk:ComponentEditorTabControl>
         </Grid>
     </Grid>
