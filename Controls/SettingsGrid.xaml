@@ -7,7 +7,9 @@
           AutoGenerateColumns="False"
           CanUserReorderColumns="False"
           CanUserResizeRows="False"
-          BeginningEdit="BeginEdit">
+          SelectionUnit="Cell"
+          BeginningEdit="BeginEdit"
+          DataGridCell.GotFocus="CellGotFocus">
     <!-- HOW TO USE BINDING DIAGNOSTICS:
          Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
     <DataGrid.Resources>

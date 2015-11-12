@@ -66,5 +66,14 @@ namespace Basilisk.Controls
             var cb = (CheckBox)sender;
             cb.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateSource();
         }
+
+        private void CellGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (e.OriginalSource.GetType() == typeof(DataGridCell))
+            {
+                DataGrid grd = (DataGrid)sender;
+                grd.BeginEdit(e);
+            }
+        }
     }
 }
