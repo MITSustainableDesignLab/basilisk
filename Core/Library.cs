@@ -17,62 +17,65 @@ namespace Basilisk.Core
     [DataContract]
     public class Library
     {
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<BuildingTemplate> BuildingTemplates { get; set; } = new List<BuildingTemplate>();
 
         #region Constructions and materials
         public IEnumerable<WindowMaterialBase> AllWindowMaterials => GlazingMaterials.Cast<WindowMaterialBase>().Concat(GasMaterials);
 
-        [DataMember]
+        // Gas materials and glazing materials must be serialized first so that they're properly typed
+        // when they're deserialized. (If they're serialized as part of another component, the deserializer
+        // will only know that they're WindowMaterialBases and won't have a concrete type.)
+        [DataMember(Order = 1)]
         public ICollection<GasMaterial> GasMaterials { get; set; } = new List<GasMaterial>();
 
-        [DataMember]
+        [DataMember(Order = 1)]
         public ICollection<GlazingMaterial> GlazingMaterials { get; set; } = new List<GlazingMaterial>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<OpaqueConstruction> OpaqueConstructions { get; set; } = new List<OpaqueConstruction>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<OpaqueMaterial> OpaqueMaterials { get; set; } = new List<OpaqueMaterial>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<WindowConstruction> WindowConstructions { get; set; } = new List<WindowConstruction>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<StructureInformation> StructureDefinitions { get; set; } = new List<StructureInformation>();
         #endregion
 
         #region Schedules
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<DaySchedule> DaySchedules { get; set; } = new List<DaySchedule>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<WeekSchedule> WeekSchedules { get; set; } = new List<WeekSchedule>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<YearSchedule> YearSchedules { get; set; } = new List<YearSchedule>();
         #endregion
 
         #region Zone stuff
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<DomesticHotWaterSettings> DomesticHotWaterSettings { get; set; } = new List<DomesticHotWaterSettings>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<ZoneVentilation> VentilationSettings { get; set; }
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<WindowSettings> WindowSettings { get; set; } = new List<WindowSettings>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<ZoneConditioning> ZoneConditionings { get; set; } = new List<ZoneConditioning>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<ZoneConstructions> ZoneConstructionSets { get; set; } = new List<ZoneConstructions>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<ZoneLoads> ZoneLoads { get; set; } = new List<ZoneLoads>();
 
-        [DataMember]
+        [DataMember(Order = 10)]
         public ICollection<ZoneDefinition> Zones { get; set; } = new List<ZoneDefinition>();
         #endregion
 
