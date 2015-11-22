@@ -18,6 +18,9 @@
         [SimulationSetting]
         public OpaqueConstruction Slab { get; set; }
 
+        [SimulationSetting]
+        public WindowConstruction Window { get; set; }
+
         [SimulationSetting(DisplayName = "Facade is adiabatic")]
         public bool IsFacadeAdiabatic { get; set; }
 
@@ -42,6 +45,7 @@
                 Partition = Partition,
                 Roof = Roof,
                 Slab = Slab,
+                Window = Window,
                 IsFacadeAdiabatic = IsFacadeAdiabatic,
                 IsGroundAdiabatic = IsGroundAdiabatic,
                 IsPartitionAdiabatic = IsPartitionAdiabatic,

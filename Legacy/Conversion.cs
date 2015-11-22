@@ -182,7 +182,8 @@ namespace Basilisk.Legacy
                 Ground = getMappedOpaqueConstruction(src.GroundFl),
                 Partition = getMappedOpaqueConstruction(src.PartitionWl),
                 Roof = getMappedOpaqueConstruction(src.RoofFl),
-                Slab = getMappedOpaqueConstruction(src.InteriorFl)
+                Slab = getMappedOpaqueConstruction(src.InteriorFl),
+                Window = getMappedWindowConstruction(src.Glazing)
             };
             zone.DomesticHotWater = new Core.DomesticHotWaterSettings()
             {
