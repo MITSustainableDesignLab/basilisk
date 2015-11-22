@@ -33,7 +33,7 @@ namespace Basilisk.Core
         public double EmbodiedEnergyStdDev { get; set; }
 
         [DataMember]
-        [DefaultValue(new double[] { 0.0 })]
+        [DefaultValue(new double[] { 1.0 })]
         public double[] SubstitutionRatePattern { get; set; }
 
         [DataMember]
