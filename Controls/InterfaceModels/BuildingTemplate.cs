@@ -16,6 +16,12 @@ namespace Basilisk.Controls.InterfaceModels
         public ZoneDefinition Perimeter { get; set; }
 
         [SimulationSetting]
+        public StructureInformation Structure { get; set; }
+
+        [SimulationSetting(DisplayName = "Partition ratio")]
+        public double PartitionRatio { get; set; }
+
+        [SimulationSetting]
         public int Lifespan { get; set; }
 
         public override LibraryComponent Duplicate()
@@ -24,6 +30,8 @@ namespace Basilisk.Controls.InterfaceModels
             {
                 Core = Core,
                 Perimeter = Perimeter,
+                Structure = Structure,
+                PartitionRatio = PartitionRatio,
                 Lifespan = Lifespan
             };
             res.CopyBasePropertiesFrom(this);

@@ -83,6 +83,7 @@ namespace Basilisk.Legacy
                 .ToList();
             var lookupOpaqueConstruction = res.Lookup(lib => lib.OpaqueConstructions);
             var lookupWindowConstruction = res.Lookup(lib => lib.WindowConstructions);
+            var lookupStructure = res.Lookup(lib => lib.StructureDefinitions);
 
             var lookupDaySchedule = res.Lookup(lib => lib.DaySchedules);
             res.WeekSchedules =
@@ -103,7 +104,11 @@ namespace Basilisk.Legacy
             res.BuildingTemplates =
                 legacy
                 .BuildingTemplates
-                .Select(template => template.Map(lookupOpaqueConstruction, lookupWindowConstruction, lookupYearSchedule))
+                .Select(template => template.Map(
+                    lookupOpaqueConstruction,
+                    lookupWindowConstruction,
+                    lookupStructure,
+                    lookupYearSchedule))
                 .ToList();
             // Imported legacy templates have the same zone object for core and perimeter, so we'll just use core
             res.Zones = res.BuildingTemplates.Select(t => t.Core).ToList();
@@ -142,6 +147,7 @@ namespace Basilisk.Legacy
             this BuildingTemplate src,
             Func<string, Core.OpaqueConstruction> getMappedOpaqueConstruction,
             Func<string, Core.WindowConstruction> getMappedWindowConstruction,
+            Func<string, Core.StructureInformation> getMappedStructure,
             Func<string, Core.YearSchedule> getMappedSchedule)
         {
             var zone = new Core.ZoneDefinition()
@@ -220,7 +226,9 @@ namespace Basilisk.Legacy
                 Comments = src.Comments,
                 Core = zone,
                 Lifespan = src.LifeSpan,
-                Perimeter = zone
+                PartitionRatio = src.PartRatio,
+                Perimeter = zone,
+                Structure = getMappedStructure(src.StructureTy)
             };
         }
 

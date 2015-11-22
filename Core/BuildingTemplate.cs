@@ -18,7 +18,13 @@ namespace Basilisk.Core
         public int Lifespan { get; set; }
 
         [DataMember]
+        public double PartitionRatio { get; set; }
+
+        [DataMember]
         public ZoneDefinition Perimeter { get; set; }
+
+        [DataMember]
+        public StructureInformation Structure { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents
         {
@@ -26,7 +32,8 @@ namespace Basilisk.Core
             {
                 var core = Core?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
                 var perim = Perimeter?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
-                return core.Concat(perim);
+                var structure = Structure?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
+                return core.Concat(perim).Concat(structure);
             }
         }
     }
