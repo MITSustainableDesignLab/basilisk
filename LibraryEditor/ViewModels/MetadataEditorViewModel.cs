@@ -45,6 +45,8 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         public ICommand ConfirmCommand => confirmCommand;
 
+        public string EditorTitle { get; set; }
+
         public string Name
         {
             get { return name; }

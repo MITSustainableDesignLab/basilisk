@@ -20,7 +20,7 @@ namespace Basilisk.LibraryEditor
             var currentLibraryPath = (string)values[1];
             var unsavedChanges = (bool)values[2];
 
-            var prefix = "Basilisk - ";
+            var prefix = "Template library editor - ";
             var payload =
                 !isAnyLibraryLoaded ? "(no library loaded)" :
                 currentLibraryPath == null ? "(new library)" :

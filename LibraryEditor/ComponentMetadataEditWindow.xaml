@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Basilisk.LibraryEditor"
         xmlns:basilisk="clr-namespace:Basilisk.Controls;assembly=Basilisk.Controls"
         mc:Ignorable="d"
-        Title="ComponentMetadataEditWindow" Height="300" Width="300"
+        Height="300" Width="300"
+        Title="{Binding EditorTitle, Mode=OneTime}"
         local:DialogCloser.DialogResult="{Binding DialogResult}">
     <Grid>
         <Grid.RowDefinitions>
