@@ -29,8 +29,8 @@ namespace Basilisk.LibraryEditor.ViewModels
             EditSelectedItemMetadataCommand = new RelayCommand(EditComponentMetadata, o => o is LibraryComponent);
             NewLibraryCommand = new RelayCommand(NewLibrary);
             OpenLibraryCommand = new RelayCommand(OpenLibrary);
-            SaveCommand = new RelayCommand(Save);
-            SaveAsCommand = new RelayCommand(SaveAs);
+            SaveCommand = new RelayCommand(Save, () => parent.IsAnyLibraryLoaded);
+            SaveAsCommand = new RelayCommand(SaveAs, () => parent.IsAnyLibraryLoaded);
         }
 
         public RelayCommand CreateNewComponentCommand { get; }
@@ -345,6 +345,8 @@ namespace Basilisk.LibraryEditor.ViewModels
                 component.PropertyChanged += parent.SetUnsavedChangesOnPropertyChange;
             }
             CreateNewComponentCommand.RaiseCanExecuteChanged();
+            SaveCommand.RaiseCanExecuteChanged();
+            SaveAsCommand.RaiseCanExecuteChanged();
             parent.SelectedComponent = null;
         }
     }
