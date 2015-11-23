@@ -126,6 +126,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 EditorTitle = "Duplicate component",
                 IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
+                Name = $"{newComponent.Name} copy",
                 ValidateName = name => !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
             };
             var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
