@@ -138,7 +138,18 @@
       <Name>Legacy</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\icon-newlib-full.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\icon-add-full.png" />
+    <Resource Include="Icons\icon-delete-full.png" />
+    <Resource Include="Icons\icon-duplicate-full.png" />
+    <Resource Include="Icons\icon-edit-full.png" />
+    <Resource Include="Icons\icon-open-full.png" />
+    <Resource Include="Icons\icon-save-full.png" />
+    <Resource Include="Icons\icon-saveas-full.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -46,26 +46,65 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal"
                     DataContext="{Binding ActionBarViewModel, Mode=OneTime}">
-            <Button Content="NewLib"
-                    Command="{Binding NewLibraryCommand}" />
-            <Button Content="Open"
-                    Command="{Binding OpenLibraryCommand}" />
-            <Button Content="Save"
-                    Command="{Binding SaveCommand}" />
-            <Button Content="SaveAs"
-                    Command="{Binding SaveAsCommand}" />
-            <Button Content="EditMetadata"
-                    Command="{Binding EditSelectedItemMetadataCommand}"
-                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}" />
-            <Button Content="AddComponent"
-                    Command="{Binding CreateNewComponentCommand}"
-                    CommandParameter="{Binding ElementName=editorTabs, Path=CurrentComponentType}" />
-            <Button Content="DuplicateComponent"
-                    Command="{Binding DuplicateComponentCommand}"
-                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}" />
-            <Button Content="DeleteComponent"
-                    Command="{Binding DeleteComponentCommand}"
-                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}" />
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.Setters>
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger.Setters>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Trigger.Setters>
+                                <Setter Property="Opacity" Value="0.35" />
+                            </Trigger.Setters>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Resources>
+            <Button Command="{Binding NewLibraryCommand}"
+                    ToolTip="Create a new template library">
+                <Image Height="48" Source="Icons/icon-newlib-full.png" />
+            </Button>
+            <Button Command="{Binding OpenLibraryCommand}"
+                    ToolTip="Open an existing template library">
+                <Image Height="48" Source="Icons/icon-open-full.png" />
+            </Button>
+            <Button Command="{Binding SaveCommand}"
+                    ToolTip="Save template library">
+                <Image Height="48" Source="Icons/icon-save-full.png" />
+            </Button>
+            <Button Command="{Binding SaveAsCommand}"
+                    ToolTip="Save template library as">
+                <Image Height="48" Source="Icons/icon-saveas-full.png" />
+            </Button>
+            <Button Command="{Binding EditSelectedItemMetadataCommand}"
+                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}"
+                    ToolTip="Edit component name and other metadata">
+                <Image Height="48" Source="Icons/icon-edit-full.png" />
+            </Button>
+            <Button Command="{Binding CreateNewComponentCommand}"
+                    CommandParameter="{Binding ElementName=editorTabs, Path=CurrentComponentType}"
+                    ToolTip="Add component">
+                <Image Height="48" Source="Icons/icon-add-full.png" />
+            </Button>
+            <Button Command="{Binding DuplicateComponentCommand}"
+                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}"
+                    ToolTip="Duplicate selected component">
+                <Image Height="48" Source="Icons/icon-duplicate-full.png" />
+            </Button>
+            <Button Command="{Binding DeleteComponentCommand}"
+                    CommandParameter="{Binding ElementName=top, Path=DataContext.SelectedComponent}"
+                    ToolTip="Delete selected component">
+                <Image Height="48" Source="Icons/icon-delete-full.png" />
+            </Button>
         </StackPanel>
         <TextBlock Grid.Row="1"
                    Text="no library loaded"
