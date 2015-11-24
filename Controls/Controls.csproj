@@ -67,7 +67,8 @@
     <Compile Include="DayScheduleFractionEditor.xaml.cs">
       <DependentUpon>DayScheduleFractionEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImmutableCategoryNameAttribute.cs" />
+    <Compile Include="Attributes\DisplayNameAttribute.cs" />
+    <Compile Include="Attributes\ImmutableCategoryNameAttribute.cs" />
     <Compile Include="InterfaceModels\BuildingTemplate.cs" />
     <Compile Include="InterfaceModels\ConstructionBase.cs" />
     <Compile Include="InterfaceModels\DaySchedule.cs" />
@@ -107,14 +108,14 @@
     <Compile Include="SettingType.cs" />
     <Compile Include="SettingValueBinder.cs" />
     <Compile Include="SimulationSetting.cs" />
-    <Compile Include="SimulationSettingAttribute.cs" />
+    <Compile Include="Attributes\SimulationSettingAttribute.cs" />
     <Compile Include="SimulationSettingsCreator.cs" />
     <Compile Include="SimulationSettingTemplateSelector.cs" />
     <Compile Include="StructureEditor.xaml.cs">
       <DependentUpon>StructureEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="TypeMatchConverter.cs" />
-    <Compile Include="UseDefaultValuesOfAttribute.cs" />
+    <Compile Include="Attributes\UseDefaultValuesOfAttribute.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="WeekScheduleEditor.xaml.cs">
       <DependentUpon>WeekScheduleEditor.xaml</DependentUpon>

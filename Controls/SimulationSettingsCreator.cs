@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
+using Basilisk.Controls.Attributes;
 using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.Controls

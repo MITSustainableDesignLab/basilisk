@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.OpaqueMaterial))]
+    [DisplayName("opaque material")]
     public class OpaqueMaterial : MaterialBase
     {
-        static OpaqueMaterial()
-        {
-            Mapper
-                .CreateMap<Core.OpaqueMaterial, OpaqueMaterial>()
-                .IncludeBase<Core.MaterialBase, MaterialBase>();
-        }
-
         [SimulationSetting(DisplayName = "Solar Absorptance")]
         public double SolarAbsorptance { get; set; }
 
@@ -29,6 +17,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Visible Absorptance")]
         public double VisibleAbsorptance { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            false;
 
         public override LibraryComponent Duplicate()
         {

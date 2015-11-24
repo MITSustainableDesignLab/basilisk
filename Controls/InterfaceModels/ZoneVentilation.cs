@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneVentilation))]
+    [DisplayName("zone ventilation")]
     public class ZoneVentilation : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Infiltration")]
@@ -53,6 +50,10 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public bool Afn { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            NatVentSchedule == component ||
+            VentSchedule == component;
 
         public override LibraryComponent Duplicate()
         {

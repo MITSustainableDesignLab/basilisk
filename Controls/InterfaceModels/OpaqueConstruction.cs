@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.OpaqueConstruction))]
+    [DisplayName("opaque construction")]
     public class OpaqueConstruction : LayeredConstruction
     {
         public override LibraryComponent Duplicate()

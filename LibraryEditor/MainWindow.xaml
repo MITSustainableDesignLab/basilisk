@@ -11,7 +11,8 @@
         mc:Ignorable="d"
         Height="500" Width="800"
         d:DataContext="{d:DesignInstance {x:Type vm:DesignExample}, IsDesignTimeCreatable=True}" Closing="Window_Closing"
-        x:Name="top">
+        x:Name="top"
+        WindowStartupLocation="CenterScreen">
     <!-- HOW TO USE BINDING DIAGNOSTICS:
          Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
     <Window.DataContext>

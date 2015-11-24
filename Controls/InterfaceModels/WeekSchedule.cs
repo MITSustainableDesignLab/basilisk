@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WeekSchedule))]
     [ImmutableCategoryName]
+    [DisplayName("week schedule")]
     public class WeekSchedule : LibraryComponent
     {
         public override string Category
@@ -21,6 +20,9 @@ namespace Basilisk.Controls.InterfaceModels
         public string Type { get; set; }
 
         public ObservableCollection<DaySchedule> Days { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            Days.Contains(component);
 
         public override LibraryComponent Duplicate()
         {

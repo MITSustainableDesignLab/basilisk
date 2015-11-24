@@ -44,6 +44,8 @@ namespace Basilisk.Controls.InterfaceModels
             PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
         }
 
+        public abstract bool DirectlyReferences(LibraryComponent component);
+
         public abstract LibraryComponent Duplicate();
 
         public override string ToString() => Name;

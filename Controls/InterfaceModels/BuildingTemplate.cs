@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.BuildingTemplate))]
+    [DisplayName("building template")]
     public class BuildingTemplate : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Core zone type")]
@@ -23,6 +20,11 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public int Lifespan { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            component == Core ||
+            component == Perimeter ||
+            component == Structure;
 
         public override LibraryComponent Duplicate()
         {

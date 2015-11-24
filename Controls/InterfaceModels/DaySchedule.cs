@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.DaySchedule))]
     [ImmutableCategoryName]
+    [DisplayName("day schedule")]
     public class DaySchedule : LibraryComponent
     {
         public DaySchedule()
@@ -24,7 +24,10 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting]
         public string Type { get; set; }
 
-        public IList<double> Values { get; set; } 
+        public IList<double> Values { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            false;
 
         public override LibraryComponent Duplicate()
         {

@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
+    [UseDefaultValuesOf(typeof(Core.ZoneLoads))]
+    [DisplayName("zone loads")]
     public class ZoneLoads : LibraryComponent
     {
         [SimulationSetting(DisplayName = "People")]
-        public bool IsPeopleOn { get; set; } = true;
+        public bool IsPeopleOn { get; set; }
 
         [SimulationSetting(DisplayName = "Occupancy density (p/m2)")]
-        public double PeopleDensity { get; set; } = 0.2;
+        public double PeopleDensity { get; set; }
 
         [SimulationSetting(DisplayName = "Occupancy schedule")]
         public YearSchedule OccupancySchedule { get; set; }
@@ -21,7 +19,7 @@ namespace Basilisk.Controls.InterfaceModels
         public bool IsEquipmentOn { get; set; }
 
         [SimulationSetting(DisplayName = "Equipment power density (W/m2)")]
-        public double EquipmentPowerDensity { get; set; } = 12;
+        public double EquipmentPowerDensity { get; set; }
 
         [SimulationSetting(DisplayName = "Equipment availability schedule")]
         public YearSchedule EquipmentAvailabilitySchedule { get; set; }
@@ -30,16 +28,21 @@ namespace Basilisk.Controls.InterfaceModels
         public bool IsLightingOn { get; set; }
 
         [SimulationSetting(DisplayName = "Lighting power density (W/m2)")]
-        public double LightingPowerDensity { get; set; } = 12;
+        public double LightingPowerDensity { get; set; }
 
         [SimulationSetting(DisplayName = "Lighting availability schedule")]
         public YearSchedule LightsAvailabilitySchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Dimming type")]
-        public string DimmingType { get; set; } = "Continuous";
+        public string DimmingType { get; set; }
 
         [SimulationSetting(DisplayName = "Illuminance target (lux)")]
-        public double IlluminanceTarget { get; set; } = 500;
+        public double IlluminanceTarget { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            OccupancySchedule == component ||
+            EquipmentAvailabilitySchedule == component ||
+            LightsAvailabilitySchedule == component;
 
         public override LibraryComponent Duplicate()
         {

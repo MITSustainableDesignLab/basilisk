@@ -5,13 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows;
-using System.Windows.Input;
 
 using Microsoft.Win32;
 
 using Newtonsoft.Json;
 
-using Basilisk.Controls;
+using Basilisk.Controls.Attributes;
 using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.LibraryEditor.ViewModels
@@ -114,7 +113,16 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         private void DeleteComponent(object component)
         {
-            parent.CurrentCategorizedComponents.RemoveComponent((LibraryComponent)component);
+            var c = (LibraryComponent)component;
+            var referencers = parent.AllLoadedComponents.Where(cmp => cmp.DirectlyReferences(c));
+            if (referencers.Any())
+            {
+                var denialVM = new DeletionDenialViewModel(c, referencers);
+                var denier = new DeletionDenialWindow() { DataContext = denialVM };
+                denier.ShowDialog();
+                return;
+            }
+            parent.CurrentCategorizedComponents.RemoveComponent(c);
             parent.HasUnsavedChanges = true;
         }
 

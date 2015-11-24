@@ -66,9 +66,13 @@
     <Compile Include="ComponentPicker.xaml.cs">
       <DependentUpon>ComponentPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DeletionDenialWindow.xaml.cs">
+      <DependentUpon>DeletionDenialWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DialogCloser.cs" />
     <Compile Include="ViewModels\ActionBarViewModel.cs" />
     <Compile Include="ViewModels\ComponentPickerViewModel.cs" />
+    <Compile Include="ViewModels\DeletionDenialViewModel.cs" />
     <Compile Include="ViewModels\MetadataEditorViewModel.cs" />
     <Compile Include="WindowTitleCreator.cs" />
     <Page Include="ComponentMetadataEditWindow.xaml">
@@ -76,6 +80,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ComponentPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeletionDenialWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

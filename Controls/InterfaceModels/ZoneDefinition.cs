@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneDefinition))]
+    [DisplayName("zone definition")]
     public class ZoneDefinition : LibraryComponent
     {
         [SimulationSetting]
@@ -41,6 +38,14 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Heating CoP")]
         public double HeatingCoeffOfPerf { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            Constructions == component ||
+            Loads == component ||
+            Conditioning == component ||
+            Ventilation == component ||
+            DomesticHotWater == component ||
+            InternalMassConstruction == component;
 
         public override LibraryComponent Duplicate()
         {

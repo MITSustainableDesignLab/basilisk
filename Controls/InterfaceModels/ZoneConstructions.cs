@@ -1,6 +1,9 @@
-﻿namespace Basilisk.Controls.InterfaceModels
+﻿using Basilisk.Controls.Attributes;
+
+namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneConstructions))]
+    [DisplayName("zone constructions")]
     public class ZoneConstructions : LibraryComponent
     {
         [SimulationSetting]
@@ -35,6 +38,14 @@
 
         [SimulationSetting(DisplayName = "Slab is adiabatic")]
         public bool IsSlabAdiabatic { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            Facade == component ||
+            Ground == component ||
+            Partition == component ||
+            Roof == component ||
+            Slab == component ||
+            Window == component;
 
         public override LibraryComponent Duplicate()
         {

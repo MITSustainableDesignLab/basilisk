@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Basilisk.Controls
+namespace Basilisk.Controls.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class UseDefaultValuesOfAttribute : Attribute

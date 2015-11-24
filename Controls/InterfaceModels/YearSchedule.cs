@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Basilisk.Controls.Attributes;
+
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.YearSchedule))]
     [ImmutableCategoryName]
+    [DisplayName("year schedule")]
     public class YearSchedule : LibraryComponent
     {
         public override string Category
@@ -18,6 +21,9 @@ namespace Basilisk.Controls.InterfaceModels
         }
 
         public ObservableCollection<YearSchedulePart> Parts { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            Parts.Any(part => part.Schedule == component);
 
         public override LibraryComponent Duplicate()
         {

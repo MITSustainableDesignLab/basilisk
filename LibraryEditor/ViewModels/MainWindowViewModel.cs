@@ -113,6 +113,8 @@ namespace Basilisk.LibraryEditor.ViewModels
             }
         }
 
+        public IEnumerable<LibraryComponent> AllLoadedComponents => loadedLibrary?.AllComponents;
+
         public IEnumerable<DaySchedule> LoadedDaySchedules => LoadedSchedules?.Select(s => s as DaySchedule).Where(s => s != null);
         public IEnumerable<WeekSchedule> LoadedWeekSchedules => LoadedSchedules?.Select(s => s as WeekSchedule).Where(s => s != null);
         public IEnumerable<YearSchedule> LoadedYearSchedules => LoadedSchedules?.Select(s => s as YearSchedule).Where(s => s != null);

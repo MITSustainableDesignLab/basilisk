@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Basilisk.Controls.Attributes;
+
 namespace Basilisk.Controls.InterfaceModels
 {
     public abstract class MaterialBase : LibraryComponent

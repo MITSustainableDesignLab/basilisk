@@ -29,6 +29,9 @@ namespace Basilisk.Controls.InterfaceModels
             }
         }
 
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            Layers.Any(layer => layer.Material == component);
+
         protected void CopyBasePropertiesFrom(LayeredConstruction source)
         {
             var layers =

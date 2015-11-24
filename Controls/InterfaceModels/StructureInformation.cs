@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.StructureInformation))]
+    [DisplayName("structure definition")]
     public class StructureInformation : ConstructionBase
     {
         public ObservableCollection<MassRatios> MassRatios { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            false;
 
         public override LibraryComponent Duplicate()
         {

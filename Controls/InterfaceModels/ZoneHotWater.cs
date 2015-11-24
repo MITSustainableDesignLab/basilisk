@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.DomesticHotWaterSettings))]
+    [DisplayName("zone hot water")]
     public class ZoneHotWater : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Enabled")]
@@ -23,6 +20,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Flow rate (m3/h/m2)")]
         public double FlowRatePerFloorArea { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            WaterSchedule == component;
 
         public override LibraryComponent Duplicate()
         {

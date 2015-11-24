@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneConditioning))]
+    [DisplayName("zone conditioning")]
     public class ZoneConditioning : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Heating")]
@@ -68,6 +65,11 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Heat recovery efficiency (sensible)")]
         public double HeatRecoveryEfficiencySensible { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            HeatingSchedule == component ||
+            CoolingSchedule == component ||
+            MechVentSchedule == component;
 
         public override LibraryComponent Duplicate()
         {

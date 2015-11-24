@@ -1,24 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.GasMaterial))]
     [ImmutableCategoryName]
+    [DisplayName("gas material")]
     public class GasMaterial : WindowMaterialBase
     {
-        static GasMaterial()
-        {
-            Mapper
-                .CreateMap<Core.GasMaterial, GasMaterial>()
-                .IncludeBase<Core.MaterialBase, MaterialBase>();
-        }
-
         public override string Category
         {
             get { return "Gas"; }
@@ -27,6 +15,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public string Type { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            false;
 
         public override LibraryComponent Duplicate()
         {

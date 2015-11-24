@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.GlazingMaterial))]
+    [DisplayName("glazing material")]
     public class GlazingMaterial : WindowMaterialBase
     {
-        static GlazingMaterial()
-        {
-            Mapper
-                .CreateMap<Core.GlazingMaterial, GlazingMaterial>()
-                .IncludeBase<Core.MaterialBase, MaterialBase>();
-        }
-
         [SimulationSetting(DisplayName = "Dirt Factor")]
         public double DirtFactor { get; set; }
 
@@ -47,6 +35,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Visible Transmittance")]
         public double VisibleTransmittance { get; set; }
+
+        public override bool DirectlyReferences(LibraryComponent component) =>
+            false;
 
         public override LibraryComponent Duplicate()
         {
