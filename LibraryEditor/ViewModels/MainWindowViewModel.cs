@@ -132,6 +132,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         public ICollection<LibraryComponent> LoadedZoneVentilations => loadedLibrary?.ZoneVentilations;
         public ICollection<LibraryComponent> LoadedZoneHotWaters => loadedLibrary?.ZoneHotWaters;
         public ICollection<LibraryComponent> LoadedZones => loadedLibrary?.Zones;
+        public ICollection<LibraryComponent> LoadedWindowSettings => loadedLibrary?.WindowSettings;
         public ICollection<LibraryComponent> LoadedTemplates => loadedLibrary?.BuildingTemplates;
 
         public Func<IMaterialPickable, ICollection<LibraryComponent>, bool> PickMaterial =>

@@ -21,10 +21,14 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting]
         public int Lifespan { get; set; }
 
+        [SimulationSetting]
+        public WindowSettings Windows { get; set; }
+
         public override bool DirectlyReferences(LibraryComponent component) =>
             component == Core ||
             component == Perimeter ||
-            component == Structure;
+            component == Structure ||
+            component == Windows;
 
         public override LibraryComponent Duplicate()
         {
@@ -34,7 +38,8 @@ namespace Basilisk.Controls.InterfaceModels
                 Perimeter = Perimeter,
                 Structure = Structure,
                 PartitionRatio = PartitionRatio,
-                Lifespan = Lifespan
+                Lifespan = Lifespan,
+                Windows = Windows
             };
             res.CopyBasePropertiesFrom(this);
             return res;

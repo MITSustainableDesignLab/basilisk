@@ -94,6 +94,12 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
                 .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
                 .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
+            Mapper.CreateMap<Core.WindowSettings, WindowSettings>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                .ForMember(dest => dest.Construction, opt => opt.Ignore())
+                .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
             Mapper.CreateMap<Core.BuildingTemplate, BuildingTemplate>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
                 .ForMember(dest => dest.Core, opt => opt.Ignore())
@@ -191,10 +197,17 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
                 .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
                 .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
+            Mapper.CreateMap<WindowSettings, Core.WindowSettings>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.Construction, opt => opt.Ignore())
+                .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
             Mapper.CreateMap<BuildingTemplate, Core.BuildingTemplate>()
                 .IncludeBase<LibraryComponent, Core.LibraryComponent > ()
                 .ForMember(dest => dest.Core, opt => opt.Ignore())
-                .ForMember(dest => dest.Perimeter, opt => opt.Ignore());
+                .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
+                .ForMember(dest => dest.Windows, opt => opt.Ignore());
         }
 
         public IEnumerable<LibraryComponent> AllComponents =>
@@ -211,6 +224,7 @@ namespace Basilisk.Controls.InterfaceModels
             .Concat(ZoneVentilations)
             .Concat(ZoneHotWaters)
             .Concat(Zones)
+            .Concat(WindowSettings)
             .Concat(BuildingTemplates);
 
         public ICollection<LibraryComponent> GasMaterials { get; set; } = new List<LibraryComponent>();
@@ -229,6 +243,8 @@ namespace Basilisk.Controls.InterfaceModels
         public ICollection<LibraryComponent> ZoneVentilations { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> ZoneHotWaters { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> Zones { get; set; } = new List<LibraryComponent>();
+
+        public ICollection<LibraryComponent> WindowSettings { get; set; } = new List<LibraryComponent>();
 
         public ICollection<LibraryComponent> BuildingTemplates { get; set; } = new List<LibraryComponent>();
 
@@ -251,7 +267,7 @@ namespace Basilisk.Controls.InterfaceModels
                 sourceLib
                 .WindowConstructions
                 .Select(src => BuildLayeredConstruction<Core.WindowConstruction, WindowConstruction, Core.WindowMaterialBase>(src, windowMatDict))
-                .ToList();
+                .ToDictionary(c => c.Name);
             var structureDefinitions =
                 sourceLib
                 .StructureDefinitions
@@ -340,6 +356,11 @@ namespace Basilisk.Controls.InterfaceModels
                 .DomesticHotWaterSettings
                 .Select(hw => BuildHotWater(hw, years))
                 .ToDictionary(hw => hw.Name);
+            var windowSettings =
+                sourceLib
+                .WindowSettings
+                .Select(w => BuildWindowSettings(w, windowConstructions, years))
+                .ToDictionary(w => w.Name);
             var zones =
                 sourceLib
                 .Zones
@@ -379,7 +400,7 @@ namespace Basilisk.Controls.InterfaceModels
                 GlazingMaterials = glazingMats,
                 GasMaterials = gasMats,
                 OpaqueConstructions = opaqueConstructions.Values.Cast<LibraryComponent>().ToList(),
-                WindowConstructions = windowConstructions.Cast<LibraryComponent>().ToList(),
+                WindowConstructions = windowConstructions.Values.Cast<LibraryComponent>().ToList(),
                 StructureDefinitions = structureDefinitions,
                 Schedules = allSchedules,
                 ZoneConstructions = zoneConstructions.Values.Cast<LibraryComponent>().ToList(),
@@ -388,6 +409,7 @@ namespace Basilisk.Controls.InterfaceModels
                 ZoneVentilations = zoneVentilations.Values.Cast<LibraryComponent>().ToList(),
                 ZoneHotWaters = zoneHotWaters.Values.Cast<LibraryComponent>().ToList(),
                 Zones = zones.Values.Cast<LibraryComponent>().ToList(),
+                WindowSettings = windowSettings.Values.Cast<LibraryComponent>().ToList(),
                 BuildingTemplates = templates.Cast<LibraryComponent>().ToList()
             };
         }
@@ -501,6 +523,7 @@ namespace Basilisk.Controls.InterfaceModels
             var knownSchedules = newLib.YearSchedules.ToDictionary(s => s.Name);
 
             var knownOpaqueConstructions = newLib.OpaqueConstructions.ToDictionary(c => c.Name);
+            var knownWindowConstructions = newLib.WindowConstructions.ToDictionary(c => c.Name);
             newLib.ZoneConstructionSets =
                 ZoneConstructions
                 .Cast<ZoneConstructions>()
@@ -561,6 +584,20 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .ToList();
 
+            newLib.WindowSettings =
+                WindowSettings
+                .Cast<WindowSettings>()
+                .Select(w =>
+                {
+                    var res = Mapper.Map<Core.WindowSettings>(w);
+                    res.AfnWindowAvailability = knownSchedules.GetValueOrDefault(w.AfnWindowAvailability?.Name);
+                    res.ZoneMixingAvailabilitySchedule = knownSchedules.GetValueOrDefault(w.ZoneMixingAvailabilitySchedule?.Name);
+                    res.ShadingSystemAvailabilitySchedule = knownSchedules.GetValueOrDefault(w.ShadingSystemAvailabilitySchedule?.Name);
+                    res.Construction = knownWindowConstructions.GetValueOrDefault(w.Construction?.Name);
+                    return res;
+                })
+                .ToList();
+
             var knownConstructionSets = newLib.ZoneConstructionSets.ToDictionary(x => x.Name);
             var knownLoads = newLib.ZoneLoads.ToDictionary(x => x.Name);
             var knownConditionings = newLib.ZoneConditionings.ToDictionary(x => x.Name);
@@ -583,6 +620,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .ToList();
 
             var knownZones = newLib.Zones.ToDictionary(z => z.Name);
+            var knownWindowSettings = newLib.WindowSettings.ToDictionary(w => w.Name);
             newLib.BuildingTemplates =
                 BuildingTemplates
                 .Cast<BuildingTemplate>()
@@ -591,6 +629,7 @@ namespace Basilisk.Controls.InterfaceModels
                     var res = Mapper.Map<Core.BuildingTemplate>(t);
                     res.Core = knownZones.GetValueOrDefault(t.Core?.Name);
                     res.Perimeter = knownZones.GetValueOrDefault(t.Perimeter?.Name);
+                    res.Windows = knownWindowSettings.GetValueOrDefault(t.Windows?.Name);
                     return res;
                 })
                 .ToList();
@@ -647,6 +686,16 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .Where(layer => layer != null);
             dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
+            return dest;
+        }
+
+        private static WindowSettings BuildWindowSettings(Core.WindowSettings src, Dictionary<string, WindowConstruction> windowsConstructions, Dictionary<string, YearSchedule> years)
+        {
+            var dest = Mapper.Map<WindowSettings>(src);
+            dest.AfnWindowAvailability = years.GetValueOrDefault(src.AfnWindowAvailability?.Name);
+            dest.ZoneMixingAvailabilitySchedule = years.GetValueOrDefault(src.ZoneMixingAvailabilitySchedule?.Name);
+            dest.ShadingSystemAvailabilitySchedule = years.GetValueOrDefault(src.ShadingSystemAvailabilitySchedule?.Name);
+            dest.Construction = windowsConstructions.GetValueOrDefault(src.Construction?.Name);
             return dest;
         }
 

@@ -15,7 +15,7 @@ namespace Basilisk.Core
         public double AfnTempSetpoint { get; set; } = 20;
 
         [DataMember]
-        public YearSchedule AfnWindowAvailbility { get; set; }
+        public YearSchedule AfnWindowAvailability { get; set; }
 
         [DataMember]
         public WindowConstruction Construction { get; set; }
@@ -62,7 +62,7 @@ namespace Basilisk.Core
             {
                 var direct = new LibraryComponent[]
                 {
-                    AfnWindowAvailbility,
+                    AfnWindowAvailability,
                     Construction,
                     ShadingSystemAvailabilitySchedule,
                     ZoneMixingAvailabilitySchedule,

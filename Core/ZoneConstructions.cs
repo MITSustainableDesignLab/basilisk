@@ -23,9 +23,6 @@ namespace Basilisk.Core
         public OpaqueConstruction Slab { get; set; }
 
         [DataMember]
-        public WindowConstruction Window { get; set; }
-
-        [DataMember]
         public bool IsFacadeAdiabatic { get; set; }
 
         [DataMember]
@@ -50,8 +47,7 @@ namespace Basilisk.Core
                     Ground,
                     Partition,
                     Roof,
-                    Slab,
-                    Window
+                    Slab
                 }.Where(c => c != null);
                 return direct.Concat(direct.SelectMany(c => c.ReferencedComponents));
             }

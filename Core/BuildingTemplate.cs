@@ -26,6 +26,9 @@ namespace Basilisk.Core
         [DataMember]
         public StructureInformation Structure { get; set; }
 
+        [DataMember]
+        public WindowSettings Windows { get; set; }
+
         internal override IEnumerable<LibraryComponent> ReferencedComponents
         {
             get
@@ -33,7 +36,8 @@ namespace Basilisk.Core
                 var core = Core?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
                 var perim = Perimeter?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
                 var structure = Structure?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
-                return core.Concat(perim).Concat(structure);
+                var window = Enumerable.Repeat(Windows, 1);
+                return core.Concat(perim).Concat(structure).Concat(window);
             }
         }
     }

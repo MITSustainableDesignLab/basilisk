@@ -86,6 +86,8 @@
     <Compile Include="InterfaceModels\WeekSchedule.cs" />
     <Compile Include="InterfaceModels\WindowConstruction.cs" />
     <Compile Include="InterfaceModels\WindowMaterialBase.cs" />
+    <Compile Include="InterfaceModels\WindowSettings.cs" />
+    <Compile Include="InterfaceModels\WindowType.cs" />
     <Compile Include="InterfaceModels\YearSchedule.cs" />
     <Compile Include="InterfaceModels\YearSchedulePart.cs" />
     <Compile Include="InterfaceModels\ZoneConditioning.cs" />

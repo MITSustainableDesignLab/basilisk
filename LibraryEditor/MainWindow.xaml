@@ -239,6 +239,12 @@
                             <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
+                        <TabItem Header="Windows"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedWindowSettings}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:WindowSettings}">
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                                                   PickReferencedComponent="{Binding PickReferenceTarget}" />
+                        </TabItem>
                     </basilisk:ComponentEditorTabControl>
                 </TabItem>
                 <TabItem Header="Building Templates"

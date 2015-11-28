@@ -51,6 +51,22 @@ namespace Basilisk.Legacy
             Mapper
                 .CreateMap<Legacy.YearSchedule, Core.YearSchedule>()
                 .ForMember(dest => dest.Parts, opt => opt.Ignore());
+
+            Mapper
+                .CreateMap<Legacy.BuildingTemplate, Core.WindowSettings>()
+                .ForMember(dest => dest.Name, opt => opt.ResolveUsing((BuildingTemplate src) => $"{src.Name} windows"))
+                .ForMember(dest => dest.IsShadingSystemOn, opt => opt.MapFrom(src => src.BlindOn))
+                .ForMember(dest => dest.ShadingSystemTransmittance, opt => opt.MapFrom(src => src.BlindTrns))
+                .ForMember(dest => dest.ShadingSystemSetpoint, opt => opt.MapFrom(src => src.BlindSetWatt))
+                .ForMember(dest => dest.Type, opt => opt.ResolveUsing((BuildingTemplate src) =>
+                {
+                    var res = Core.WindowType.External;
+                    Enum.TryParse(src.BlindT.ToString(), true, out res);
+                    return res;
+                }))
+                .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
+                .ForMember(dest => dest.Construction, opt => opt.Ignore());
         }
 
         public static Core.Library Convert(Library legacy)
@@ -101,12 +117,20 @@ namespace Basilisk.Legacy
                 .ToList();
             var lookupYearSchedule = res.Lookup(lib => lib.YearSchedules);
 
+            res.WindowSettings =
+                legacy
+                .BuildingTemplates
+                .Select(s => s.Map(lookupYearSchedule, lookupWindowConstruction))
+                .Where(s => s != null)
+                .ToList();
+            var lookupWindowSettings = res.Lookup(lib => lib.WindowSettings);
+
             res.BuildingTemplates =
                 legacy
                 .BuildingTemplates
                 .Select(template => template.Map(
                     lookupOpaqueConstruction,
-                    lookupWindowConstruction,
+                    lookupWindowSettings,
                     lookupStructure,
                     lookupYearSchedule))
                 .ToList();
@@ -146,7 +170,7 @@ namespace Basilisk.Legacy
         private static Core.BuildingTemplate Map(
             this BuildingTemplate src,
             Func<string, Core.OpaqueConstruction> getMappedOpaqueConstruction,
-            Func<string, Core.WindowConstruction> getMappedWindowConstruction,
+            Func<string, Core.WindowSettings> getMappedWindow,
             Func<string, Core.StructureInformation> getMappedStructure,
             Func<string, Core.YearSchedule> getMappedSchedule)
         {
@@ -182,8 +206,7 @@ namespace Basilisk.Legacy
                 Ground = getMappedOpaqueConstruction(src.GroundFl),
                 Partition = getMappedOpaqueConstruction(src.PartitionWl),
                 Roof = getMappedOpaqueConstruction(src.RoofFl),
-                Slab = getMappedOpaqueConstruction(src.InteriorFl),
-                Window = getMappedWindowConstruction(src.Glazing)
+                Slab = getMappedOpaqueConstruction(src.InteriorFl)
             };
             zone.DomesticHotWater = new Core.DomesticHotWaterSettings()
             {
@@ -229,7 +252,8 @@ namespace Basilisk.Legacy
                 Lifespan = src.LifeSpan,
                 PartitionRatio = src.PartRatio,
                 Perimeter = zone,
-                Structure = getMappedStructure(src.StructureTy)
+                Structure = getMappedStructure(src.StructureTy),
+                Windows = getMappedWindow($"{src.Name} windows")
             };
         }
 
@@ -306,6 +330,15 @@ namespace Basilisk.Legacy
                     ToMonth = src.MonthTill[i]
                 });
             }
+            return res;
+        }
+
+        private static Core.WindowSettings Map(this BuildingTemplate src, Func<string, Core.YearSchedule> getMappedYear, Func<string, Core.WindowConstruction> getMappedWindow)
+        {
+            var res = Mapper.Map<Core.WindowSettings>(src);
+            res.ShadingSystemAvailabilitySchedule = getMappedYear(src.BlindSchd);
+            res.ZoneMixingAvailabilitySchedule = getMappedYear(src.BlindSchd);
+            res.Construction = getMappedWindow(src.Glazing);
             return res;
         }
     }
