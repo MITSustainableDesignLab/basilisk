@@ -12,7 +12,7 @@ namespace Basilisk.Core
         public bool Afn { get; set; }
 
         [DataMember, DefaultValue(true)]
-        public bool Buoy { get; set; } = true;
+        public bool IsBuoyancyOn { get; set; } = true;
 
         [DataMember, DefaultValue(0.1)]
         public double Infiltration { get; set; } = 0.1;
@@ -24,7 +24,7 @@ namespace Basilisk.Core
         public bool IsNatVentOn { get; set; }
 
         [DataMember]
-        public bool IsVentOn { get; set; }
+        public bool IsScheduledVentilationOn { get; set; }
 
         [DataMember, DefaultValue(90)]
         public double NatVentMaxRelHumidity { get; set; } = 90;
@@ -42,22 +42,22 @@ namespace Basilisk.Core
         public double NatVentZoneTempSetpoint { get; set; } = 18;
 
         [DataMember, DefaultValue(0.6)]
-        public double VentAirChangesPerHour { get; set; } = 0.6;
+        public double ScheduledVentilationAch { get; set; } = 0.6;
 
         [DataMember]
-        public YearSchedule VentSchedule { get; set; }
+        public YearSchedule ScheduledVentilationSchedule { get; set; }
 
         [DataMember, DefaultValue(18)]
-        public double ScheduleVentMinTemp { get; set; } = 18;
+        public double ScheduledVentilationSetpoint { get; set; } = 18;
 
         [DataMember]
-        public bool Wind { get; set; }
+        public bool IsWindOn { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
             new LibraryComponent[]
             {
                 NatVentSchedule,
-                VentSchedule
+                ScheduledVentilationSchedule
             }.Where(s => s != null);
     }
 }

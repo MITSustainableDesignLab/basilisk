@@ -30,30 +30,30 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Nat vent zone temperature setpoint")]
         public double NatVentZoneTempSetpoint { get; set; }
 
-        [SimulationSetting(DisplayName = "Ventilation")]
-        public bool IsVentOn { get; set; }
+        [SimulationSetting(DisplayName = "Scheduled ventilation")]
+        public bool IsScheduledVentilationOn { get; set; }
 
-        [SimulationSetting(DisplayName = "Ventilation ACH")]
-        public double VentAirChangesPerHour { get; set; }
+        [SimulationSetting(DisplayName = "Scheduled ventilation ACH")]
+        public double ScheduledVentilationAch { get; set; }
 
-        [SimulationSetting(DisplayName = "Ventilation schedule")]
-        public YearSchedule VentSchedule { get; set; }
+        [SimulationSetting(DisplayName = "Scheduled ventilation schedule")]
+        public YearSchedule ScheduledVentilationSchedule { get; set; }
 
-        [SimulationSetting(DisplayName = "Schedule ventilation min temp")]
-        public double ScheduleVentMinTemp { get; set; }
+        [SimulationSetting(DisplayName = "Scheduled ventilation setpoint")]
+        public double ScheduledVentilationSetpoint { get; set; }
 
-        [SimulationSetting]
-        public bool Buoy { get; set; }
+        [SimulationSetting(DisplayName = "Buoyancy")]
+        public bool IsBuoyancyOn { get; set; }
 
-        [SimulationSetting]
-        public bool Wind { get; set; }
+        [SimulationSetting(DisplayName = "Wind")]
+        public bool IsWindOn { get; set; }
 
         [SimulationSetting]
         public bool Afn { get; set; }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             NatVentSchedule == component ||
-            VentSchedule == component;
+            ScheduledVentilationSchedule == component;
 
         public override LibraryComponent Duplicate()
         {
@@ -67,12 +67,12 @@ namespace Basilisk.Controls.InterfaceModels
                 NatVentMaxRelHumidity = NatVentMaxRelHumidity,
                 NatVentSchedule = NatVentSchedule,
                 NatVentZoneTempSetpoint = NatVentZoneTempSetpoint,
-                IsVentOn = IsVentOn,
-                VentAirChangesPerHour = VentAirChangesPerHour,
-                VentSchedule = VentSchedule,
-                ScheduleVentMinTemp = ScheduleVentMinTemp,
-                Buoy = Buoy,
-                Wind = Wind,
+                IsScheduledVentilationOn = IsScheduledVentilationOn,
+                ScheduledVentilationAch = ScheduledVentilationAch,
+                ScheduledVentilationSchedule = ScheduledVentilationSchedule,
+                ScheduledVentilationSetpoint = ScheduledVentilationSetpoint,
+                IsBuoyancyOn = IsBuoyancyOn,
+                IsWindOn = IsWindOn,
                 Afn = Afn,
             };
             res.CopyBasePropertiesFrom(this);

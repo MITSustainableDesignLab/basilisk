@@ -240,7 +240,8 @@ namespace Basilisk.Legacy
                 Infiltration = src.Infiltration,
                 IsNatVentOn = src.NatVentOn,
                 NatVentMinOutdoorAirTemp = src.NatVMinTout,
-                NatVentSchedule = getMappedSchedule(src.NatVentSchd)
+                NatVentSchedule = getMappedSchedule(src.NatVentSchd),
+                ScheduledVentilationSchedule = getMappedSchedule(src.MechVentSchd)
             };
             return new Core.BuildingTemplate()
             {
@@ -336,6 +337,7 @@ namespace Basilisk.Legacy
         private static Core.WindowSettings Map(this BuildingTemplate src, Func<string, Core.YearSchedule> getMappedYear, Func<string, Core.WindowConstruction> getMappedWindow)
         {
             var res = Mapper.Map<Core.WindowSettings>(src);
+            res.AfnWindowAvailability = getMappedYear(src.BlindSchd);
             res.ShadingSystemAvailabilitySchedule = getMappedYear(src.BlindSchd);
             res.ZoneMixingAvailabilitySchedule = getMappedYear(src.BlindSchd);
             res.Construction = getMappedWindow(src.Glazing);

@@ -82,7 +82,7 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper.CreateMap<Core.ZoneVentilation, ZoneVentilation>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
                 .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.VentSchedule, opt => opt.Ignore());
+                .ForMember(dest => dest.ScheduledVentilationSchedule, opt => opt.Ignore());
             Mapper.CreateMap<Core.DomesticHotWaterSettings, ZoneHotWater>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
                 .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
@@ -185,7 +185,7 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper.CreateMap<ZoneVentilation, Core.ZoneVentilation>()
                 .IncludeBase<LibraryComponent, Core.LibraryComponent>()
                 .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.VentSchedule, opt => opt.Ignore());
+                .ForMember(dest => dest.ScheduledVentilationSchedule, opt => opt.Ignore());
             Mapper.CreateMap<ZoneHotWater, Core.DomesticHotWaterSettings>()
                 .IncludeBase<LibraryComponent, Core.LibraryComponent>()
                 .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
@@ -568,7 +568,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(v =>
                 {
                     var res = Mapper.Map<Core.ZoneVentilation>(v);
-                    res.VentSchedule = knownSchedules.GetValueOrDefault(v.VentSchedule?.Name);
+                    res.ScheduledVentilationSchedule = knownSchedules.GetValueOrDefault(v.ScheduledVentilationSchedule?.Name);
                     res.NatVentSchedule = knownSchedules.GetValueOrDefault(v.NatVentSchedule?.Name);
                     return res;
                 })
@@ -731,7 +731,7 @@ namespace Basilisk.Controls.InterfaceModels
         private static ZoneVentilation BuildVentilation(Core.ZoneVentilation src, Dictionary<string, YearSchedule> schedules)
         {
             var dest = Mapper.Map<ZoneVentilation>(src);
-            dest.VentSchedule = schedules.GetValueOrDefault(src.VentSchedule?.Name);
+            dest.ScheduledVentilationSchedule = schedules.GetValueOrDefault(src.ScheduledVentilationSchedule?.Name);
             dest.NatVentSchedule = schedules.GetValueOrDefault(src.NatVentSchedule?.Name);
             return dest;
         }
