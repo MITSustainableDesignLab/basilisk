@@ -52,6 +52,11 @@ namespace Basilisk.LibraryEditor.ViewModels
 #if DEBUG
             Instance = this;
 #endif
+            var args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                ActionBarViewModel.OpenLibraryCommand.Execute(args[1]);
+            }
         }
 
 #if DEBUG

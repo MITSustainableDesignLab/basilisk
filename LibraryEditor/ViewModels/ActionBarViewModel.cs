@@ -27,7 +27,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             DuplicateComponentCommand = new RelayCommand(DuplicateComponent, c => c != null);
             EditSelectedItemMetadataCommand = new RelayCommand(EditComponentMetadata, o => o is LibraryComponent);
             NewLibraryCommand = new RelayCommand(NewLibrary);
-            OpenLibraryCommand = new RelayCommand(OpenLibrary);
+            OpenLibraryCommand = new RelayCommand(path => OpenLibrary(path as string));
             SaveCommand = new RelayCommand(Save, () => parent.IsAnyLibraryLoaded);
             SaveAsCommand = new RelayCommand(SaveAs, () => parent.IsAnyLibraryLoaded);
         }
@@ -190,18 +190,22 @@ namespace Basilisk.LibraryEditor.ViewModels
             parent.HasUnsavedChanges = false;
         }
 
-        private void OpenLibrary()
+        private void OpenLibrary(string path = null)
         {
             try
             {
                 if (parent.HasUnsavedChanges && !CheckForSaveAndProceed()) { return; }
-                var ofd = new OpenFileDialog()
+                if (path == null)
                 {
-                    Title = "Select library file",
-                    Filter = "Building template libraries|*.xml;*.json"
-                };
-                var res = ofd.ShowDialog();
-                if (res.HasValue && res.Value)
+                    var ofd = new OpenFileDialog()
+                    {
+                        Title = "Select library file",
+                        Filter = "Building template libraries|*.xml;*.json"
+                    };
+                    var res = ofd.ShowDialog();
+                    if (res.HasValue && res.Value) { path = ofd.FileName; }
+                }
+                if (path != null)
                 {
                     // We could use the extension, but there's still no way to distinguish
                     // between legacy XML libraries and new ones, so let's just try
@@ -209,7 +213,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                     var newLib = default(Core.Library);
                     try
                     {
-                        newLib = Core.Library.FromJson(File.ReadAllText(ofd.FileName));
+                        newLib = Core.Library.FromJson(File.ReadAllText(path));
                     }
                     catch { }
                     if (newLib != null)
@@ -219,13 +223,13 @@ namespace Basilisk.LibraryEditor.ViewModels
                         if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
 #endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
-                        parent.CurrentLibraryPath = ofd.FileName;
+                        parent.CurrentLibraryPath = path;
                         parent.HasUnsavedChanges = false;
                         return;
                     }
                     try
                     {
-                        newLib = Core.Library.FromXml(ofd.FileName);
+                        newLib = Core.Library.FromXml(path);
                     }
                     catch { }
                     if (newLib != null)
@@ -235,13 +239,13 @@ namespace Basilisk.LibraryEditor.ViewModels
                         if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
 #endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
-                        parent.CurrentLibraryPath = ofd.FileName;
+                        parent.CurrentLibraryPath = path;
                         parent.HasUnsavedChanges = false;
                         return;
                     }
                     try
                     {
-                        var legacy = Legacy.Library.Load(ofd.FileName);
+                        var legacy = Legacy.Library.Load(path);
                         newLib = Legacy.Conversion.Convert(legacy);
                     }
                     catch { }
