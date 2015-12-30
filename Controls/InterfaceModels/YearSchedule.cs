@@ -22,6 +22,8 @@ namespace Basilisk.Controls.InterfaceModels
 
         public ObservableCollection<YearSchedulePart> Parts { get; set; }
 
+        public string Type { get; set; }
+
         public override bool DirectlyReferences(LibraryComponent component) =>
             Parts.Any(part => part.Schedule == component);
 

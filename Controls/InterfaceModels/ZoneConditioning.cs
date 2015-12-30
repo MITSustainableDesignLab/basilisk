@@ -24,6 +24,9 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Max heat flow (m3/s)")]
         public double MaxHeatFlow { get; set; }
 
+        [SimulationSetting(DisplayName = "Heating CoP")]
+        public double HeatingCoeffOfPerf { get; set; }
+
         [SimulationSetting(DisplayName = "Cooling")]
         public bool IsCoolingOn { get; set; }
 
@@ -41,6 +44,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Max cool flow (m3/s/m2)")]
         public double MaxCoolFlow { get; set; }
+
+        [SimulationSetting(DisplayName = "Cooling CoP")]
+        public double CoolingCoeffOfPerf { get; set; }
 
         [SimulationSetting(DisplayName = "Mechanical ventilation")]
         public bool IsMechVentOn { get; set; }
@@ -82,6 +88,7 @@ namespace Basilisk.Controls.InterfaceModels
                 MaxHeatingCapacity = MaxHeatingCapacity,
                 MaxHeatFlow = MaxHeatFlow,
                 IsCoolingOn = IsCoolingOn,
+                CoolingCoeffOfPerf = CoolingCoeffOfPerf,
                 CoolingSetpoint = CoolingSetpoint,
                 CoolingSchedule = CoolingSchedule,
                 CoolingLimitType = CoolingLimitType,
@@ -94,7 +101,8 @@ namespace Basilisk.Controls.InterfaceModels
                 EconomizerType = EconomizerType,
                 HeatRecoveryType = HeatRecoveryType,
                 HeatRecoveryEfficiencyLatent = HeatRecoveryEfficiencyLatent,
-                HeatRecoveryEfficiencySensible = HeatRecoveryEfficiencySensible
+                HeatRecoveryEfficiencySensible = HeatRecoveryEfficiencySensible,
+                HeatingCoeffOfPerf = HeatingCoeffOfPerf
             };
             res.CopyBasePropertiesFrom(this);
             return res;

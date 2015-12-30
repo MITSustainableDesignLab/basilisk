@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Basilisk.Core
 {
@@ -19,6 +17,9 @@ namespace Basilisk.Core
 
         [DataMember]
         public IList<YearSchedulePart> Parts { get; set; }
+
+        [DataMember, DefaultValue("Fraction")]
+        public string Type { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
             Parts.Select(part => part.Schedule);

@@ -11,6 +11,9 @@ namespace Basilisk.Core
         [DataMember]
         public YearSchedule CoolingSchedule { get; set; }
 
+        [DataMember]
+        public double CoolingCoeffOfPerf { get; set; }
+
         [DataMember, DefaultValue(26)]
         public double CoolingSetpoint { get; set; } = 26;
 
@@ -19,7 +22,10 @@ namespace Basilisk.Core
 
         [DataMember, DefaultValue("NoEconomizer")]
         public string EconomizerType { get; set; } = "NoEconomizer";
-        
+
+        [DataMember]
+        public double HeatingCoeffOfPerf { get; set; }
+
         [DataMember, DefaultValue("NoLimit")]
         public string HeatingLimitType { get; set; } = "NoLimit";
 

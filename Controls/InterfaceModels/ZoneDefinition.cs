@@ -33,12 +33,6 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Internal mass exposed per floor area")]
         public double InternalMassExposedPerFloorArea { get; set; }
 
-        [SimulationSetting(DisplayName = "Cooling CoP")]
-        public double CoolingCoeffOfPerf { get; set; }
-
-        [SimulationSetting(DisplayName = "Heating CoP")]
-        public double HeatingCoeffOfPerf { get; set; }
-
         public override bool DirectlyReferences(LibraryComponent component) =>
             Constructions == component ||
             Loads == component ||
@@ -59,9 +53,7 @@ namespace Basilisk.Controls.InterfaceModels
                 DaylightMeshResolution = DaylightMeshResolution,
                 DaylightWorkplaneHeight = DaylightWorkplaneHeight,
                 InternalMassConstruction = InternalMassConstruction,
-                InternalMassExposedPerFloorArea = InternalMassExposedPerFloorArea,
-                CoolingCoeffOfPerf = CoolingCoeffOfPerf,
-                HeatingCoeffOfPerf = HeatingCoeffOfPerf
+                InternalMassExposedPerFloorArea = InternalMassExposedPerFloorArea
             };
             res.CopyBasePropertiesFrom(this);
             return res;

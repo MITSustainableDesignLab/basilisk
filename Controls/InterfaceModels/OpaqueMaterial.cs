@@ -6,6 +6,9 @@ namespace Basilisk.Controls.InterfaceModels
     [DisplayName("opaque material")]
     public class OpaqueMaterial : MaterialBase
     {
+        [SimulationSetting]
+        public string Roughness { get; set; }
+
         [SimulationSetting(DisplayName = "Solar Absorptance")]
         public double SolarAbsorptance { get; set; }
 

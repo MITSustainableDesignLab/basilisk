@@ -14,6 +14,9 @@ namespace Basilisk.Core
     public class OpaqueMaterial : MaterialBase, IEquatable<OpaqueMaterial>
     {
         [DataMember]
+        public string Roughness { get; set; }
+
+        [DataMember]
         public double SolarAbsorptance { get; set; }
 
         [DataMember]

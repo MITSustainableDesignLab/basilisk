@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legacy", "Legacy\Legacy.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryEditor", "LibraryEditor\LibraryEditor.csproj", "{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchsimConverter", "ArchsimConverter\ArchsimConverter.csproj", "{2B7D5A88-1FB8-490D-8437-FA32131F49AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
