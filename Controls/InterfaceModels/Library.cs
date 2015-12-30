@@ -109,7 +109,8 @@ namespace Basilisk.Controls.InterfaceModels
                 .CreateMap<LibraryComponent, Core.LibraryComponent>();
             Mapper
                 .CreateMap<MaterialBase, Core.MaterialBase>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>();
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.UseValue(new double[] { 1.0 }));
             Mapper
                 .CreateMap<OpaqueMaterial, Core.OpaqueMaterial>()
                 .IncludeBase<MaterialBase, Core.MaterialBase>();
@@ -208,6 +209,8 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Core, opt => opt.Ignore())
                 .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
                 .ForMember(dest => dest.Windows, opt => opt.Ignore());
+
+            Mapper.AssertConfigurationIsValid();
         }
 
         public IEnumerable<LibraryComponent> AllComponents =>

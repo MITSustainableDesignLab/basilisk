@@ -21,9 +21,6 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting]
         public OpaqueConstruction Slab { get; set; }
 
-        [SimulationSetting]
-        public WindowConstruction Window { get; set; }
-
         [SimulationSetting(DisplayName = "Facade is adiabatic")]
         public bool IsFacadeAdiabatic { get; set; }
 
@@ -44,8 +41,7 @@ namespace Basilisk.Controls.InterfaceModels
             Ground == component ||
             Partition == component ||
             Roof == component ||
-            Slab == component ||
-            Window == component;
+            Slab == component;
 
         public override LibraryComponent Duplicate()
         {
@@ -56,7 +52,6 @@ namespace Basilisk.Controls.InterfaceModels
                 Partition = Partition,
                 Roof = Roof,
                 Slab = Slab,
-                Window = Window,
                 IsFacadeAdiabatic = IsFacadeAdiabatic,
                 IsGroundAdiabatic = IsGroundAdiabatic,
                 IsPartitionAdiabatic = IsPartitionAdiabatic,

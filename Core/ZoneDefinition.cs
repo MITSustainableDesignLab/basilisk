@@ -12,12 +12,6 @@ namespace Basilisk.Core
     public class ZoneDefinition : LibraryComponent
     {
         [DataMember]
-        public double CoolingCoeffOfPerf { get; set; }
-
-        [DataMember]
-        public double HeatingCoeffOfPerf { get; set; }
-
-        [DataMember]
         public ZoneConditioning Conditioning { get; set; }
 
         [DataMember]

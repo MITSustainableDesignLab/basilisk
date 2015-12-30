@@ -31,14 +31,8 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Embodied Carbon")]
         public double EmbodiedCarbon { get; set; }
 
-        [SimulationSetting(DisplayName = "Embodied Carbon Standard Deviation")]
-        public double EmbodiedCarbonStdDev { get; set; }
-
         [SimulationSetting(DisplayName = "Embodied Energy")]
         public double EmbodiedEnergy { get; set; }
-
-        [SimulationSetting(DisplayName = "Embodied Energy Standard Deviation")]
-        public double EmbodiedEnergyStdDev { get; set; }
 
         [SimulationSetting(DisplayName = "Substitution Timestep")]
         public double SubstitutionTimestep { get; set; }
@@ -58,9 +52,7 @@ namespace Basilisk.Controls.InterfaceModels
             Cost = source.Cost;
             Density = source.Density;
             EmbodiedCarbon = source.EmbodiedCarbon;
-            EmbodiedCarbonStdDev = source.EmbodiedCarbonStdDev;
             EmbodiedEnergy = source.EmbodiedEnergy;
-            EmbodiedEnergyStdDev = source.EmbodiedEnergyStdDev;
             SubstitutionTimestep = source.SubstitutionTimestep;
             TransportCarbon = source.TransportCarbon;
             TransportDistance = source.TransportDistance;
