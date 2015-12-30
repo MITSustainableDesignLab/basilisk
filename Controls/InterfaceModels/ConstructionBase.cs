@@ -17,7 +17,7 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Disassembly Energy (MJ/m2)")]
         public double DisassemblyEnergy { get; set; }
 
-        [SimulationSetting(DisplayName = "Cost ($/m3)")]
+        [SimulationSetting(DisplayName = "Cost ($/m2)")]
         public double AssemblyCost { get; set; }
 
         protected void CopyBasePropertiesFrom(ConstructionBase source)
