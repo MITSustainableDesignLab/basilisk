@@ -17,18 +17,29 @@ namespace Basilisk.Legacy
         {
             Mapper
                 .CreateMap<Legacy.BaseMaterial, Core.MaterialBase>()
-                .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.MapFrom(src => src.ECStandardDev))
-                .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.MapFrom(src => src.EEStandardDev))
                 .ForMember(dest => dest.SubstitutionTimestep, opt => opt.MapFrom(src => src.SubstituionTimeStep))
-                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.MapFrom(src => src.SubstituionRatePattern));
+                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.MapFrom(src => src.SubstituionRatePattern))
+                .ForMember(dest => dest.TransportDistance, opt => opt.MapFrom(src => src.TransportDist))
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
             Mapper
                 .CreateMap<Legacy.OpaqueMaterial, Core.OpaqueMaterial>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
+                .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
             Mapper
                 .CreateMap<Legacy.GlazingMaterial, Core.GlazingMaterial>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
+                .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
             Mapper
-                .CreateMap<Legacy.GasMaterial, Core.GasMaterial>();
+                .CreateMap<Legacy.GasMaterial, Core.GasMaterial>()
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
+                .ForMember(dest => dest.Conductivity, opt => opt.Ignore())
+                .ForMember(dest => dest.Cost, opt => opt.Ignore())
+                .ForMember(dest => dest.Density, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedCarbon, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedEnergy, opt => opt.Ignore())
+                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.Ignore())
+                .ForMember(dest => dest.SubstitutionTimestep, opt => opt.Ignore())
+                .ForMember(dest => dest.TransportCarbon, opt => opt.Ignore())
+                .ForMember(dest => dest.TransportDistance, opt => opt.Ignore())
+                .ForMember(dest => dest.TransportEnergy, opt => opt.Ignore());
 
             Mapper
                 .CreateMap<Legacy.OpaqueConstruction, Core.OpaqueConstruction>()
@@ -44,16 +55,20 @@ namespace Basilisk.Legacy
                 .ForMember(dest => dest.MassRatios, opt => opt.Ignore());
 
             Mapper
-                .CreateMap<Legacy.DaySchedule, Core.DaySchedule>();
+                .CreateMap<Legacy.DaySchedule, Core.DaySchedule>()
+                .ForMember(dest => dest.Category, opt => opt.Ignore());
             Mapper
                 .CreateMap<Legacy.WeekSchedule, Core.WeekSchedule>()
-                .ForMember(dest => dest.Days, opt => opt.Ignore());
+                .ForMember(dest => dest.Days, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore());
             Mapper
                 .CreateMap<Legacy.YearSchedule, Core.YearSchedule>()
-                .ForMember(dest => dest.Parts, opt => opt.Ignore());
+                .ForMember(dest => dest.Parts, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore());
 
             Mapper
                 .CreateMap<Legacy.BuildingTemplate, Core.WindowSettings>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Name, opt => opt.ResolveUsing((BuildingTemplate src) => $"{src.Name} windows"))
                 .ForMember(dest => dest.IsShadingSystemOn, opt => opt.MapFrom(src => src.BlindOn))
                 .ForMember(dest => dest.ShadingSystemTransmittance, opt => opt.MapFrom(src => src.BlindTrns))
@@ -66,7 +81,18 @@ namespace Basilisk.Legacy
                 }))
                 .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
                 .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.Construction, opt => opt.Ignore());
+                .ForMember(dest => dest.Construction, opt => opt.Ignore())
+                .ForMember(dest => dest.AfnDischargeC, opt => opt.Ignore())
+                .ForMember(dest => dest.AfnTempSetpoint, opt => opt.Ignore())
+                .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore())
+                .ForMember(dest => dest.IsVirtualPartition, opt => opt.Ignore())
+                .ForMember(dest => dest.IsZoneMixingOn, opt => opt.Ignore())
+                .ForMember(dest => dest.OperableArea, opt => opt.Ignore())
+                .ForMember(dest => dest.ShadingSystemType, opt => opt.Ignore())
+                .ForMember(dest => dest.ZoneMixingDeltaTemperature, opt => opt.Ignore())
+                .ForMember(dest => dest.ZoneMixingFlowRate, opt => opt.Ignore());
+
+            Mapper.AssertConfigurationIsValid();
         }
 
         public static Core.Library Convert(Library legacy)
@@ -180,8 +206,6 @@ namespace Basilisk.Legacy
                 DataSource = src.DataSource,
                 Category = src.Type
             };
-            zone.CoolingCoeffOfPerf = src.CoolingCoP;
-            zone.HeatingCoeffOfPerf = src.HeatingCoP;
             zone.Conditioning = new Core.ZoneConditioning()
             {
                 Name = $"{src.Name} conditioning",
@@ -189,7 +213,10 @@ namespace Basilisk.Legacy
                 DataSource = src.DataSource,
                 CoolingSchedule = getMappedSchedule(src.CoolingSchd),
                 CoolingSetpoint = src.CoolingSet,
+                CoolingCoeffOfPerf = src.CoolingCoP,
                 HeatingSchedule = getMappedSchedule(src.HeatingSchd),
+                HeatingSetpoint = src.HeatingSet,
+                HeatingCoeffOfPerf = src.HeatingCoP,
                 IsCoolingOn = src.CoolingOn,
                 IsHeatingOn = src.HeatingOn,
                 IsMechVentOn = src.MechVentOn,

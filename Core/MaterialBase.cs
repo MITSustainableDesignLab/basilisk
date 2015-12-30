@@ -24,13 +24,7 @@ namespace Basilisk.Core
         public double EmbodiedCarbon { get; set; }
 
         [DataMember]
-        public double EmbodiedCarbonStdDev { get; set; }
-
-        [DataMember]
         public double EmbodiedEnergy { get; set; }
-
-        [DataMember]
-        public double EmbodiedEnergyStdDev { get; set; }
 
         [DataMember]
         [DefaultValue(new double[] { 1.0 })]
@@ -56,9 +50,7 @@ namespace Basilisk.Core
                 a.Cost == b.Cost &&
                 a.Density == b.Density &&
                 a.EmbodiedCarbon == b.EmbodiedCarbon &&
-                a.EmbodiedCarbonStdDev == b.EmbodiedCarbonStdDev &&
                 a.EmbodiedEnergy == b.EmbodiedEnergy &&
-                a.EmbodiedEnergyStdDev == b.EmbodiedEnergyStdDev &&
                 a.SubstitutionRatePattern == b.SubstitutionRatePattern &&
                 a.SubstitutionTimestep == b.SubstitutionTimestep &&
                 a.TransportCarbon == b.TransportCarbon &&
