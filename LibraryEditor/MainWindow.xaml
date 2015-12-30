@@ -144,7 +144,9 @@
                         <TabItem Header="Gas"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedGasMaterials}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:GasMaterial}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}" />
+                            <TextBlock Text="Gas materials have no editable properties (the gas type is the material name)"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>
                 </TabItem>

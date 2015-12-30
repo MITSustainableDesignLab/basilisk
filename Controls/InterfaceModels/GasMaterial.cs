@@ -12,16 +12,15 @@ namespace Basilisk.Controls.InterfaceModels
             get { return "Gas"; }
             set { }
         }
-
-        [SimulationSetting]
-        public string Type { get; set; }
+        
+        public string Type => Name;
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             false;
 
         public override LibraryComponent Duplicate()
         {
-            var res = new GasMaterial() { Type = Type };
+            var res = new GasMaterial();
             res.CopyBasePropertiesFrom(this);
             return res;
         }
