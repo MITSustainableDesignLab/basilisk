@@ -89,7 +89,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 currentLibraryPath = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(CurrentLibraryPath)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentLibraryPath)));
             }
         }
 
@@ -99,7 +99,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 hasUnsavedChanges = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(HasUnsavedChanges)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasUnsavedChanges)));
             }
         }
 
@@ -109,7 +109,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 loadedLibrary = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(String.Empty));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
             }
         }
 
@@ -199,10 +199,10 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 selectedComponent = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedComponent)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponent)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
                 ActionBarViewModel.EditSelectedItemMetadataCommand.RaiseCanExecuteChanged();
                 ActionBarViewModel.DeleteComponentCommand.RaiseCanExecuteChanged();
                 ActionBarViewModel.DuplicateComponentCommand.RaiseCanExecuteChanged();
@@ -217,7 +217,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 selectedComponentLayers = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedComponentLayers)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentLayers)));
             }
         }
 
@@ -237,7 +237,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 ((DaySchedule)selectedComponent).Values = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
             }
         }
 
@@ -247,7 +247,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 ((WeekSchedule)selectedComponent).Days = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
             }
         }
 
@@ -257,7 +257,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 ((YearSchedule)selectedComponent).Parts = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
             }
         }
 
