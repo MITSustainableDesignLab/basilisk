@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
-using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.Controls
 {
@@ -66,14 +60,13 @@ namespace Basilisk.Controls
             SettingType = type;
             if (SettingType == SettingType.Enum)
             {
-                EnumChoices = Enum.GetNames(prop.PropertyType);
-                Value = EnumChoices[0];
+                Choices = Enum.GetValues(prop.PropertyType);
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string[] EnumChoices { get; private set; }
+        public IList Choices { get; private set; }
         public string DisplayName { get; private set; }
         public bool ExposeAsCheckbox => SettingType == SettingType.Bool;
         public bool ExposeAsComboBox => SettingType == SettingType.Enum;
@@ -100,12 +93,6 @@ namespace Basilisk.Controls
                     error = e.Message;
                 }
             }
-        }
-
-        public string ValueText
-        {
-            get { return Value == null ? null : Value.ToString(); }
-            set { Value = value; }
         }
 
         internal SettingType SettingType { get; private set; }

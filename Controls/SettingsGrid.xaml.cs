@@ -75,5 +75,11 @@ namespace Basilisk.Controls
                 grd.BeginEdit(e);
             }
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = (ComboBox)sender;
+            comboBox.GetBindingExpression(ComboBox.SelectedItemProperty).UpdateSource();
+        }
     }
 }

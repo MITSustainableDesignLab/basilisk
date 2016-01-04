@@ -30,8 +30,9 @@
                        Style="{StaticResource ErrorStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="EnumPropertyTemplate">
-            <ComboBox ItemsSource="{Binding Path=EnumChoices, Mode=OneTime}"
-                      SelectedItem="{Binding Path=ValueText}" />
+            <ComboBox ItemsSource="{Binding Path=Choices, Mode=OneTime}"
+                      SelectedItem="{Binding Path=Value}"
+                      SelectionChanged="ComboBox_SelectionChanged" />
         </DataTemplate>
         <DataTemplate x:Key="BoolPropertyTemplate">
             <CheckBox IsChecked="{Binding Path=Value}"
