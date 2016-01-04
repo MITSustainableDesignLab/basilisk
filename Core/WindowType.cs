@@ -8,6 +8,7 @@ namespace Basilisk.Core
 {
     public enum WindowType
     {
-        External
+        External,
+        Internal
     }
 }
