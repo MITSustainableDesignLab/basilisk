@@ -45,14 +45,14 @@ namespace Basilisk.Archsim
 
             Mapper
                 .CreateMap<Core.ZoneConditioning, ArchsimLib.ZoneConditioning>()
-                .ForMember(dest => dest.CoolingLimitType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.IdealSystemLimit), src.CoolingLimitType, ignoreCase: true)))
+                .ForMember(dest => dest.CoolingLimitType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.IdealSystemLimit), src.CoolingLimitType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.CoolingSchedule, opt => opt.ResolveUsing(src => src.CoolingSchedule.Name))
                 .ForMember(dest => dest.CoolIsOn, opt => opt.MapFrom(src => src.IsCoolingOn))
-                .ForMember(dest => dest.EconomizerType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.EconomizerItem), src.EconomizerType, ignoreCase: true)))
-                .ForMember(dest => dest.HeatingLimitType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.IdealSystemLimit), src.HeatingLimitType, ignoreCase: true)))
+                .ForMember(dest => dest.EconomizerType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.EconomizerItem), src.EconomizerType.ToString(), ignoreCase: true)))
+                .ForMember(dest => dest.HeatingLimitType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.IdealSystemLimit), src.HeatingLimitType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.HeatingSchedule, opt => opt.ResolveUsing(src => src.HeatingSchedule.Name))
                 .ForMember(dest => dest.HeatIsOn, opt => opt.MapFrom(src => src.IsHeatingOn))
-                .ForMember(dest => dest.HeatRecoveryType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.HeatRecoveryItem), src.HeatRecoveryType, ignoreCase: true)))
+                .ForMember(dest => dest.HeatRecoveryType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.HeatRecoveryItem), src.HeatRecoveryType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.MechVentIsOn, opt => opt.MapFrom(src => src.IsMechVentOn))
                 .ForMember(dest => dest.MechVentSchedule, opt => opt.ResolveUsing(src => src.MechVentSchedule.Name))
                 .ForMember(dest => dest.MinFreshAirArea, opt => opt.MapFrom(src => src.MinFreshAirPerArea))
@@ -62,7 +62,7 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.WaterSchedule, opt => opt.ResolveUsing(src => src.WaterSchedule.Name));
             Mapper
                 .CreateMap<Core.ZoneLoads, ArchsimLib.ZoneLoad>()
-                .ForMember(dest => dest.DimmingType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.DimmingItem), src.DimmingType, ignoreCase: true)))
+                .ForMember(dest => dest.DimmingType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.DimmingItem), src.DimmingType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.EquipmentAvailibilitySchedule, opt => opt.ResolveUsing(src => src.EquipmentAvailabilitySchedule.Name))
                 .ForMember(dest => dest.EquipmentIsOn, opt => opt.MapFrom(src => src.IsEquipmentOn))
                 .ForMember(dest => dest.LightsAvailibilitySchedule, opt => opt.ResolveUsing(src => src.LightsAvailabilitySchedule.Name))
@@ -120,7 +120,7 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.ShadingSystemAvailibilitySchedule, opt => opt.ResolveUsing(src => src.ShadingSystemAvailabilitySchedule.Name))
                 .ForMember(dest => dest.ShadingSystemIsOn, opt => opt.MapFrom(src => src.IsShadingSystemOn))
                 .ForMember(dest => dest.ShadingSystemSetPoint, opt => opt.MapFrom(src => src.ShadingSystemSetpoint))
-                .ForMember(dest => dest.ShadingSystemType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.ShadingType), src.ShadingSystemType, ignoreCase: true)))
+                .ForMember(dest => dest.ShadingSystemType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.ShadingType), src.ShadingSystemType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.ZoneMixingAvailibilitySchedule, opt => opt.ResolveUsing(src => src.ZoneMixingAvailabilitySchedule.Name))
                 .ForMember(dest => dest.ZoneMixingIsOn, opt => opt.MapFrom(src => src.IsZoneMixingOn));
 

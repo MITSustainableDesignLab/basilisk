@@ -8,8 +8,8 @@ namespace Basilisk.Core
     [DataContract(IsReference = true)]
     public class ZoneLoads : LibraryComponent
     {
-        [DataMember, DefaultValue("Continuous")]
-        public string DimmingType { get; set; } = "Continuous";
+        [DataMember, DefaultValue(DimmingType.Continuous)]
+        public DimmingType DimmingType { get; set; } = DimmingType.Continuous;
 
         [DataMember]
         public YearSchedule EquipmentAvailabilitySchedule { get; set; }

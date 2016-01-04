@@ -1,4 +1,5 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using Basilisk.Core;
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -34,7 +35,7 @@ namespace Basilisk.Controls.InterfaceModels
         public YearSchedule LightsAvailabilitySchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Dimming type")]
-        public string DimmingType { get; set; }
+        public DimmingType DimmingType { get; set; }
 
         [SimulationSetting(DisplayName = "Illuminance target (lux)")]
         public double IlluminanceTarget { get; set; }

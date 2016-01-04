@@ -28,7 +28,7 @@ namespace Basilisk.Controls.InterfaceModels
         public double ShadingSystemTransmittance { get; set; }
 
         [SimulationSetting(DisplayName = "Shading system type")]
-        public string ShadingSystemType { get; set; }
+        public ShadingType ShadingSystemType { get; set; }
 
         [SimulationSetting(DisplayName = "Zone mixing")]
         public bool IsZoneMixingOn { get; set; }

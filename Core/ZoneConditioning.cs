@@ -17,17 +17,17 @@ namespace Basilisk.Core
         [DataMember, DefaultValue(26)]
         public double CoolingSetpoint { get; set; } = 26;
 
-        [DataMember, DefaultValue("NoLimit")]
-        public string CoolingLimitType { get; set; } = "NoLimit";
+        [DataMember, DefaultValue(IdealSystemLimit.NoLimit)]
+        public IdealSystemLimit CoolingLimitType { get; set; } = IdealSystemLimit.NoLimit;
 
-        [DataMember, DefaultValue("NoEconomizer")]
-        public string EconomizerType { get; set; } = "NoEconomizer";
+        [DataMember, DefaultValue(EconomizerType.NoEconomizer)]
+        public EconomizerType EconomizerType { get; set; } = EconomizerType.NoEconomizer;
 
         [DataMember]
         public double HeatingCoeffOfPerf { get; set; }
 
-        [DataMember, DefaultValue("NoLimit")]
-        public string HeatingLimitType { get; set; } = "NoLimit";
+        [DataMember, DefaultValue(IdealSystemLimit.NoLimit)]
+        public IdealSystemLimit HeatingLimitType { get; set; } = IdealSystemLimit.NoLimit;
 
         [DataMember]
         public YearSchedule HeatingSchedule { get; set; }
@@ -41,8 +41,8 @@ namespace Basilisk.Core
         [DataMember, DefaultValue(0.7)]
         public double HeatRecoveryEfficiencySensible { get; set; } = 0.7;
 
-        [DataMember, DefaultValue("None")]
-        public string HeatRecoveryType { get; set; } = "None";
+        [DataMember, DefaultValue(HeatRecoveryType.None)]
+        public HeatRecoveryType HeatRecoveryType { get; set; } = HeatRecoveryType.None;
 
         [DataMember, DefaultValue(true)]
         public bool IsCoolingOn { get; set; } = true;

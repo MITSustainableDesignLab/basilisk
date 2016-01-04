@@ -48,9 +48,13 @@
     <Compile Include="BuildingTemplate.cs" />
     <Compile Include="ConstructionBase.cs" />
     <Compile Include="DaySchedule.cs" />
+    <Compile Include="DimmingType.cs" />
     <Compile Include="DomesticHotWaterSettings.cs" />
+    <Compile Include="EconomizerType.cs" />
     <Compile Include="GasMaterial.cs" />
     <Compile Include="GlazingMaterial.cs" />
+    <Compile Include="HeatRecoveryType.cs" />
+    <Compile Include="IdealSystemLimit.cs" />
     <Compile Include="LayeredConstruction.cs" />
     <Compile Include="MassRatios.cs" />
     <Compile Include="MaterialBase.cs" />
@@ -60,6 +64,7 @@
     <Compile Include="OpaqueMaterial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="ShadingType.cs" />
     <Compile Include="StructureInformation.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="WeekSchedule.cs" />

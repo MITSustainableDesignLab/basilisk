@@ -41,8 +41,8 @@ namespace Basilisk.Core
         [DataMember, DefaultValue(0.5)]
         public double ShadingSystemTransmittance { get; set; } = 0.5;
 
-        [DataMember, DefaultValue("ExteriorShade")]
-        public string ShadingSystemType { get; set; } = "ExteriorShade";
+        [DataMember, DefaultValue(ShadingType.ExteriorShade)]
+        public ShadingType ShadingSystemType { get; set; } = ShadingType.ExteriorShade;
 
         [DataMember, DefaultValue(WindowType.External)]
         public WindowType Type { get; set; } = WindowType.External;

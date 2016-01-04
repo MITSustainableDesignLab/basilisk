@@ -1,4 +1,5 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using Basilisk.Core;
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -16,7 +17,7 @@ namespace Basilisk.Controls.InterfaceModels
         public YearSchedule HeatingSchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Heating limit type")]
-        public string HeatingLimitType { get; set; }
+        public IdealSystemLimit HeatingLimitType { get; set; }
 
         [SimulationSetting(DisplayName = "Max heating capacity (W/m2)")]
         public double MaxHeatingCapacity { get; set; }
@@ -37,7 +38,7 @@ namespace Basilisk.Controls.InterfaceModels
         public YearSchedule CoolingSchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Cooling limit type")]
-        public string CoolingLimitType { get; set; }
+        public IdealSystemLimit CoolingLimitType { get; set; }
 
         [SimulationSetting(DisplayName = "Max cooling capacity (W/m2)")]
         public double MaxCoolingCapacity { get; set; }
@@ -61,10 +62,10 @@ namespace Basilisk.Controls.InterfaceModels
         public double MinFreshAirPerPerson { get; set; }
 
         [SimulationSetting(DisplayName = "Economizer type")]
-        public string EconomizerType { get; set; }
+        public EconomizerType EconomizerType { get; set; }
 
         [SimulationSetting(DisplayName = "Heat recovery type")]
-        public string HeatRecoveryType { get; set; }
+        public HeatRecoveryType HeatRecoveryType { get; set; }
 
         [SimulationSetting(DisplayName = "Heat recovery efficiency (latent)")]
         public double HeatRecoveryEfficiencyLatent { get; set; }
