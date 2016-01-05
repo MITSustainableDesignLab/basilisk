@@ -23,14 +23,15 @@
                    Text="Name" />
         <TextBox Grid.Row="0"
                  Grid.Column="1"
-                 Text="{Binding ElementName=editor, Path=ComponentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding ElementName=editor, Path=ComponentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding IsNameReadOnly, Mode=OneTime}"/>
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Text="Category" />
         <TextBox Grid.Row="1"
                  Grid.Column="1"
                  Text="{Binding ElementName=editor, Path=Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="{Binding IsCategoryReadOnly}" />
+                 IsReadOnly="{Binding IsCategoryReadOnly, Mode=OneTime}" />
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Text="Data Source" />

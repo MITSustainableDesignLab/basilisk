@@ -3,7 +3,6 @@
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.GasMaterial))]
-    [ImmutableCategoryName]
     [DisplayName("gas material")]
     public class GasMaterial : WindowMaterialBase
     {
@@ -12,7 +11,9 @@ namespace Basilisk.Controls.InterfaceModels
             get { return "Gas"; }
             set { }
         }
-        
+
+        public override bool IsCategoryNameMutable => false;
+
         public string Type => Name;
 
         public override bool DirectlyReferences(LibraryComponent component) =>

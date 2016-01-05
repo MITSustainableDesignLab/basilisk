@@ -134,12 +134,12 @@
                         <TabItem Header="Opaque"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedOpaqueMaterials}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:OpaqueMaterial}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}" />
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}" />
                         </TabItem>
                         <TabItem Header="Glazing"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedGlazingMaterials}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:GlazingMaterial}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}" />
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}" />
                         </TabItem>
                         <TabItem Header="Gas"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedGasMaterials}"
@@ -155,7 +155,7 @@
                         <TabItem Header="Opaque"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedOpaqueConstructions}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:OpaqueConstruction}">
-                            <basilisk:ConstructionEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:ConstructionEditor Settings="{Binding SelectedComponent.SimulationSettings}"
                                                          Layers="{Binding SelectedComponentLayers}"
                                                          PickMaterial="{Binding PickMaterial}"
                                                          LayerMaterialChoices="{Binding LoadedOpaqueMaterials}" />
@@ -163,7 +163,7 @@
                         <TabItem Header="Window"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedWindowConstructions}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:WindowConstruction}">
-                            <basilisk:ConstructionEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:ConstructionEditor Settings="{Binding SelectedComponent.SimulationSettings}"
                                                          Layers="{Binding SelectedComponentLayers}"
                                                          PickMaterial="{Binding PickMaterial}"
                                                          LayerMaterialChoices="{Binding LoadedWindowMaterials}" />
@@ -171,7 +171,7 @@
                         <TabItem Header="Structure"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedStructureDefinitions}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:StructureInformation}">
-                            <basilisk:StructureEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:StructureEditor Settings="{Binding SelectedComponent.SimulationSettings}"
                                                       Ratios="{Binding SelectedComponentMassRatios}"
                                                       PickMaterial="{Binding PickMaterial}"
                                                       MaterialChoices="{Binding LoadedOpaqueMaterials}" />
@@ -185,19 +185,19 @@
                         <TabItem Header="Day"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:DaySchedule}"
                                  IsSelected="{Binding ElementName=componentsTree, Path=SelectedComponent, Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type models:DaySchedule}, Mode=OneWay}">
-                            <basilisk:DayScheduleEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:DayScheduleEditor Settings="{Binding SelectedComponent.SimulationSettings}"
                                                         Values="{Binding SelectedDayScheduleValues}" />
                         </TabItem>
                         <TabItem Header="Week"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:WeekSchedule}"
                                  IsSelected="{Binding ElementName=componentsTree, Path=SelectedComponent, Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type models:WeekSchedule}, Mode=OneWay}">
-                            <basilisk:WeekScheduleEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:WeekScheduleEditor Settings="{Binding SelectedComponent.SimulationSettings}"
                                                          AvailableDaySchedules="{Binding LoadedDaySchedules}"
                                                          Days="{Binding SelectedWeekScheduleDays}" />
                         </TabItem>
                         <TabItem Header="Year"
                                  IsSelected="{Binding ElementName=componentsTree, Path=SelectedComponent, Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type models:YearSchedule}, Mode=OneWay}">
-                            <basilisk:YearScheduleEditor Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:YearScheduleEditor Settings="{Binding SelectedComponent.SimulationSettings}"
                                                          WeekScheduleChoices="{Binding LoadedWeekSchedules}"
                                                          Parts="{Binding SelectedYearScheduleParts}"
                                                          PickWeekSchedule="{Binding PickWeekForYear}" />
@@ -209,43 +209,43 @@
                         <TabItem Header="Zones"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZones}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneDefinition}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                         <TabItem Header="Loads"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneLoads}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneLoads}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                         <TabItem Header="Constructions"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneConstructions}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneConstructions}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                         <TabItem Header="Conditioning"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneConditionings}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneConditioning}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                         <TabItem Header="Ventilation"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneVentilations}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneVentilation}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                         <TabItem Header="Domestic Hot Water"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedZoneHotWaters}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:ZoneHotWater}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                         <TabItem Header="Windows"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedWindowSettings}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:WindowSettings}">
-                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                            <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                                    PickReferencedComponent="{Binding PickReferenceTarget}" />
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>
@@ -253,7 +253,7 @@
                 <TabItem Header="Building Templates"
                          basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedTemplates}"
                          basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:BuildingTemplate}">
-                    <basilisk:SettingsGrid Settings="{Binding SelectedComponent, Converter={StaticResource SimulationSettingsCreator}}"
+                    <basilisk:SettingsGrid Settings="{Binding SelectedComponent.SimulationSettings}"
                                            PickReferencedComponent="{Binding PickReferenceTarget}" />
                 </TabItem>
             </basilisk:ComponentEditorTabControl>

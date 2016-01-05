@@ -1,27 +1,31 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+
+using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.Controls
 {
     public class SimulationSetting : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
     {
-        private readonly object obj;
+        private readonly IReadOnlyList<LibraryComponent> components;
         private readonly PropertyInfo prop;
 
-        private object backupVal;
+        private IReadOnlyList<object> backupVals;
         private bool inTxn = false;
         private string error = String.Empty;
 
         public SimulationSetting(
-            object obj,
+            LibraryComponent component,
             PropertyInfo prop,
             string displayName,
             SettingType type = SettingType.Unspecified)
         {
-            PropertyChanged += (s, e) => { };
-            this.obj = obj;
+            var multiple = component as LibraryComponentSet;
+            components = multiple == null ? new List<LibraryComponent>() { component } : multiple.Components.ToList();
             this.prop = prop;
 
             DisplayName = displayName;
@@ -54,7 +58,7 @@ namespace Basilisk.Controls
                 }
                 else
                 {
-                    throw new ArgumentException("Unknown setting type", "type");
+                    throw new ArgumentException("Unknown setting type", nameof(type));
                 }
             }
             SettingType = type;
@@ -72,19 +76,31 @@ namespace Basilisk.Controls
         public bool ExposeAsComboBox => SettingType == SettingType.Enum;
         public bool ExposeAsText => !ExposeAsCheckbox && !ExposeAsComboBox;
         public string PropertyName => prop.Name;
+        public bool ShowMultivalueDescription => MultipleValueDescriptionText != null;
         public Type TargetType => prop.PropertyType;
 
-        public object Value
+        public object SingleValue
         {
             get
             {
-                return prop.GetValue(obj);
+                var distinct = components.Select(prop.GetValue).Distinct();
+                if (prop.PropertyType == typeof(bool))
+                {
+                    return
+                        distinct.Count() == 0 ? false :
+                        distinct.Count() == 1 ? distinct.First() :
+                        default(bool?);
+                }
+                return distinct.SingleOrDefault();
             }
             set
             {
                 try
                 {
-                    prop.SetValue(obj, value, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);
+                    foreach (var c in components)
+                    {
+                        prop.SetValue(c, value, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);
+                    }
                     Update();
                     error = String.Empty;
                 }
@@ -95,11 +111,57 @@ namespace Basilisk.Controls
             }
         }
 
+        public string MultipleValueDescriptionText
+        {
+            get
+            {
+                if (components.Count <= 1 || prop.PropertyType == typeof(bool)) { return null; }
+                else if (prop.PropertyType == typeof(string))
+                {
+                    var vals =
+                        components
+                        .Select(prop.GetValue)
+                        .Cast<string>()
+                        .Distinct()
+                        .Where(v => !String.IsNullOrEmpty(v))
+                        .ToArray();
+                    if (vals.Length <= 1) { return null; }
+                    var joined = String.Join(", ", vals);
+                    return $"Multiple values: {joined}";
+                }
+                else if (prop.PropertyType == typeof(int) || prop.PropertyType == typeof(int?) || prop.PropertyType == typeof(double) || prop.PropertyType == typeof(double?))
+                {
+                    var vals =
+                        components
+                        .Select(c => Convert.ToDouble(prop.GetValue(c)))
+                        .Cast<double?>()
+                        .ToArray();
+                    return $"Values range from {vals.Min()} to {vals.Max()}";
+                }
+                else if (!prop.PropertyType.IsValueType)
+                {
+                    var vals =
+                        components
+                        .Select(prop.GetValue)
+                        .Cast<LibraryComponent>()
+                        .Distinct()
+                        .Select(c => c.Name)
+                        .ToArray();
+                    if (vals.Length <= 1) { return null; }
+                    var joined = String.Join(", ", vals);
+                    return $"Multiple values: {joined}";
+                }
+                return null;
+            }
+        }
+
         internal SettingType SettingType { get; private set; }
 
         public void Update()
         {
-            PropertyChanged(this, new PropertyChangedEventArgs("Value"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SingleValue)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MultipleValueDescriptionText)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowMultivalueDescription)));
         }
 
         #region IEditableObject
@@ -107,7 +169,7 @@ namespace Basilisk.Controls
         {
             if (!inTxn)
             {
-                backupVal = Value;
+                backupVals = components.Select(prop.GetValue).ToList();
                 inTxn = true;
             }
         }
@@ -116,7 +178,12 @@ namespace Basilisk.Controls
         {
             if (inTxn)
             {
-                Value = backupVal;
+                foreach (var x in components.Zip(backupVals, (c, v) => new { C = c, V = v }))
+                {
+                    prop.SetValue(x.C, x.V, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);
+                }
+                error = String.Empty;
+                Update();
                 inTxn = false;
             }
         }
@@ -125,7 +192,7 @@ namespace Basilisk.Controls
         {
             if (inTxn)
             {
-                backupVal = null;
+                backupVals = null;
                 inTxn = false;
             }
         }

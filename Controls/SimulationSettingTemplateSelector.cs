@@ -14,6 +14,7 @@ namespace Basilisk.Controls
                 var template =
                     setting.ExposeAsComboBox ? grid.FindResource("EnumPropertyTemplate") :
                     setting.ExposeAsCheckbox ? grid.FindResource("BoolPropertyTemplate") :
+                    setting.ShowMultivalueDescription ? grid.FindResource("MultiValueDescriptionTemplate") :
                     grid.FindResource("TextPropertyTemplate");
                 return (DataTemplate)template;
             }

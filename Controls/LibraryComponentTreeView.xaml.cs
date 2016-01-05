@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -29,21 +29,46 @@ namespace Basilisk.Controls
             set { SetValue(SelectedComponentProperty, value); }
         }
 
-        private void OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private ICollection<object> SelectedItems
         {
-            SelectedComponent = e.NewValue as LibraryComponent;
+            get { return (ICollection<object>)GetValue(SelectedItemsProperty); }
+            set { SetValue(SelectedItemsProperty, value); }
         }
 
         public static DependencyProperty ComponentsProperty =
             DependencyProperty.Register(
                 nameof(Components),
                 typeof(ComponentCategoryCollection),
-                typeof(LibraryComponentTreeView));
+                typeof(LibraryComponentTreeView),
+                new FrameworkPropertyMetadata(OnComponentsChanged));
 
         public static DependencyProperty SelectedComponentProperty =
             DependencyProperty.Register(
                 nameof(SelectedComponent),
                 typeof(LibraryComponent),
                 typeof(LibraryComponentTreeView));
+
+        private static DependencyProperty SelectedItemsProperty =
+            DependencyProperty.Register(
+                nameof(SelectedItems),
+                typeof(ICollection<object>),
+                typeof(LibraryComponentTreeView),
+                new FrameworkPropertyMetadata(new List<object>(), OnSelectedItemsChanged));
+
+        private static void OnComponentsChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var tree = (LibraryComponentTreeView)o;
+            tree.SelectedItems = new List<object>();
+        }
+
+        private static void OnSelectedItemsChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var selection = (ICollection<object>)e.NewValue;
+            var treeView = (LibraryComponentTreeView)o;
+            treeView.SelectedComponent =
+                selection.Count == 1 ? (LibraryComponent)selection.First() :
+                selection.Count > 1 ? new LibraryComponentSet(selection.Cast<LibraryComponent>()) :
+                null;
+        }
     }
 }

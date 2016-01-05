@@ -16,28 +16,7 @@ namespace Basilisk.Controls
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) { return Enumerable.Empty<SimulationSetting>(); }
-            var sourceType = value.GetType();
-            var typeOrderer = HierarchyComparer.Build(sourceType);
-            var component = value as LibraryComponent;
-            
-            return
-                sourceType
-                .GetProperties()
-                .OrderBy(prop => prop.DeclaringType, typeOrderer)
-                .Select(prop => new { Prop = prop, Att = prop.GetCustomAttribute<SimulationSettingAttribute>() })
-                .Where(x => x.Att != null)
-                .Select(x =>
-                {
-                    var displayName = x.Att.DisplayName == null ? x.Prop.Name : x.Att.DisplayName;
-                    var setting = new SimulationSetting(value, x.Prop, displayName);
-                    if (component != null)
-                    {
-                        setting.PropertyChanged += (s, e) => component.RaisePropertyChanged(setting.PropertyName);
-                    }
-                    return setting;
-                })
-                .ToArray();
+            return (value as LibraryComponent)?.SimulationSettings;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -45,7 +24,7 @@ namespace Basilisk.Controls
             throw new NotSupportedException();
         }
 
-        private class HierarchyComparer : IComparer<Type>
+        internal class HierarchyComparer : IComparer<Type>
         {
             private List<Type> TypeList { get; set; }
 

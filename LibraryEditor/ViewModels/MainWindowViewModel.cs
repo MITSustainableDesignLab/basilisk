@@ -194,7 +194,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 var res = picker.ShowDialog();
                 if (res.HasValue && res.Value)
                 {
-                    setting.Value = pickerVM.SelectedComponent;
+                    setting.SingleValue = pickerVM.SelectedComponent;
                     HasUnsavedChanges = true;
                     return true;
                 }

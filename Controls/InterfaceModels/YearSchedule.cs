@@ -10,7 +10,6 @@ using Basilisk.Controls.Attributes;
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.YearSchedule))]
-    [ImmutableCategoryName]
     [DisplayName("year schedule")]
     public class YearSchedule : LibraryComponent
     {
@@ -19,6 +18,8 @@ namespace Basilisk.Controls.InterfaceModels
             get { return "Year"; }
             set { }
         }
+
+        public override bool IsCategoryNameMutable => false;
 
         public ObservableCollection<YearSchedulePart> Parts { get; set; }
 

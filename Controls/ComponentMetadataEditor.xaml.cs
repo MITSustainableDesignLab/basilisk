@@ -88,5 +88,17 @@ namespace Basilisk.Controls
                 nameof(IsCategoryReadOnly),
                 typeof(bool),
                 typeof(ComponentMetadataEditor));
+
+        public bool IsNameReadOnly
+        {
+            get { return (bool)GetValue(IsNameReadOnlyProperty); }
+            set { SetValue(IsNameReadOnlyProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsNameReadOnlyProperty =
+            DependencyProperty.Register(
+                nameof(IsNameReadOnly),
+                typeof(bool),
+                typeof(ComponentMetadataEditor));
     }
 }

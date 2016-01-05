@@ -10,8 +10,9 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="componentsTree">
     <Grid>
-        <TreeView SelectedItemChanged="OnSelectedItemChanged"
-                  ItemsSource="{Binding ElementName=componentsTree, Path=Components}">
+        <TreeView ItemsSource="{Binding ElementName=componentsTree, Path=Components}"
+                  local:Multiselect.Allow="True"
+                  local:Multiselect.SelectedItems="{Binding ElementName=componentsTree, Path=SelectedItems, Mode=TwoWay}">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:ComponentCategory}"
                                           ItemsSource="{Binding}">
@@ -26,6 +27,28 @@
                     <Style.Setters>
                         <Setter Property="IsExpanded" Value="True" />
                     </Style.Setters>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:Multiselect.IsItemSelected)}"
+                                           Value="True" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=IsKeyboardFocusWithin}"
+                                           Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:Multiselect.IsItemSelected)}"
+                                           Value="True" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=IsKeyboardFocusWithin}"
+                                           Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}" />
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>

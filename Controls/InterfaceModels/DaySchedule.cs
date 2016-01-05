@@ -6,7 +6,6 @@ using Basilisk.Controls.Attributes;
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.DaySchedule))]
-    [ImmutableCategoryName]
     [DisplayName("day schedule")]
     public class DaySchedule : LibraryComponent
     {
@@ -20,6 +19,8 @@ namespace Basilisk.Controls.InterfaceModels
             get { return "Day"; }
             set { }
         }
+
+        public override bool IsCategoryNameMutable => false;
 
         [SimulationSetting]
         public string Type { get; set; }

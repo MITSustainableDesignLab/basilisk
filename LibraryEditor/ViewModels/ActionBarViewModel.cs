@@ -90,11 +90,10 @@ namespace Basilisk.LibraryEditor.ViewModels
         {
             var cType = (Type)componentType;
             var newComponent = CreateComponentWithDefaults(cType);
-            var vm = new MetadataEditorViewModel()
+            var vm = new MetadataEditorViewModel(newComponent)
             {
                 Category = newComponent.Category,
                 EditorTitle = "New component",
-                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
                 ValidateName = name => !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
             };
             var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
@@ -133,7 +132,6 @@ namespace Basilisk.LibraryEditor.ViewModels
             var vm = new MetadataEditorViewModel(newComponent)
             {
                 EditorTitle = "Duplicate component",
-                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
                 Name = $"{newComponent.Name} copy",
                 ValidateName = name => !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
             };
@@ -155,10 +153,9 @@ namespace Basilisk.LibraryEditor.ViewModels
         {
             var cType = component.GetType();
             var original = (LibraryComponent)component;
-            var vm = new MetadataEditorViewModel((LibraryComponent)component)
+            var vm = new MetadataEditorViewModel(original)
             {
                 EditorTitle = "Edit component",
-                IsCategoryReadOnly = cType.GetCustomAttribute<ImmutableCategoryNameAttribute>() != null,
                 ValidateName = name =>
                     name == original.Name ||
                     !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)

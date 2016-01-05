@@ -17,16 +17,6 @@ namespace Basilisk.LibraryEditor.ViewModels
         private RelayCommand confirmCommand;
         private bool? dialogResult;
 
-        public MetadataEditorViewModel()
-        {
-            confirmCommand = new RelayCommand(
-                () => DialogResult = true,
-                () =>
-                    !String.IsNullOrWhiteSpace(Name) &&
-                    !String.IsNullOrWhiteSpace(Category) &&
-                    ValidateName(Name));
-        }
-
         public MetadataEditorViewModel(LibraryComponent component)
         {
             confirmCommand = new RelayCommand(
@@ -38,6 +28,8 @@ namespace Basilisk.LibraryEditor.ViewModels
             Category = component.Category;
             Comments = component.Comments;
             DataSource = component.DataSource;
+            IsCategoryReadOnly = !component.IsCategoryNameMutable;
+            IsNameReadOnly = !component.IsNameMutable;
             Name = component.Name;
         }
 
@@ -82,7 +74,8 @@ namespace Basilisk.LibraryEditor.ViewModels
             }
         }
 
-        public bool IsCategoryReadOnly { get; set; }
+        public bool IsCategoryReadOnly { get; }
+        public bool IsNameReadOnly { get; }
 
         public Func<string, bool> ValidateName { get; set; } = _ => true;
     }
