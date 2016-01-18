@@ -419,6 +419,29 @@ namespace Basilisk.Controls.InterfaceModels
             };
         }
 
+        public void Import(Library other)
+        {
+            if (WouldCollide(other).Any())
+            {
+                throw new InvalidOperationException("The library could not be imported because it would cause at least one name collision.");
+            }
+            OpaqueMaterials = OpaqueMaterials.Concat(other.OpaqueMaterials).ToList();
+            GlazingMaterials = GlazingMaterials.Concat(other.GlazingMaterials).ToList();
+            GasMaterials = GasMaterials.Concat(other.GasMaterials).ToList();
+            OpaqueConstructions = OpaqueConstructions.Concat(other.OpaqueConstructions).ToList();
+            WindowConstructions = WindowConstructions.Concat(other.WindowConstructions).ToList();
+            StructureDefinitions = StructureDefinitions.Concat(other.StructureDefinitions).ToList();
+            Schedules = Schedules.Concat(other.Schedules).ToList();
+            ZoneConstructions = ZoneConstructions.Concat(other.ZoneConstructions).ToList();
+            ZoneLoads = ZoneLoads.Concat(other.ZoneLoads).ToList();
+            ZoneConditionings = ZoneConditionings.Concat(other.ZoneConditionings).ToList();
+            ZoneVentilations = ZoneVentilations.Concat(other.ZoneVentilations).ToList();
+            ZoneHotWaters = ZoneHotWaters.Concat(other.ZoneHotWaters).ToList();
+            Zones = Zones.Concat(other.Zones).ToList();
+            WindowSettings = WindowSettings.Concat(other.WindowSettings).ToList();
+            BuildingTemplates = BuildingTemplates.Concat(other.BuildingTemplates).ToList();
+        }
+
         public Core.Library ToCoreLibrary()
         {
             var newLib = new Core.Library()
@@ -669,6 +692,10 @@ namespace Basilisk.Controls.InterfaceModels
             return dest;
         }
 
+        public IEnumerable<LibraryComponent> WouldCollide(Library other) =>
+            // TODO: Make sure this performance isn't terrible (it sure looks terrible here)
+            other.AllComponents.Where(c => WouldCollide(c.Name, c.GetType()));
+
         public bool WouldCollide(string name, Type type)
         {
             var nameMatches = AllComponents.Where(c => String.Equals(name, c.Name, StringComparison.InvariantCultureIgnoreCase)).ToArray();
@@ -676,6 +703,47 @@ namespace Basilisk.Controls.InterfaceModels
             var namespaceTypes = ComponentNamespaceAttribute.NamespaceTypes(type);
             var nameMatchTypes = nameMatches.Select(c => c.GetType());
             return namespaceTypes.Any(n => nameMatchTypes.Any(m => n.IsAssignableFrom(m)));
+        }
+
+        internal static Core.Library CreateSublibrary(IEnumerable<LibraryComponent> withComponents)
+        {
+            var typed =
+                withComponents
+                .GroupBy(c => c.GetType())
+                .ToDictionary(g => g.Key, g => g.ToList());
+            Func<Type, ICollection<LibraryComponent>> retrieve = t =>
+            {
+                List<LibraryComponent> res;
+                return typed.TryGetValue(t, out res) ? res : new List<LibraryComponent>();
+            };
+            var allSchedules =
+                retrieve(typeof(DaySchedule))
+                .Concat(retrieve(typeof(WeekSchedule)))
+                .Concat(retrieve(typeof(YearSchedule)))
+                .ToList();
+            var sub = new Library()
+            {
+                OpaqueMaterials = retrieve(typeof(OpaqueMaterial)),
+                GlazingMaterials = retrieve(typeof(GlazingMaterial)),
+                GasMaterials = retrieve(typeof(GasMaterial)),
+                OpaqueConstructions = retrieve(typeof(OpaqueConstruction)),
+                WindowConstructions = retrieve(typeof(WindowConstruction)),
+                StructureDefinitions = retrieve(typeof(StructureInformation)),
+                Schedules = allSchedules,
+                ZoneConstructions = retrieve(typeof(ZoneConstructions)),
+                ZoneLoads = retrieve(typeof(ZoneLoads)),
+                ZoneConditionings = retrieve(typeof(ZoneConditioning)),
+                ZoneHotWaters = retrieve(typeof(ZoneHotWater)),
+                ZoneVentilations = retrieve(typeof(ZoneVentilation)),
+                Zones = retrieve(typeof(ZoneDefinition)),
+                WindowSettings = retrieve(typeof(WindowSettings)),
+                BuildingTemplates = retrieve(typeof(BuildingTemplate))
+            };
+            var core = sub.ToCoreLibrary();
+#if DEBUG
+            System.Diagnostics.Debug.Assert(!core.OrphanedComponents().Any());
+#endif
+            return core;
         }
 
         private static LibraryComponent BuildStructureDefinition(Core.StructureInformation src, Dictionary<string, LibraryComponent> matDict)

@@ -273,6 +273,12 @@ namespace Basilisk.LibraryEditor.ViewModels
         {
             return !HasUnsavedChanges || ActionBarViewModel.CheckForSaveAndProceed();
         }
+
+        internal void ImportIntoCurrentLibrary(Library lib)
+        {
+            LoadedLibrary.Import(lib);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
+        }
         
         internal void SetUnsavedChangesOnPropertyChange(object sender, PropertyChangedEventArgs e)
         {

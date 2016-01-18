@@ -125,7 +125,9 @@
                                                Width="Auto"
                                                HorizontalAlignment="Stretch"
                                                SelectedComponent="{Binding SelectedComponent, Mode=OneWayToSource}"
-                                               x:Name="componentsTree" />
+                                               x:Name="componentsTree"
+                                               AllowDrop="True"
+                                               Drop="componentsTree_Drop" />
             <basilisk:ComponentEditorTabControl x:Name="editorTabs"
                                                 Grid.Column="2"
                                                 CurrentComponents="{Binding CurrentComponents, Mode=OneWayToSource}">
