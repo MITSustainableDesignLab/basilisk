@@ -73,6 +73,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 var matched =
                     type
                     .GetProperties()
+                    .Where(p => p.SetMethod != null)
                     .Join(
                         source,
                         prop => prop.Name,
