@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneDefinition))]
     [DisplayName("zone definition")]
+    [ComponentNamespace]
     public class ZoneDefinition : LibraryComponent
     {
         [SimulationSetting]

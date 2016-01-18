@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneConstructions))]
     [DisplayName("zone constructions")]
+    [ComponentNamespace]
     public class ZoneConstructions : LibraryComponent
     {
         [SimulationSetting]

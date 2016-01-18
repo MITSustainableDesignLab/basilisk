@@ -5,6 +5,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneLoads))]
     [DisplayName("zone loads")]
+    [ComponentNamespace]
     public class ZoneLoads : LibraryComponent
     {
         [SimulationSetting(DisplayName = "People")]

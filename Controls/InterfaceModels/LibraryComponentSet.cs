@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 
 using Basilisk.Controls.Attributes;
 
@@ -22,6 +24,11 @@ namespace Basilisk.Controls.InterfaceModels
                 throw new ArgumentException("A library component set must contain at least one component", nameof(components));
             }
             Components = components;
+            EventHandler<PropertyChangedEventArgs> propChanged = (s, e) => RaisePropertyChanged(s, e.PropertyName);
+            foreach (var c in Components)
+            {
+                WeakEventManager<LibraryComponent, PropertyChangedEventArgs>.AddHandler(c, nameof(PropertyChanged), propChanged);
+            }
             settings = new Lazy<IReadOnlyCollection<SimulationSetting>>(CreateSimulationSettings);
         }
 

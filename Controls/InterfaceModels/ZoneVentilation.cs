@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneVentilation))]
     [DisplayName("zone ventilation")]
+    [ComponentNamespace]
     public class ZoneVentilation : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Infiltration")]

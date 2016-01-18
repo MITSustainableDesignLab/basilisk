@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.DomesticHotWaterSettings))]
     [DisplayName("zone hot water")]
+    [ComponentNamespace]
     public class ZoneHotWater : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Enabled")]

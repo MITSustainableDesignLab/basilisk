@@ -7,6 +7,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WeekSchedule))]
     [DisplayName("week schedule")]
+    [ComponentNamespace]
     public class WeekSchedule : LibraryComponent
     {
         public override string Category
@@ -31,8 +32,7 @@ namespace Basilisk.Controls.InterfaceModels
             {
                 Type = Type
             };
-            var days = Days.Select(d => d.Duplicate()).Cast<DaySchedule>();
-            res.Days = new ObservableCollection<DaySchedule>(days);
+            res.Days = new ObservableCollection<DaySchedule>(Days.ToArray());
             res.CopyBasePropertiesFrom(this);
             return res;
         }

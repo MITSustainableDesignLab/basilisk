@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.OpaqueConstruction))]
     [DisplayName("opaque construction")]
+    [ComponentNamespace]
     public class OpaqueConstruction : LayeredConstruction
     {
         public override LibraryComponent Duplicate()

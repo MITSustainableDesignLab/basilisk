@@ -5,6 +5,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.ZoneConditioning))]
     [DisplayName("zone conditioning")]
+    [ComponentNamespace]
     public class ZoneConditioning : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Heating")]

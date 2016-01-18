@@ -4,6 +4,7 @@ using Basilisk.Controls.Attributes;
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WindowSettings))]
+    [ComponentNamespace]
     public class WindowSettings : LibraryComponent
     {
         [SimulationSetting]

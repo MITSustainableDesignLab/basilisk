@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.GasMaterial))]
     [DisplayName("gas material")]
+    [ComponentNamespace]
     public class GasMaterial : WindowMaterialBase
     {
         public override string Category

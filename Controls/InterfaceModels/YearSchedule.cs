@@ -11,6 +11,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.YearSchedule))]
     [DisplayName("year schedule")]
+    [ComponentNamespace]
     public class YearSchedule : LibraryComponent
     {
         public override string Category
@@ -35,7 +36,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(part =>
                     new YearSchedulePart()
                     {
-                        Schedule = (WeekSchedule)part.Schedule.Duplicate(),
+                        Schedule = part.Schedule,
                         FromDay = part.FromDay,
                         ToDay = part.ToDay,
                         FromMonth = part.FromMonth,

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Basilisk.Controls.Attributes;
 using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.Controls
@@ -31,6 +32,7 @@ namespace Basilisk.Controls
 
         public void AddComponent(LibraryComponent component)
         {
+            System.Diagnostics.Debug.Assert(!(component is LibraryComponentSet));
             var category = categorized.Find(cat => cat.CategoryName == component.Category);
             if (category == null)
             {
@@ -40,6 +42,11 @@ namespace Basilisk.Controls
             }
             category.AddComponent(component);
             backingCollection.Add(component);
+        }
+
+        public void AddComponent(LibraryComponentSet set)
+        {
+            foreach (var c in set.Components) { AddComponent(c); }
         }
 
         public void RemoveComponent(LibraryComponent component)

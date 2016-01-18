@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.OpaqueMaterial))]
     [DisplayName("opaque material")]
+    [ComponentNamespace]
     public class OpaqueMaterial : MaterialBase
     {
         [SimulationSetting]

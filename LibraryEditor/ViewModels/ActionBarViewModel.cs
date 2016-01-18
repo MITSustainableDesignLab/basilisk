@@ -95,7 +95,10 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 Category = newComponent.Category,
                 EditorTitle = "New component",
-                ValidateName = name => !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
+                ValidateName = name =>
+                    name == newComponent.Name ||
+                    !parent.LoadedLibrary.WouldCollide(name, cType)
+
             };
             var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
             var res = editWindow.ShowDialog();
@@ -130,24 +133,13 @@ namespace Basilisk.LibraryEditor.ViewModels
         {
             var cType = component.GetType();
             var newComponent = ((LibraryComponent)component).Duplicate();
-            var vm = new MetadataEditorViewModel(newComponent)
+            while (parent.LoadedLibrary.WouldCollide(newComponent.Name, cType))
             {
-                EditorTitle = "Duplicate component",
-                Name = $"{newComponent.Name} copy",
-                ValidateName = name => !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
-            };
-            var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
-            var res = editWindow.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                newComponent.Name = vm.Name;
-                newComponent.Category = vm.Category;
-                newComponent.Comments = vm.Comments;
-                newComponent.DataSource = vm.DataSource;
-                parent.CurrentCategorizedComponents.AddComponent(newComponent);
-                newComponent.PropertyChanged += parent.SetUnsavedChangesOnPropertyChange;
-                parent.HasUnsavedChanges = true;
+                newComponent.Name += " copy";
             }
+            parent.CurrentCategorizedComponents.AddComponent((dynamic)newComponent);
+            newComponent.PropertyChanged += parent.SetUnsavedChangesOnPropertyChange;
+            parent.HasUnsavedChanges = true;
         }
 
         private void EditComponentMetadata(object component)
@@ -159,7 +151,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 EditorTitle = "Edit component",
                 ValidateName = name =>
                     name == original.Name ||
-                    !parent.CurrentCategorizedComponents.AllComponents.Any(c => c.Name == name && c.GetType() == cType)
+                    !parent.LoadedLibrary.WouldCollide(name, cType)
             };
             var editWindow = new ComponentMetadataEditWindow() { DataContext = vm };
             var res = editWindow.ShowDialog();

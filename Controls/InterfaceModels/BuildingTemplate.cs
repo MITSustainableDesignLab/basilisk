@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.BuildingTemplate))]
     [DisplayName("building template")]
+    [ComponentNamespace]
     public class BuildingTemplate : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Core zone type")]

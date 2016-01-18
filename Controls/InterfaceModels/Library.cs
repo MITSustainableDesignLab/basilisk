@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Basilisk.Controls.Attributes;
+
 namespace Basilisk.Controls.InterfaceModels
 {
     public class Library
@@ -665,6 +667,15 @@ namespace Basilisk.Controls.InterfaceModels
                 .Where(layer => layer != null);
             dest.Layers = new ObservableCollection<MaterialLayer>(layers);
             return dest;
+        }
+
+        public bool WouldCollide(string name, Type type)
+        {
+            var nameMatches = AllComponents.Where(c => String.Equals(name, c.Name, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+            if (!nameMatches.Any()) { return false; }
+            var namespaceTypes = ComponentNamespaceAttribute.NamespaceTypes(type);
+            var nameMatchTypes = nameMatches.Select(c => c.GetType());
+            return namespaceTypes.Any(n => nameMatchTypes.Any(m => n.IsAssignableFrom(m)));
         }
 
         private static LibraryComponent BuildStructureDefinition(Core.StructureInformation src, Dictionary<string, LibraryComponent> matDict)

@@ -4,6 +4,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.GlazingMaterial))]
     [DisplayName("glazing material")]
+    [ComponentNamespace]
     public class GlazingMaterial : WindowMaterialBase
     {
         [SimulationSetting(DisplayName = "Dirt Factor")]

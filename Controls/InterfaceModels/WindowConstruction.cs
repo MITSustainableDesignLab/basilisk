@@ -10,6 +10,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WindowConstruction))]
     [DisplayName("window construction")]
+    [ComponentNamespace]
     public class WindowConstruction : LayeredConstruction
     {
         public override LibraryComponent Duplicate()

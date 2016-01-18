@@ -55,6 +55,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ComponentNamespaceAttribute.cs" />
     <Compile Include="ComponentCategory.cs" />
     <Compile Include="ComponentCategoryCollection.cs" />
     <Compile Include="ComponentEditorTabControl.cs" />

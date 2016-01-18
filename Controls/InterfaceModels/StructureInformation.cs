@@ -6,6 +6,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.StructureInformation))]
     [DisplayName("structure definition")]
+    [ComponentNamespace]
     public class StructureInformation : ConstructionBase
     {
         public ObservableCollection<MassRatios> MassRatios { get; set; } = new ObservableCollection<MassRatios>();

@@ -7,6 +7,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.DaySchedule))]
     [DisplayName("day schedule")]
+    [ComponentNamespace]
     public class DaySchedule : LibraryComponent
     {
         public DaySchedule()
