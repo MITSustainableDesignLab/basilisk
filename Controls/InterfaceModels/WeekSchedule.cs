@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 using Basilisk.Controls.Attributes;
@@ -22,6 +24,11 @@ namespace Basilisk.Controls.InterfaceModels
         public string Type { get; set; }
 
         public ObservableCollection<DaySchedule> Days { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents =>
+            Days
+            .Where(day => day != null)
+            .Distinct();
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             Days.Contains(component);

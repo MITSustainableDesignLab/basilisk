@@ -1,4 +1,8 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -51,6 +55,22 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public bool Afn { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    NatVentSchedule,
+                    ScheduledVentilationSchedule
+                }.Where(d => d != null);
+                return
+                    direct
+                    .Concat(direct.SelectMany(d => d.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             NatVentSchedule == component ||

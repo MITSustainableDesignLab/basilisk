@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 using Basilisk.Controls.Attributes;
 
@@ -11,6 +14,12 @@ namespace Basilisk.Controls.InterfaceModels
     {
         public ObservableCollection<MassRatios> MassRatios { get; set; } = new ObservableCollection<MassRatios>();
 
+        public override IEnumerable<LibraryComponent> AllReferencedComponents =>
+            MassRatios
+            .Where(mr => mr.Material != null)
+            .SelectMany(mr => mr.Material.AllReferencedComponents)
+            .Distinct();
+
         public override bool DirectlyReferences(LibraryComponent component) =>
             false;
 
@@ -21,7 +30,8 @@ namespace Basilisk.Controls.InterfaceModels
                 AssemblyCarbon = AssemblyCarbon,
                 AssemblyEnergy = AssemblyEnergy,
                 DisassemblyCarbon = DisassemblyCarbon,
-                DisassemblyEnergy = DisassemblyEnergy
+                DisassemblyEnergy = DisassemblyEnergy,
+                MassRatios = new ObservableCollection<MassRatios>(MassRatios.Select(mr => mr.Duplicate()))
             };
             res.CopyBasePropertiesFrom(this);
             return res;

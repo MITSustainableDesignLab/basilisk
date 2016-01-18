@@ -1,5 +1,9 @@
-﻿using Basilisk.Core;
+﻿using System.Linq;
+
+using Basilisk.Core;
 using Basilisk.Controls.Attributes;
+using System;
+using System.Collections.Generic;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -40,6 +44,23 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Illuminance target (lux)")]
         public double IlluminanceTarget { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    OccupancySchedule,
+                    EquipmentAvailabilitySchedule,
+                    LightsAvailabilitySchedule
+                }.Where(d => d != null);
+                return
+                    direct
+                    .Concat(direct.SelectMany(d => d.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             OccupancySchedule == component ||

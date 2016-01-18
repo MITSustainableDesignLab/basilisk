@@ -1,4 +1,8 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -36,6 +40,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Visible Transmittance")]
         public double VisibleTransmittance { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents =>
+            Enumerable.Empty<LibraryComponent>();
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             false;

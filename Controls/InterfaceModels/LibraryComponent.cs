@@ -30,6 +30,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public abstract IEnumerable<LibraryComponent> AllReferencedComponents { get; }
         public virtual string Category { get; set; }
         public virtual string Comments { get; set; }
         public virtual string DataSource { get; set; }

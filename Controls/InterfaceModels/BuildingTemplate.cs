@@ -1,4 +1,7 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using System.Linq;
+using System.Collections.Generic;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -24,6 +27,25 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public WindowSettings Windows { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    Core,
+                    Perimeter,
+                    Structure,
+                    Windows
+                };
+                return
+                    direct
+                    .Where(d => d != null)
+                    .Concat(direct.SelectMany(d => d.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             component == Core ||

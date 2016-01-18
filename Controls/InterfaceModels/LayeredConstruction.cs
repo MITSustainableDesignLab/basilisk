@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -28,6 +26,12 @@ namespace Basilisk.Controls.InterfaceModels
                 RaisePropertyChanged(this, nameof(Layers));
             }
         }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents =>
+            Layers
+            .Select(layer => layer.Material)
+            .Where(mat => mat != null)
+            .Distinct();
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             Layers.Any(layer => layer.Material == component);

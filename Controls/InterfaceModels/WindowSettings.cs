@@ -1,6 +1,9 @@
 ﻿using Basilisk.Core;
 using Basilisk.Controls.Attributes;
 
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WindowSettings))]
@@ -54,6 +57,24 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting]
         public YearSchedule AfnWindowAvailability { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    ShadingSystemAvailabilitySchedule,
+                    ZoneMixingAvailabilitySchedule,
+                    AfnWindowAvailability,
+                    Construction
+                }.Where(d => d != null);
+                return
+                    direct
+                    .Concat(direct.SelectMany(d => d.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             component == ShadingSystemAvailabilitySchedule ||

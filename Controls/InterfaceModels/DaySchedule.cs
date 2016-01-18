@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Basilisk.Controls.Attributes;
@@ -20,6 +21,9 @@ namespace Basilisk.Controls.InterfaceModels
             get { return "Day"; }
             set { }
         }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents =>
+            Enumerable.Empty<LibraryComponent>();
 
         public override bool IsCategoryNameMutable => false;
 

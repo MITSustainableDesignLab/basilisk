@@ -52,6 +52,9 @@ namespace Basilisk.Controls.InterfaceModels
             set { throw new NotSupportedException(); }
         }
 
+        public override IEnumerable<LibraryComponent> AllReferencedComponents =>
+            Components.Concat(Components.SelectMany(c => c.AllReferencedComponents));
+
         public override bool IsCategoryNameMutable => false;
         public override bool IsNameMutable => false;
 

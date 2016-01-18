@@ -1,4 +1,7 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -33,6 +36,26 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Internal mass exposed per floor area")]
         public double InternalMassExposedPerFloorArea { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    Constructions,
+                    Loads,
+                    Conditioning,
+                    Ventilation,
+                    DomesticHotWater,
+                    InternalMassConstruction
+                }.Where(d => d != null);
+                return
+                    direct
+                    .Concat(direct.SelectMany(d => d.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             Constructions == component ||

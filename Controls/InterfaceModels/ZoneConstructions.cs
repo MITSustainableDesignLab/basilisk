@@ -1,4 +1,8 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -36,6 +40,25 @@ namespace Basilisk.Controls.InterfaceModels
 
         [SimulationSetting(DisplayName = "Slab is adiabatic")]
         public bool IsSlabAdiabatic { get; set; }
+
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var direct = new LibraryComponent[]
+                {
+                    Facade,
+                    Ground,
+                    Partition,
+                    Roof,
+                    Slab
+                }.Where(d => d != null);
+                return
+                    direct
+                    .Concat(direct.SelectMany(d => d.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             Facade == component ||

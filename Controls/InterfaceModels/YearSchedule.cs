@@ -26,6 +26,22 @@ namespace Basilisk.Controls.InterfaceModels
 
         public string Type { get; set; }
 
+        public override IEnumerable<LibraryComponent> AllReferencedComponents
+        {
+            get
+            {
+                var weeks =
+                    Parts
+                    .Select(part => part.Schedule)
+                    .Where(week => week != null)
+                    .Distinct();
+                return
+                    weeks
+                    .Concat(weeks.SelectMany(week => week.AllReferencedComponents))
+                    .Distinct();
+            }
+        }
+
         public override bool DirectlyReferences(LibraryComponent component) =>
             Parts.Any(part => part.Schedule == component);
 
