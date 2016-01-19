@@ -17,7 +17,7 @@ namespace Basilisk.Core
     [DataContract]
     public class Library
     {
-        [DataMember(Order = 10)]
+        [DataMember(Order = 100)]
         public ICollection<BuildingTemplate> BuildingTemplates { get; set; } = new List<BuildingTemplate>();
 
         #region Constructions and materials
@@ -35,7 +35,7 @@ namespace Basilisk.Core
         [DataMember(Order = 10)]
         public ICollection<OpaqueConstruction> OpaqueConstructions { get; set; } = new List<OpaqueConstruction>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 1)]
         public ICollection<OpaqueMaterial> OpaqueMaterials { get; set; } = new List<OpaqueMaterial>();
 
         [DataMember(Order = 10)]
@@ -46,36 +46,36 @@ namespace Basilisk.Core
         #endregion
 
         #region Schedules
-        [DataMember(Order = 10)]
+        [DataMember(Order = 11)]
         public ICollection<DaySchedule> DaySchedules { get; set; } = new List<DaySchedule>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 12)]
         public ICollection<WeekSchedule> WeekSchedules { get; set; } = new List<WeekSchedule>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 13)]
         public ICollection<YearSchedule> YearSchedules { get; set; } = new List<YearSchedule>();
         #endregion
 
         #region Zone stuff
-        [DataMember(Order = 10)]
+        [DataMember(Order = 20)]
         public ICollection<DomesticHotWaterSettings> DomesticHotWaterSettings { get; set; } = new List<DomesticHotWaterSettings>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 20)]
         public ICollection<ZoneVentilation> VentilationSettings { get; set; }
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 250)]
         public ICollection<WindowSettings> WindowSettings { get; set; } = new List<WindowSettings>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 20)]
         public ICollection<ZoneConditioning> ZoneConditionings { get; set; } = new List<ZoneConditioning>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 20)]
         public ICollection<ZoneConstructions> ZoneConstructionSets { get; set; } = new List<ZoneConstructions>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 20)]
         public ICollection<ZoneLoads> ZoneLoads { get; set; } = new List<ZoneLoads>();
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 30)]
         public ICollection<ZoneDefinition> Zones { get; set; } = new List<ZoneDefinition>();
         #endregion
 
