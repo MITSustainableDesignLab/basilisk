@@ -8,7 +8,7 @@ namespace Basilisk.Controls.InterfaceModels
     [DisplayName("structure definition")]
     public class StructureInformation : ConstructionBase
     {
-        public ObservableCollection<MassRatios> MassRatios { get; set; }
+        public ObservableCollection<MassRatios> MassRatios { get; set; } = new ObservableCollection<MassRatios>();
 
         public override bool DirectlyReferences(LibraryComponent component) =>
             false;

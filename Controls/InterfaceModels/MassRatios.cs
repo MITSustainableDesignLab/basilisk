@@ -44,5 +44,13 @@ namespace Basilisk.Controls.InterfaceModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public MassRatios Duplicate() =>
+            new MassRatios()
+            {
+                HighLoadRatio = HighLoadRatio,
+                Material = Material,
+                NormalRatio = NormalRatio
+            };
     }
 }
