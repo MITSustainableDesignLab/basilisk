@@ -277,6 +277,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         internal void ImportIntoCurrentLibrary(Library lib)
         {
             LoadedLibrary.Import(lib);
+            HasUnsavedChanges = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
         }
         
