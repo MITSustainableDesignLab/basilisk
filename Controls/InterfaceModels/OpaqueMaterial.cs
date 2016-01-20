@@ -5,11 +5,14 @@ using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    [UseDefaultValuesOf(typeof(Core.OpaqueMaterial))]
+    [UseDefaultValuesOf(typeof(ArchsimLib.OpaqueMaterial))]
     [DisplayName("opaque material")]
     [ComponentNamespace]
     public class OpaqueMaterial : MaterialBase
     {
+        [SimulationSetting]
+        public double MoistureDiffusionResistance { get; set; }
+
         [SimulationSetting]
         public string Roughness { get; set; }
 

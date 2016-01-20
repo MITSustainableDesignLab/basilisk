@@ -12,13 +12,6 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public abstract class MaterialBase : LibraryComponent
     {
-        static MaterialBase()
-        {
-            Mapper
-                .CreateMap<Core.MaterialBase, MaterialBase>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>();
-        }
-
         [SimulationSetting]
         public double Conductivity { get; set; }
 

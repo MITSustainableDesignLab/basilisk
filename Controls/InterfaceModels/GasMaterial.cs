@@ -5,7 +5,7 @@ using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    [UseDefaultValuesOf(typeof(Core.GasMaterial))]
+    [UseDefaultValuesOf(typeof(ArchsimLib.GasMaterial))]
     [DisplayName("gas material")]
     [ComponentNamespace]
     public class GasMaterial : WindowMaterialBase

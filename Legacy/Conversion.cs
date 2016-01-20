@@ -16,30 +16,40 @@ namespace Basilisk.Legacy
         static Conversion()
         {
             Mapper
-                .CreateMap<Legacy.BaseMaterial, Core.MaterialBase>()
+                .CreateMap<Legacy.BaseMaterial, ArchsimLib.BaseMaterial>()
                 .ForMember(dest => dest.SubstitutionTimestep, opt => opt.MapFrom(src => src.SubstituionTimeStep))
                 .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.MapFrom(src => src.SubstituionRatePattern))
                 .ForMember(dest => dest.TransportDistance, opt => opt.MapFrom(src => src.TransportDist))
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
+                .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.Life, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.Ignore());
             Mapper
-                .CreateMap<Legacy.OpaqueMaterial, Core.OpaqueMaterial>()
-                .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
+                .CreateMap<Legacy.OpaqueMaterial, ArchsimLib.OpaqueMaterial>()
+                .IncludeBase<Legacy.BaseMaterial, ArchsimLib.BaseMaterial>()
+                .ForMember(dest => dest.PhaseChange, opt => opt.Ignore())
+                .ForMember(dest => dest.PhaseChangeProperties, opt => opt.Ignore())
+                .ForMember(dest => dest.VariableConductivity, opt => opt.Ignore())
+                .ForMember(dest => dest.VariableConductivityProperties, opt => opt.Ignore())
+                .ForMember(dest => dest.MoistureDiffusionResistance, opt => opt.Ignore());
             Mapper
-                .CreateMap<Legacy.GlazingMaterial, Core.GlazingMaterial>()
-                .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
+                .CreateMap<Legacy.GlazingMaterial, ArchsimLib.GlazingMaterial>()
+                .IncludeBase<Legacy.BaseMaterial, ArchsimLib.BaseMaterial>();
             Mapper
-                .CreateMap<Legacy.GasMaterial, Core.GasMaterial>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore())
-                .ForMember(dest => dest.Conductivity, opt => opt.Ignore())
+                .CreateMap<Legacy.GasMaterial, ArchsimLib.GasMaterial>()
+                .ForMember(dest => dest.GasType, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Cost, opt => opt.Ignore())
-                .ForMember(dest => dest.Density, opt => opt.Ignore())
                 .ForMember(dest => dest.EmbodiedCarbon, opt => opt.Ignore())
                 .ForMember(dest => dest.EmbodiedEnergy, opt => opt.Ignore())
                 .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.Ignore())
                 .ForMember(dest => dest.SubstitutionTimestep, opt => opt.Ignore())
                 .ForMember(dest => dest.TransportCarbon, opt => opt.Ignore())
                 .ForMember(dest => dest.TransportDistance, opt => opt.Ignore())
-                .ForMember(dest => dest.TransportEnergy, opt => opt.Ignore());
+                .ForMember(dest => dest.TransportEnergy, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.Life, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.Ignore());
 
             Mapper
                 .CreateMap<Legacy.OpaqueConstruction, Core.OpaqueConstruction>()
@@ -99,49 +109,49 @@ namespace Basilisk.Legacy
         {
             var res = new Core.Library()
             {
-                OpaqueMaterials = Mapper.Map<IEnumerable<Core.OpaqueMaterial>>(legacy.OpaqueMaterials).ToList(),
-                GlazingMaterials = Mapper.Map<IEnumerable<Core.GlazingMaterial>>(legacy.GlazingMaterials).ToList(),
-                GasMaterials = Mapper.Map<IEnumerable<Core.GasMaterial>>(legacy.GasMaterials).ToList(),
+                OpaqueMaterials = Mapper.Map<IEnumerable<ArchsimLib.OpaqueMaterial>>(legacy.OpaqueMaterials).ToList(),
+                GlazingMaterials = Mapper.Map<IEnumerable<ArchsimLib.GlazingMaterial>>(legacy.GlazingMaterials).ToList(),
+                GasMaterials = Mapper.Map<IEnumerable<ArchsimLib.GasMaterial>>(legacy.GasMaterials).ToList(),
                 DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(legacy.DaySchedules).ToList()
             };
 
-            var lookupOpaqueMat = res.Lookup(lib => lib.OpaqueMaterials);
-            var lookupWindowMat = res.Lookup(lib => lib.AllWindowMaterials);
+            var lookupOpaqueMat = res.LookupArchsim(lib => lib.OpaqueMaterials);
+            var lookupWindowMat = res.LookupArchsim(lib => lib.AllWindowMaterials);
 
             res.OpaqueConstructions =
                 legacy
                 .OpaqueConstructions
-                .Select(c => c.Map<Core.OpaqueConstruction, Core.OpaqueMaterial, OpaqueLayer>(lookupOpaqueMat))
+                .Select(c => c.Map<Core.OpaqueConstruction, ArchsimLib.OpaqueMaterial, OpaqueLayer>(lookupOpaqueMat))
                 .ToList();
             res.WindowConstructions =
                 legacy
                 .GlazingConstructions
-                .Select(c => c.Map<Core.WindowConstruction, Core.WindowMaterialBase, GlazingLayer>(lookupWindowMat))
+                .Select(c => c.Map<Core.WindowConstruction, ArchsimLib.WindowMaterialBase, GlazingLayer>(lookupWindowMat))
                 .ToList();
             res.StructureDefinitions =
                 legacy
                 .StructureTypes
                 .Select(s => s.Map(lookupOpaqueMat))
                 .ToList();
-            var lookupOpaqueConstruction = res.Lookup(lib => lib.OpaqueConstructions);
-            var lookupWindowConstruction = res.Lookup(lib => lib.WindowConstructions);
-            var lookupStructure = res.Lookup(lib => lib.StructureDefinitions);
+            var lookupOpaqueConstruction = res.LookupCore(lib => lib.OpaqueConstructions);
+            var lookupWindowConstruction = res.LookupCore(lib => lib.WindowConstructions);
+            var lookupStructure = res.LookupCore(lib => lib.StructureDefinitions);
 
-            var lookupDaySchedule = res.Lookup(lib => lib.DaySchedules);
+            var lookupDaySchedule = res.LookupCore(lib => lib.DaySchedules);
             res.WeekSchedules =
                 legacy
                 .WeekSchedules
                 .Select(s => s.Map(lookupDaySchedule))
                 .Where(s => s != null)
                 .ToList();
-            var lookupWeekSchedule = res.Lookup(lib => lib.WeekSchedules);
+            var lookupWeekSchedule = res.LookupCore(lib => lib.WeekSchedules);
             res.YearSchedules =
                 legacy
                 .YearSchedules
                 .Select(s => s.Map(lookupWeekSchedule))
                 .Where(s => s != null)
                 .ToList();
-            var lookupYearSchedule = res.Lookup(lib => lib.YearSchedules);
+            var lookupYearSchedule = res.LookupCore(lib => lib.YearSchedules);
 
             res.WindowSettings =
                 legacy
@@ -149,7 +159,7 @@ namespace Basilisk.Legacy
                 .Select(s => s.Map(lookupYearSchedule, lookupWindowConstruction))
                 .Where(s => s != null)
                 .ToList();
-            var lookupWindowSettings = res.Lookup(lib => lib.WindowSettings);
+            var lookupWindowSettings = res.LookupCore(lib => lib.WindowSettings);
 
             res.BuildingTemplates =
                 legacy
@@ -176,12 +186,23 @@ namespace Basilisk.Legacy
                 System.Diagnostics.Debug.Assert(massC.Layers != null);
             }
 #endif
-            System.Diagnostics.Debug.Assert(!res.OrphanedComponents().Any());
 
             return res;
         }
 
-        private static Func<string, ComponentT> Lookup<ComponentT>(this Core.Library lib, Func<Core.Library, IEnumerable<ComponentT>> getComponents)
+        private static Func<string, ComponentT> LookupArchsim<ComponentT>(this Core.Library lib, Func<Core.Library, IEnumerable<ComponentT>> getComponents)
+            where ComponentT : ArchsimLib.LibraryComponent
+        {
+            var dict = getComponents(lib).ToDictionary(c => c.Name);
+            return name =>
+            {
+                var res = default(ComponentT);
+                dict.TryGetValue(name, out res);
+                return res;
+            };
+        }
+
+        private static Func<string, ComponentT> LookupCore<ComponentT>(this Core.Library lib, Func<Core.Library, IEnumerable<ComponentT>> getComponents)
             where ComponentT : Core.LibraryComponent
         {
             var dict = getComponents(lib).ToDictionary(c => c.Name);
@@ -285,7 +306,7 @@ namespace Basilisk.Legacy
             };
         }
 
-        private static Core.MassRatios Map(this MaterialComp src, Func<string, Core.OpaqueMaterial> getMappedMat) =>
+        private static Core.MassRatios Map(this MaterialComp src, Func<string, ArchsimLib.OpaqueMaterial> getMappedMat) =>
             new Core.MassRatios()
             {
                 HighLoadRatio = src.QuantRatioHigh,
@@ -293,7 +314,7 @@ namespace Basilisk.Legacy
                 NormalRatio = src.QuantRatio
             };
 
-        private static Core.StructureInformation Map(this StructureType src, Func<string, Core.OpaqueMaterial> getMappedMat)
+        private static Core.StructureInformation Map(this StructureType src, Func<string, ArchsimLib.OpaqueMaterial> getMappedMat)
         {
             var ratios =
                 src
@@ -307,7 +328,7 @@ namespace Basilisk.Legacy
         }
 
         private static TargetConstructionT Map<TargetConstructionT, TargetMaterialT, SourceLayerT>(this BaseConstruction<SourceLayerT> src, Func<string, TargetMaterialT> getMappedMat)
-            where TargetMaterialT : Core.MaterialBase
+            where TargetMaterialT : ArchsimLib.BaseMaterial
             where TargetConstructionT : Core.LayeredConstruction<TargetMaterialT>, new()
             where SourceLayerT : BaseLayer
         {

@@ -15,25 +15,9 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comments));
 
             Mapper
-                .CreateMap<Core.MaterialBase, ArchsimLib.BaseMaterial>()
-                .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
-                .ForMember(dest => dest.Life, opt => opt.Ignore())
-                .ForMember(dest => dest.Type, opt => opt.Ignore())
-                .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.Ignore())
-                .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
-                .IncludeBase<Core.MaterialBase, ArchsimLib.BaseMaterial>();
-            Mapper
-                .CreateMap<Core.GasMaterial, ArchsimLib.GasMaterial>()
-                .IncludeBase<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
-                .ForMember(dest => dest.GasType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.GasTypes), src.Type, ignoreCase: true)));
-
-            Mapper
                 .CreateMap<Core.ConstructionBase, ArchsimLib.BaseConstruction>()
                 .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
-                .ForMember(dest => dest.Life, opt => opt.Ignore())
-                .ForMember(dest => dest.Type, opt => opt.Ignore());
+                .ForMember(dest => dest.Life, opt => opt.Ignore());
             Mapper
                 .CreateMap<Core.OpaqueConstruction, ArchsimLib.OpaqueConstruction>()
                 .IncludeBase<Core.ConstructionBase, ArchsimLib.BaseConstruction>()
@@ -159,9 +143,9 @@ namespace Basilisk.Archsim
             };
             res.YearSchedules = lib.YearSchedules.Select(y => Convert(y, getWeek)).ToList();
 
-            res.GasMaterials = lib.GasMaterials.Select(Convert).ToList();
-            res.GlazingMaterials = lib.GlazingMaterials.Select(Convert).ToList();
-            res.OpaqueMaterials = lib.OpaqueMaterials.Select(Convert).ToList();
+            res.GasMaterials = lib.GasMaterials.ToList();
+            res.GlazingMaterials = lib.GlazingMaterials.ToList();
+            res.OpaqueMaterials = lib.OpaqueMaterials.ToList();
 
             var allOpaqueMats =
                 res
@@ -173,21 +157,9 @@ namespace Basilisk.Archsim
                 .Cast<ArchsimLib.WindowMaterialBase>()
                 .Concat(res.GlazingMaterials)
                 .ToDictionary(mat => mat.Name);
-            Func<Core.OpaqueMaterial, ArchsimLib.OpaqueMaterial> getOpaqueMat = coreMat =>
-            {
-                var mat = default(ArchsimLib.OpaqueMaterial);
-                allOpaqueMats.TryGetValue(coreMat.Name, out mat);
-                return mat;
-            };
-            Func<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase> getWindowMat = coreMat =>
-            {
-                var mat = default(ArchsimLib.WindowMaterialBase);
-                allWindowMats.TryGetValue(coreMat.Name, out mat);
-                return mat;
-            };
 
-            res.GlazingConstructions = lib.WindowConstructions.Select(c => Convert(c, getWindowMat)).ToList();
-            res.OpaqueConstructions = lib.OpaqueConstructions.Select(c => Convert(c, getOpaqueMat)).ToList();
+            res.GlazingConstructions = lib.WindowConstructions.Select(Convert).ToList();
+            res.OpaqueConstructions = lib.OpaqueConstructions.Select(Convert).ToList();
 
             res.DomHotWaters = res.ZoneDefinitions.Select(z => z.DomHotWater).ToList();
             res.ZoneConditionings = res.ZoneDefinitions.Select(z => z.Conditioning).ToList();
@@ -204,7 +176,6 @@ namespace Basilisk.Archsim
                 Name = day.Name,
                 DataSource = day.DataSource,
                 Comment = day.Comments,
-                Category = day.Category,
                 Type = day.Type,
                 Values = day.Values.ToList()
             };
@@ -212,73 +183,33 @@ namespace Basilisk.Archsim
         public static ArchsimLib.DomHotWater Convert(Core.DomesticHotWaterSettings dhw) =>
             Mapper.Map<ArchsimLib.DomHotWater>(dhw);
 
-        public static ArchsimLib.GasMaterial Convert(Core.GasMaterial gas) =>
-            Mapper.Map<ArchsimLib.GasMaterial>(gas);
-
-        public static ArchsimLib.GlazingConstruction Convert(Core.WindowConstruction window, Func<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase> getArchsimMat)
+        public static ArchsimLib.GlazingConstruction Convert(Core.WindowConstruction window)
         {
             var res = Mapper.Map<ArchsimLib.GlazingConstruction>(window);
             res.Layers =
                 window
                 .Layers
-                .Select(layer => new ArchsimLib.Layer<ArchsimLib.WindowMaterialBase>(layer.Thickness, getArchsimMat(layer.Material)))
+                .Select(layer => new ArchsimLib.Layer<ArchsimLib.WindowMaterialBase>(layer.Thickness, layer.Material))
                 .ToList();
             return res;
         }
 
-        public static ArchsimLib.GlazingMaterial Convert(Core.GlazingMaterial glazing) =>
-            new ArchsimLib.GlazingMaterial()
-            {
-                Name = glazing.Name,
-                Category = glazing.Category,
-                DataSource = glazing.DataSource,
-                Comment = glazing.DataSource,
-                Conductivity = glazing.Conductivity,
-                Density = glazing.Density,
-                DirtFactor = glazing.DirtFactor,
-                IREmissivityBack = glazing.IREmissivityBack,
-                IREmissivityFront = glazing.IREmissivityFront,
-                SolarReflectanceBack = glazing.SolarReflectanceBack,
-                SolarReflectanceFront = glazing.SolarReflectanceFront,
-                SolarTransmittance = glazing.SolarTransmittance,
-                VisibleReflectanceBack = glazing.VisibleReflectanceBack,
-                VisibleReflectanceFront = glazing.VisibleReflectanceFront,
-                VisibleTransmittance = glazing.VisibleTransmittance
-            };
-
-        public static ArchsimLib.OpaqueConstruction Convert(Core.OpaqueConstruction c, Func<Core.OpaqueMaterial, ArchsimLib.OpaqueMaterial> getArchsimMat)
+        public static ArchsimLib.OpaqueConstruction Convert(Core.OpaqueConstruction c)
         {
             var res = Mapper.Map<ArchsimLib.OpaqueConstruction>(c);
             res.Layers =
                 c
                 .Layers
-                .Select(layer => new ArchsimLib.Layer<ArchsimLib.OpaqueMaterial>(layer.Thickness, getArchsimMat(layer.Material)))
+                .Select(layer => new ArchsimLib.Layer<ArchsimLib.OpaqueMaterial>(layer.Thickness, layer.Material))
                 .ToList();
             return res;
         }
-
-        public static ArchsimLib.OpaqueMaterial Convert(Core.OpaqueMaterial mat) =>
-            new ArchsimLib.OpaqueMaterial()
-            {
-                Name = mat.Name,
-                DataSource = mat.DataSource,
-                Category = mat.Category,
-                Comment = mat.Comments,
-                Conductivity = mat.Conductivity,
-                Density = mat.Density,
-                Roughness = mat.Roughness,
-                SolarAbsorptance = mat.SolarAbsorptance,
-                SpecificHeat = mat.SpecificHeat,
-                ThermalEmittance = mat.ThermalEmittance,
-                VisibleAbsorptance = mat.VisibleAbsorptance
-            };
 
         public static ArchsimLib.WeekSchedule Convert(Core.WeekSchedule week, Func<Core.DaySchedule, ArchsimLib.DaySchedule> getArchsimDay)
         {
             var res = new ArchsimLib.WeekSchedule()
             {
                 Name = week.Name,
-                Category = week.Category,
                 DataSource = week.DataSource,
                 Comment = week.Comments,
                 Type = week.Type,
@@ -296,7 +227,6 @@ namespace Basilisk.Archsim
             var res = new ArchsimLib.YearSchedule()
             {
                 Name = year.Name,
-                Category = year.Category,
                 DataSource = year.DataSource,
                 Comment = year.Comments
             };
