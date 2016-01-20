@@ -42,14 +42,20 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override string Comments
         {
-            get { return "(multiple comments)"; }
-            set { throw new NotSupportedException(); }
+            get { return SingleIfExists(Components.Select(c => c.Comments)) ?? "(multiple comments)"; }
+            set
+            {
+                foreach (var c in Components) { c.Comments = value; }
+            }
         }
 
         public override string DataSource
         {
-            get { return "(multiple sources)"; }
-            set { throw new NotSupportedException(); }
+            get { return SingleIfExists(Components.Select(c => c.DataSource)) ?? "(multiple sources)"; }
+            set
+            {
+                foreach (var c in Components) { c.DataSource = value; }
+            }
         }
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
@@ -96,6 +102,13 @@ namespace Basilisk.Controls.InterfaceModels
                     return setting;
                 })
                 .ToArray();
+        }
+
+        private static string SingleIfExists(IEnumerable<string> sources)
+        {
+            System.Diagnostics.Debug.Assert(sources.Any());
+            var vals = sources.Distinct();
+            return vals.Count() == 1 ? vals.First() : null;
         }
     }
 }

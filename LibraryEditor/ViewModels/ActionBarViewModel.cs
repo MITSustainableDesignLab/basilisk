@@ -158,8 +158,8 @@ namespace Basilisk.LibraryEditor.ViewModels
             if (res.HasValue && res.Value)
             {
                 var oldCategoryName = parent.SelectedComponent.Category;
-                parent.SelectedComponent.Name = vm.Name;
-                parent.SelectedComponent.Category = vm.Category;
+                if (original.IsNameMutable) { parent.SelectedComponent.Name = vm.Name; }
+                if (original.IsCategoryNameMutable) { parent.SelectedComponent.Category = vm.Category; }
                 parent.SelectedComponent.Comments = vm.Comments;
                 parent.SelectedComponent.DataSource = vm.DataSource;
                 if (oldCategoryName != parent.SelectedComponent.Category)
