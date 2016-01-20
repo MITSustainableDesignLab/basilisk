@@ -10,7 +10,7 @@
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Height="500" Width="800"
-        d:DataContext="{d:DesignInstance {x:Type vm:DesignExample}, IsDesignTimeCreatable=True}" Closing="Window_Closing"
+        Closing="Window_Closing"
         x:Name="top"
         WindowStartupLocation="CenterScreen"
         Icon="icon32.ico">
