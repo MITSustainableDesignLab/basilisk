@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 using Basilisk.Controls.InterfaceModels;
 
@@ -16,6 +18,8 @@ namespace Basilisk.Controls
     {
         public const string IdentifiedLibraryDragDropFormat = "IdentifiedLibrary";
         public readonly Guid Identifer = Guid.NewGuid();
+
+        private bool isDraggingOnScrollbar = false;
 
         public LibraryComponentTreeView()
         {
@@ -81,8 +85,25 @@ namespace Basilisk.Controls
         private void componentsTree_MouseMove(object sender, MouseEventArgs e)
         {
             var tree = sender as LibraryComponentTreeView;
-            if (tree != null && e.LeftButton == MouseButtonState.Pressed)
+            if (!isDraggingOnScrollbar &&
+                tree != null &&
+                e.LeftButton == MouseButtonState.Pressed)
             {
+                // Check for scrollbar
+                // http://stackoverflow.com/questions/10171107/dragdrop-in-a-wpf-treeview-on-the-scrollbar
+                var hit = VisualTreeHelper.HitTest(tree, e.GetPosition(tree));
+                var hitObj = hit?.VisualHit;
+                while (hitObj != null)
+                {
+                    if (hitObj is ScrollBar)
+                    {
+                        isDraggingOnScrollbar = true;
+                        return;
+                    }
+                    else if (hitObj is Visual) { hitObj = VisualTreeHelper.GetParent(hitObj); }
+                    else { hitObj = LogicalTreeHelper.GetParent(hitObj); }
+                }
+
                 var selected = tree.SelectedItems.Cast<LibraryComponent>();
                 var all = selected.Concat(selected.SelectMany(c => c.AllReferencedComponents));
                 var json = Library.CreateSublibrary(all).ToJson();
@@ -111,6 +132,11 @@ namespace Basilisk.Controls
             }
 
             public override string ToString() => $"{SourceId.ToString()};{Json}";
+        }
+
+        private void componentsTree_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isDraggingOnScrollbar = false;
         }
     }
 }
