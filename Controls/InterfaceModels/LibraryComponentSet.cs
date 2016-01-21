@@ -11,8 +11,6 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public class LibraryComponentSet : LibraryComponent
     {
-        private readonly Lazy<IReadOnlyCollection<SimulationSetting>> settings;
-
         internal LibraryComponentSet(IEnumerable<LibraryComponent> components)
         {
             if (components == null)
@@ -29,7 +27,6 @@ namespace Basilisk.Controls.InterfaceModels
             {
                 WeakEventManager<LibraryComponent, PropertyChangedEventArgs>.AddHandler(c, nameof(PropertyChanged), propChanged);
             }
-            settings = new Lazy<IReadOnlyCollection<SimulationSetting>>(CreateSimulationSettings);
         }
 
         public IEnumerable<LibraryComponent> Components { get; }
@@ -76,10 +73,7 @@ namespace Basilisk.Controls.InterfaceModels
         public override LibraryComponent Duplicate() =>
             new LibraryComponentSet(Components.Select(c => c.Duplicate()));
 
-        public override IEnumerable<SimulationSetting> SimulationSettings =>
-            settings.Value;
-
-        private IReadOnlyCollection<SimulationSetting> CreateSimulationSettings()
+        public override IReadOnlyCollection<SimulationSetting> SimulationSettings(ComponentCoordinator coordinator)
         {
             System.Diagnostics.Debug.Assert(Components.Any());
             var sourceTypes = Components.Select(c => c.GetType()).Distinct().ToArray();
@@ -97,7 +91,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(x =>
                 {
                     var displayName = x.Att.DisplayName == null ? x.Prop.Name : x.Att.DisplayName;
-                    var setting = new SimulationSetting(this, x.Prop, displayName);
+                    var setting = new SimulationSetting(this, x.Prop, displayName, coordinator);
                     setting.PropertyChanged += (s, e) => RaisePropertyChanged(setting.PropertyName);
                     return setting;
                 })

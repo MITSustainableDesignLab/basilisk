@@ -30,16 +30,9 @@ namespace Basilisk.Controls
             InitializeComponent();
         }
 
-        private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void AddLayer(object sender, RoutedEventArgs e)
         {
-            if ((string)e.Column.Header != "Material") { return; }
-            var layer = (MaterialLayer)e.Row.DataContext;
-            var success = PickMaterial?.Invoke(layer, LayerMaterialChoices);
-            if (success.HasValue && success.Value)
-            {
-                ((DataGrid)sender).CommitEdit();
-            }
-            e.Cancel = true;
+            Layers.Add(new MaterialLayer());
         }
 
         private void DeleteSelectedLayer(object sender, RoutedEventArgs e)
@@ -125,5 +118,11 @@ namespace Basilisk.Controls
                 nameof(Settings),
                 typeof(ICollection<SimulationSetting>),
                 typeof(ConstructionEditor));
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = (ComboBox)sender;
+            comboBox.GetBindingExpression(ComboBox.SelectedItemProperty)?.UpdateSource();
+        }
     }
 }

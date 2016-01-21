@@ -58,6 +58,7 @@
     <Compile Include="Attributes\ComponentNamespaceAttribute.cs" />
     <Compile Include="ComponentCategory.cs" />
     <Compile Include="ComponentCategoryCollection.cs" />
+    <Compile Include="ComponentCoordinator.cs" />
     <Compile Include="ComponentEditorTabControl.cs" />
     <Compile Include="ComponentMetadataEditor.xaml.cs">
       <DependentUpon>ComponentMetadataEditor.xaml</DependentUpon>

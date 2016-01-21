@@ -14,18 +14,11 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public abstract class LibraryComponent : INotifyPropertyChanged
     {
-        private readonly Lazy<IReadOnlyCollection<SimulationSetting>> settings;
-
         private string name;
 
         static LibraryComponent()
         {
             Mapper.CreateMap<Core.LibraryComponent, LibraryComponent>();
-        }
-
-        public LibraryComponent()
-        {
-            settings = new Lazy<IReadOnlyCollection<SimulationSetting>>(CreateSimulationSettings);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -47,9 +40,6 @@ namespace Basilisk.Controls.InterfaceModels
             }
         }
 
-        public virtual IEnumerable<SimulationSetting> SimulationSettings =>
-            settings.Value;
-
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -66,7 +56,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override string ToString() => Name;
 
-        private IReadOnlyCollection<SimulationSetting> CreateSimulationSettings()
+        public virtual IReadOnlyCollection<SimulationSetting> SimulationSettings(ComponentCoordinator coordinator)
         {
             var sourceType = GetType();
             var typeOrderer = SimulationSettingsCreator.HierarchyComparer.Build(sourceType);
@@ -79,7 +69,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(x =>
                 {
                     var displayName = x.Att.DisplayName == null ? x.Prop.Name : x.Att.DisplayName;
-                    var setting = new SimulationSetting(this, x.Prop, displayName);
+                    var setting = new SimulationSetting(this, x.Prop, displayName, coordinator);
                     setting.PropertyChanged += (s, e) => RaisePropertyChanged(setting.PropertyName);
                     return setting;
                 })

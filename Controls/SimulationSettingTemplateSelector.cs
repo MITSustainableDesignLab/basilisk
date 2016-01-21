@@ -12,9 +12,10 @@ namespace Basilisk.Controls
             if (grid != null && setting != null)
             {
                 var template =
-                    setting.ExposeAsComboBox ? grid.FindResource("EnumPropertyTemplate") :
-                    setting.ExposeAsCheckbox ? grid.FindResource("BoolPropertyTemplate") :
                     setting.ShowMultivalueDescription ? grid.FindResource("MultiValueDescriptionTemplate") :
+                    setting.SettingType == SettingType.Enum ? grid.FindResource("EnumPropertyTemplate") :
+                    setting.SettingType == SettingType.Bool ? grid.FindResource("BoolPropertyTemplate") :
+                    setting.SettingType == SettingType.Reference ? grid.FindResource("ReferencePropertyTemplate") :
                     grid.FindResource("TextPropertyTemplate");
                 return (DataTemplate)template;
             }

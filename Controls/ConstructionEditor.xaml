@@ -19,6 +19,7 @@
         <GroupBox Header="Material Layers">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <Button Content="Add" Click="AddLayer" />
                     <Button Content="Up" Click="MoveSelectedLayerUp" />
                     <Button Content="Down" Click="MoveSelectedLayerDown" />
                     <Button Content="Delete" Click="DeleteSelectedLayer" />
@@ -29,14 +30,35 @@
                           CanUserReorderColumns="False"
                           CanUserResizeRows="False"
                           CanUserSortColumns="False"
-                          CanUserAddRows="True"
-                          CanUserDeleteRows="True"
-                          BeginningEdit="BeginEdit">
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Material"
-                                            Binding="{Binding Material.Name}" />
-                        <DataGridTextColumn Header="Thickness"
-                                            Binding="{Binding Thickness}" />
+                        <DataGridTemplateColumn Header="Material"
+                                                IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding ElementName=top, Path=LayerMaterialChoices}"
+                                              SelectedItem="{Binding Material}"
+                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Thickness">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Thickness}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Thickness}"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Right" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 

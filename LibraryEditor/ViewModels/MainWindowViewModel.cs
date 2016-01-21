@@ -20,8 +20,6 @@ namespace Basilisk.LibraryEditor.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private readonly Dictionary<Type, Func<IEnumerable<LibraryComponent>>> referenceTargets;
-
         private ComponentCategoryCollection currentlyCategorizedComponents;
         private string currentLibraryPath;
         private ICollection<LibraryComponent> currentlyListedComponents;
@@ -35,19 +33,6 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         public MainWindowViewModel()
         {
-            referenceTargets = new Dictionary<Type, Func<IEnumerable<LibraryComponent>>>()
-            {
-                [typeof(YearSchedule)] = () => LoadedYearSchedules,
-                [typeof(OpaqueConstruction)] = () => LoadedOpaqueConstructions,
-                [typeof(WindowConstruction)] = () => LoadedWindowConstructions,
-                [typeof(ZoneConstructions)] = () => LoadedZoneConstructions,
-                [typeof(ZoneLoads)] = () => LoadedZoneLoads,
-                [typeof(ZoneConditioning)] = () => LoadedZoneConditionings,
-                [typeof(ZoneVentilation)] = () => LoadedZoneVentilations,
-                [typeof(ZoneHotWater)] = () => LoadedZoneHotWaters,
-                [typeof(ZoneDefinition)] = () => LoadedZones,
-                [typeof(BuildingTemplate)] = () => LoadedTemplates,
-            };
             ActionBarViewModel = new ActionBarViewModel(this);
 #if DEBUG
             Instance = this;
@@ -181,26 +166,6 @@ namespace Basilisk.LibraryEditor.ViewModels
                 return false;
             };
 
-        public Func<SimulationSetting, bool> PickReferenceTarget =>
-            setting =>
-            {
-                var choices = referenceTargets[setting.TargetType]().ToArray();
-                var categorized = new ComponentCategoryCollection(choices);
-                var pickerVM = new ComponentPickerViewModel()
-                {
-                    Components = categorized
-                };
-                var picker = new ComponentPicker() { DataContext = pickerVM };
-                var res = picker.ShowDialog();
-                if (res.HasValue && res.Value)
-                {
-                    setting.SingleValue = pickerVM.SelectedComponent;
-                    HasUnsavedChanges = true;
-                    return true;
-                }
-                return false;
-            };
-
         public LibraryComponent SelectedComponent
         {
             get { return selectedComponent; }
@@ -208,6 +173,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 selectedComponent = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponent)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentSettings)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
@@ -238,6 +204,9 @@ namespace Basilisk.LibraryEditor.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentMassRatios)));
             }
         }
+
+        public IEnumerable<SimulationSetting> SelectedComponentSettings =>
+            SelectedComponent?.SimulationSettings(new ComponentCoordinator(loadedLibrary));
 
         public IList<double> SelectedDayScheduleValues
         {

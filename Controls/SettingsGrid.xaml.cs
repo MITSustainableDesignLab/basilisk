@@ -27,34 +27,11 @@ namespace Basilisk.Controls
             InitializeComponent();
         }
 
-        private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            var setting = (SimulationSetting)e.Row.DataContext;
-            if (setting.SettingType != SettingType.Reference) { return; }
-            var success = PickReferencedComponent?.Invoke(setting);
-            if (success.HasValue && success.Value)
-            {
-                ((DataGrid)sender).CommitEdit();
-            }
-            e.Cancel = true;
-        }
-
-        public Func<SimulationSetting, bool> PickReferencedComponent
-        {
-            get { return (Func<SimulationSetting, bool>)GetValue(PickReferencedComponentProperty); }
-            set { SetValue(PickReferencedComponentProperty, value); }
-        }
-
         public IEnumerable<SimulationSetting> Settings
         {
             get { return (IEnumerable<SimulationSetting>)GetValue(SettingsProperty); }
             set { SetValue(SettingsProperty, value); }
         }
-
-        public static readonly DependencyProperty PickReferencedComponentProperty = DependencyProperty.Register(
-            nameof(PickReferencedComponent),
-            typeof(Func<SimulationSetting, bool>),
-            typeof(SettingsGrid));
 
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
             nameof(Settings),
@@ -80,6 +57,17 @@ namespace Basilisk.Controls
         {
             var comboBox = (ComboBox)sender;
             comboBox.GetBindingExpression(ComboBox.SelectedItemProperty)?.UpdateSource();
+        }
+
+        private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            var setting = (SimulationSetting)e.Row.DataContext;
+            if (setting.SettingType == SettingType.Bool ||
+                setting.SettingType == SettingType.Enum ||
+                setting.SettingType == SettingType.Reference)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

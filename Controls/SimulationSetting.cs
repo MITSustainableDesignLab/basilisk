@@ -13,6 +13,7 @@ namespace Basilisk.Controls
     {
         private readonly IReadOnlyList<LibraryComponent> components;
         private readonly PropertyInfo prop;
+        private readonly ComponentCoordinator coordinator;
 
         private IReadOnlyList<object> backupVals;
         private bool inTxn = false;
@@ -22,11 +23,13 @@ namespace Basilisk.Controls
             LibraryComponent component,
             PropertyInfo prop,
             string displayName,
+            ComponentCoordinator coordinator,
             SettingType type = SettingType.Unspecified)
         {
             var multiple = component as LibraryComponentSet;
             components = multiple == null ? new List<LibraryComponent>() { component } : multiple.Components.ToList();
             this.prop = prop;
+            this.coordinator = coordinator;
 
             DisplayName = displayName;
 
@@ -64,18 +67,16 @@ namespace Basilisk.Controls
             SettingType = type;
             if (SettingType == SettingType.Enum)
             {
-                Choices = Enum.GetValues(prop.PropertyType);
+                EnumChoices = Enum.GetValues(prop.PropertyType);
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public IList Choices { get; private set; }
+        public IList EnumChoices { get; private set; }
         public string DisplayName { get; private set; }
-        public bool ExposeAsCheckbox => SettingType == SettingType.Bool;
-        public bool ExposeAsComboBox => SettingType == SettingType.Enum;
-        public bool ExposeAsText => !ExposeAsCheckbox && !ExposeAsComboBox;
         public string PropertyName => prop.Name;
+        public IEnumerable<LibraryComponent> ReferenceChoices => coordinator.ComponentsOfType(prop.PropertyType);
         public bool ShowMultivalueDescription => MultipleValueDescriptionText != null;
         public Type TargetType => prop.PropertyType;
 

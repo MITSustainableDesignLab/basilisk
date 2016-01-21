@@ -8,7 +8,7 @@
           CanUserReorderColumns="False"
           CanUserResizeRows="False"
           SelectionUnit="Cell"
-          BeginningEdit="BeginEdit"
+          BeginningEdit="DataGrid_BeginningEdit"
           DataGridCell.GotFocus="CellGotFocus">
     <!-- HOW TO USE BINDING DIAGNOSTICS:
          Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
@@ -37,7 +37,7 @@
                        Style="{StaticResource ErrorStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="EnumPropertyTemplate">
-            <ComboBox ItemsSource="{Binding Path=Choices, Mode=OneTime}"
+            <ComboBox ItemsSource="{Binding Path=EnumChoices, Mode=OneTime}"
                       SelectedItem="{Binding Path=SingleValue}"
                       SelectionChanged="ComboBox_SelectionChanged" />
         </DataTemplate>
@@ -47,6 +47,11 @@
                       Unchecked="CheckBoxChanged"
                       HorizontalAlignment="Right"
                       Margin="3" />
+        </DataTemplate>
+        <DataTemplate x:Key="ReferencePropertyTemplate">
+            <ComboBox ItemsSource="{Binding ReferenceChoices}"
+                      SelectedItem="{Binding SingleValue}"
+                      SelectionChanged="ComboBox_SelectionChanged" />
         </DataTemplate>
     </DataGrid.Resources>
     <DataGrid.Columns>
