@@ -86,11 +86,6 @@ namespace Basilisk.Core
             return JsonConvert.DeserializeObject<Library>(json);
         }
 
-        public static Task<Library> FromJsonAsync(string json)
-        {
-            return JsonConvert.DeserializeObjectAsync<Library>(json);
-        }
-
         public static Library FromXml(string path)
         {
             using (var file = File.OpenRead(path))
@@ -104,11 +99,6 @@ namespace Basilisk.Core
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this, JsonFormatting.Indented);
-        }
-
-        public Task<string> ToJsonAsync()
-        {
-            return JsonConvert.SerializeObjectAsync(this, JsonFormatting.Indented);
         }
 
         public string ToXml()
