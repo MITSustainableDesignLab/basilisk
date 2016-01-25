@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ArchsimLib;
 
 using Basilisk.Controls.Attributes;
 
@@ -19,5 +15,8 @@ namespace Basilisk.Controls.InterfaceModels
             res.CopyBasePropertiesFrom(this);
             return res;
         }
+
+        [SimulationSetting]
+        public GlazingConstructionTypes Type { get; set; }
     }
 }

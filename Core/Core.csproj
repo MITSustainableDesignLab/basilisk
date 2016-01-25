@@ -30,9 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ArchsimLibData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ArchSimLib4Umi, Version=1.6.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dependencies\ArchsimLibData.dll</HintPath>
+      <HintPath>..\dependencies\ArchSimLib4Umi.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -73,6 +73,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="WeekSchedule.cs" />
     <Compile Include="WindowConstruction.cs" />
+    <None Include="packages.config" />
     <None Include="WindowMaterialBase.cs" />
     <Compile Include="WindowSettings.cs" />
     <Compile Include="WindowType.cs" />
@@ -83,9 +84,6 @@
     <Compile Include="ZoneDefinition.cs" />
     <Compile Include="ZoneLoads.cs" />
     <Compile Include="ZoneVentilation.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

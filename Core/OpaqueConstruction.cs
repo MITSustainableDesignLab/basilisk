@@ -12,6 +12,9 @@ namespace Basilisk.Core
         [DataMember]
         public override IList<MaterialLayer<OpaqueMaterial>> Layers { get; set; } = new List<MaterialLayer<OpaqueMaterial>>();
 
+        [DataMember]
+        public ConstructionTypes Type { get; set; }
+
         internal override IEnumerable<LibraryComponent> ReferencedComponents
         {
             get { throw new System.NotImplementedException(); }

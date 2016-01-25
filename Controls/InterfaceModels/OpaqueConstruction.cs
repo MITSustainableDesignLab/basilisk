@@ -1,5 +1,7 @@
 ﻿using Basilisk.Controls.Attributes;
 
+using ArchsimLib;
+
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.OpaqueConstruction))]
@@ -13,5 +15,8 @@ namespace Basilisk.Controls.InterfaceModels
             res.CopyBasePropertiesFrom(this);
             return res;
         }
+
+        [SimulationSetting]
+        public ConstructionTypes Type { get; set; }
     }
 }

@@ -29,6 +29,7 @@ namespace Basilisk.Archsim
 
             Mapper
                 .CreateMap<Core.ZoneConditioning, ArchsimLib.ZoneConditioning>()
+                .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
                 .ForMember(dest => dest.CoolingLimitType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.IdealSystemLimit), src.CoolingLimitType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.CoolingSchedule, opt => opt.ResolveUsing(src => src.CoolingSchedule.Name))
                 .ForMember(dest => dest.CoolIsOn, opt => opt.MapFrom(src => src.IsCoolingOn))
@@ -43,9 +44,11 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.MinFreshAirPerson, opt => opt.MapFrom(src => src.MinFreshAirPerPerson));
             Mapper
                 .CreateMap<Core.DomesticHotWaterSettings, ArchsimLib.DomHotWater>()
+                .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
                 .ForMember(dest => dest.WaterSchedule, opt => opt.ResolveUsing(src => src.WaterSchedule.Name));
             Mapper
                 .CreateMap<Core.ZoneLoads, ArchsimLib.ZoneLoad>()
+                .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
                 .ForMember(dest => dest.DimmingType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.DimmingItem), src.DimmingType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.EquipmentAvailibilitySchedule, opt => opt.ResolveUsing(src => src.EquipmentAvailabilitySchedule.Name))
                 .ForMember(dest => dest.EquipmentIsOn, opt => opt.MapFrom(src => src.IsEquipmentOn))
@@ -55,6 +58,7 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.PeopleIsOn, opt => opt.MapFrom(src => src.IsPeopleOn));
             Mapper
                 .CreateMap<Core.ZoneConstructions, ArchsimLib.ZoneConstruction>()
+                .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
                 .ForMember(dest => dest.FacadeConstruction, opt => opt.ResolveUsing(src => src.Facade.Name))
                 .ForMember(dest => dest.FacadeIsAdiabatic, opt => opt.MapFrom(src => src.IsFacadeAdiabatic))
                 .ForMember(dest => dest.GroundConstruction, opt => opt.ResolveUsing(src => src.Ground.Name))
@@ -67,6 +71,7 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.SlabIsAdiabatic, opt => opt.MapFrom(src => src.IsSlabAdiabatic));
             Mapper
                 .CreateMap<Core.ZoneVentilation, ArchsimLib.ZoneVentilation>()
+                .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
                 .ForMember(dest => dest.AFN, opt => opt.MapFrom(src => src.Afn))
                 .ForMember(dest => dest.BuoyancyDrivenIsOn, opt => opt.MapFrom(src => src.IsBuoyancyOn))
                 .ForMember(dest => dest.InfiltrationAch, opt => opt.MapFrom(src => src.Infiltration))

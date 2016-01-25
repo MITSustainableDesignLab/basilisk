@@ -111,10 +111,5 @@ namespace Basilisk.Core
                 return stringWriter.ToString();
             }
         }
-
-        public IEnumerable<LibraryComponent> OrphanedComponents()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

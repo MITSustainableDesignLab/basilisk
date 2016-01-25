@@ -54,10 +54,24 @@ namespace Basilisk.Legacy
             Mapper
                 .CreateMap<Legacy.OpaqueConstruction, Core.OpaqueConstruction>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Type, opt => opt.ResolveUsing((Legacy.OpaqueConstruction src) =>
+                {
+                    var legacy = src.Type.Replace(" ", String.Empty);
+                    var type = default(ArchsimLib.ConstructionTypes);
+                    Enum.TryParse(legacy, true, out type);
+                    return type;
+                }))
                 .ForMember(dest => dest.Layers, opt => opt.Ignore());
             Mapper
                 .CreateMap<Legacy.GlazingConstruction, Core.WindowConstruction>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Type, opt => opt.ResolveUsing((Legacy.GlazingConstruction src) =>
+                {
+                    var legacy = src.Type.Replace(" ", String.Empty);
+                    var type = default(ArchsimLib.GlazingConstructionTypes);
+                    Enum.TryParse(legacy, true, out type);
+                    return type;
+                }))
                 .ForMember(dest => dest.Layers, opt => opt.Ignore());
             Mapper
                 .CreateMap<Legacy.StructureType, Core.StructureInformation>()
