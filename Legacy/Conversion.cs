@@ -276,6 +276,7 @@ namespace Basilisk.Legacy
                 Category = src.Type,
                 DataSource = src.DataSource,
                 IsOn = src.WaterOn,
+                FlowRatePerFloorArea = src.WaterPeakFlow,
                 WaterSchedule = getMappedSchedule(src.WaterSchd),
                 WaterSupplyTemperature = src.WaterTempSup,
                 WaterTemperatureInlet = src.WaterTempIn
