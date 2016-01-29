@@ -304,6 +304,8 @@ namespace Basilisk.Legacy
                 IsNatVentOn = src.NatVentOn,
                 NatVentMinOutdoorAirTemp = src.NatVMinTout,
                 NatVentSchedule = getMappedSchedule(src.NatVentSchd),
+                NatVentZoneTempSetpoint = src.NatVMinTin,
+                ScheduledVentilationSetpoint = src.NatVMinTin,
                 ScheduledVentilationSchedule = getMappedSchedule(src.MechVentSchd)
             };
             return new Core.BuildingTemplate()
