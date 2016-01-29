@@ -30,6 +30,7 @@ namespace Basilisk.Controls
             else if (type == typeof(ZoneVentilation)) { return lib.ZoneVentilations; }
             else if (type == typeof(ZoneDefinition)) { return lib.Zones; }
             else if (type == typeof(BuildingTemplate)) { return lib.BuildingTemplates; }
+            else if (type == typeof(WindowSettings)) { return lib.WindowSettings; }
             else { throw new NotSupportedException($"Components of type '{type.Name}' cannot be retrieved from a library."); }
         }
     }
