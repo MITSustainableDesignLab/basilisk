@@ -55,17 +55,13 @@
     <Compile Include="DimmingType.cs" />
     <Compile Include="DomesticHotWaterSettings.cs" />
     <Compile Include="EconomizerType.cs" />
-    <None Include="GasMaterial.cs" />
-    <None Include="GlazingMaterial.cs" />
     <Compile Include="HeatRecoveryType.cs" />
     <Compile Include="IdealSystemLimit.cs" />
     <Compile Include="LayeredConstruction.cs" />
     <Compile Include="MassRatios.cs" />
-    <None Include="MaterialBase.cs" />
     <Compile Include="LibraryComponent.cs" />
     <Compile Include="OpaqueConstruction.cs" />
     <Compile Include="MaterialLayer.cs" />
-    <None Include="OpaqueMaterial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="ShadingType.cs" />
