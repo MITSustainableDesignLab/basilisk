@@ -89,7 +89,7 @@ namespace Basilisk.Controls
             get
             {
                 var cmp = new EqualityComparerGenericWrapper(StructuralComparisons.StructuralEqualityComparer);
-                var distinct = components.Select(prop.GetValue).Distinct(cmp);
+                var distinct = components.Select(prop.GetValue).Distinct(cmp).ToArray();
                 if (prop.PropertyType == typeof(bool))
                 {
                     return
