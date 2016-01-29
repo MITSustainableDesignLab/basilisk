@@ -92,7 +92,7 @@ namespace Basilisk.Controls
                         distinct.Count() == 1 ? distinct.First() :
                         default(bool?);
                 }
-                return distinct.SingleOrDefault();
+                return distinct.Count() == 1 ? distinct.Single() : null;
             }
             set
             {
