@@ -112,7 +112,9 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper.CreateMap<Core.BuildingTemplate, BuildingTemplate>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
                 .ForMember(dest => dest.Core, opt => opt.Ignore())
-                .ForMember(dest => dest.Perimeter, opt => opt.Ignore());
+                .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
+                .ForMember(dest => dest.Structure, opt => opt.Ignore())
+                .ForMember(dest => dest.Windows, opt => opt.Ignore());
 
             Mapper
                 .CreateMap<LibraryComponent, Core.LibraryComponent>();
@@ -228,9 +230,10 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
                 .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
             Mapper.CreateMap<BuildingTemplate, Core.BuildingTemplate>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent > ()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
                 .ForMember(dest => dest.Core, opt => opt.Ignore())
                 .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
+                .ForMember(dest => dest.Structure, opt => opt.Ignore())
                 .ForMember(dest => dest.Windows, opt => opt.Ignore());
 
             Mapper.AssertConfigurationIsValid();
@@ -297,7 +300,7 @@ namespace Basilisk.Controls.InterfaceModels
                 sourceLib
                 .StructureDefinitions
                 .Select(src => BuildStructureDefinition(src, opaqueMatDict))
-                .ToList();
+                .ToDictionary(c => c.Name);
 
             var days =
                 Mapper
@@ -409,6 +412,8 @@ namespace Basilisk.Controls.InterfaceModels
                     var res = Mapper.Map<BuildingTemplate>(t);
                     res.Core = zones.GetValueOrDefault(t.Core?.Name);
                     res.Perimeter = zones.GetValueOrDefault(t.Perimeter?.Name);
+                    res.Structure = structureDefinitions.GetValueOrDefault(t.Structure?.Name);
+                    res.Windows = windowSettings.GetValueOrDefault(t.Windows?.Name);
                     return res;
                 });
 
@@ -426,7 +431,7 @@ namespace Basilisk.Controls.InterfaceModels
                 GasMaterials = gasMats,
                 OpaqueConstructions = opaqueConstructions.Values.Cast<LibraryComponent>().ToList(),
                 WindowConstructions = windowConstructions.Values.Cast<LibraryComponent>().ToList(),
-                StructureDefinitions = structureDefinitions,
+                StructureDefinitions = structureDefinitions.Values.Cast<LibraryComponent>().ToList(),
                 Schedules = allSchedules,
                 ZoneConstructions = zoneConstructions.Values.Cast<LibraryComponent>().ToList(),
                 ZoneLoads = zoneLoads.Values.Cast<LibraryComponent>().ToList(),
@@ -571,6 +576,7 @@ namespace Basilisk.Controls.InterfaceModels
             var knownSchedules = newLib.YearSchedules.ToDictionary(s => s.Name);
 
             var knownOpaqueConstructions = newLib.OpaqueConstructions.ToDictionary(c => c.Name);
+            var knownStructures = newLib.StructureDefinitions.ToDictionary(c => c.Name);
             var knownWindowConstructions = newLib.WindowConstructions.ToDictionary(c => c.Name);
             newLib.ZoneConstructionSets =
                 ZoneConstructions
@@ -677,6 +683,7 @@ namespace Basilisk.Controls.InterfaceModels
                     var res = Mapper.Map<Core.BuildingTemplate>(t);
                     res.Core = knownZones.GetValueOrDefault(t.Core?.Name);
                     res.Perimeter = knownZones.GetValueOrDefault(t.Perimeter?.Name);
+                    res.Structure = knownStructures.GetValueOrDefault(t.Structure?.Name);
                     res.Windows = knownWindowSettings.GetValueOrDefault(t.Windows?.Name);
                     return res;
                 })
@@ -763,7 +770,7 @@ namespace Basilisk.Controls.InterfaceModels
             return core;
         }
 
-        private static LibraryComponent BuildStructureDefinition(Core.StructureInformation src, Dictionary<string, LibraryComponent> matDict)
+        private static StructureInformation BuildStructureDefinition(Core.StructureInformation src, Dictionary<string, LibraryComponent> matDict)
         {
             var dest = Mapper.Map<StructureInformation>(src);
             var massRatios =
