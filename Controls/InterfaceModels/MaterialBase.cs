@@ -27,6 +27,9 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Embodied Energy")]
         public double EmbodiedEnergy { get; set; }
 
+        [SimulationSetting(DisplayName = "Substitution Rate Pattern")]
+        public double[] SubstitutionRatePattern { get; set; }
+
         [SimulationSetting(DisplayName = "Substitution Timestep")]
         public double SubstitutionTimestep { get; set; }
 

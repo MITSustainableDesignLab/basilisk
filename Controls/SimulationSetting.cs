@@ -55,9 +55,13 @@ namespace Basilisk.Controls
                 {
                     type = SettingType.Enum;
                 }
-                else if (!prop.PropertyType.IsValueType)
+                else if (typeof(LibraryComponent).IsAssignableFrom(prop.PropertyType))
                 {
                     type = SettingType.Reference;
+                }
+                else if (prop.PropertyType == typeof(double[]))
+                {
+                    type = SettingType.RealArray;
                 }
                 else
                 {
@@ -84,13 +88,18 @@ namespace Basilisk.Controls
         {
             get
             {
-                var distinct = components.Select(prop.GetValue).Distinct();
+                var cmp = new EqualityComparerGenericWrapper(StructuralComparisons.StructuralEqualityComparer);
+                var distinct = components.Select(prop.GetValue).Distinct(cmp);
                 if (prop.PropertyType == typeof(bool))
                 {
                     return
                         distinct.Count() == 0 ? false :
                         distinct.Count() == 1 ? distinct.First() :
                         default(bool?);
+                }
+                else if (prop.PropertyType == typeof(double[]) && distinct.Count() == 1)
+                {
+                    return String.Join(",", (double[])distinct.Single());
                 }
                 return distinct.Count() == 1 ? distinct.Single() : null;
             }
@@ -138,6 +147,20 @@ namespace Basilisk.Controls
                         .Cast<double?>()
                         .ToArray();
                     return $"Values range from {vals.Min()} to {vals.Max()}";
+                }
+                else if (prop.PropertyType == typeof(double[]))
+                {
+                    var cmp = new EqualityComparerGenericWrapper(StructuralComparisons.StructuralEqualityComparer);
+                    var vals = components.Select(prop.GetValue).Distinct(cmp);
+                    if (vals.Count() == 1)
+                    {
+                        var val = (double[])vals.Single();
+                        return String.Join(",", val);
+                    }
+                    else
+                    {
+                        return "<multiple values>";
+                    }
                 }
                 else if (!prop.PropertyType.IsValueType)
                 {
@@ -218,5 +241,17 @@ namespace Basilisk.Controls
         }
         #endregion
 
+        private class EqualityComparerGenericWrapper : IEqualityComparer<object>
+        {
+            private readonly IEqualityComparer wrapped;
+
+            public EqualityComparerGenericWrapper(IEqualityComparer wrapped)
+            {
+                this.wrapped = wrapped;
+            }
+
+            public new bool Equals(object x, object y) => wrapped.Equals(x, y);
+            public int GetHashCode(object obj) => wrapped.GetHashCode(obj);
+        }
     }
 }

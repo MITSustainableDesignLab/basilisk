@@ -67,7 +67,7 @@
                                 CellTemplateSelector="{StaticResource CellTemplateSelector}">
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Path=SingleValue, ValidatesOnDataErrors=True}"
+                    <TextBox Text="{Binding Path=SingleValue, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}"
                              HorizontalContentAlignment="Right"
                              Visibility="{Binding Path=ExposeAsTextBox, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}">
                     </TextBox>

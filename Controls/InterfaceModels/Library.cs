@@ -125,8 +125,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.Ignore())
                 .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.Ignore())
-                .ForMember(dest => dest.Life, opt => opt.Ignore())
-                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.UseValue(new double[] { 1.0 }));
+                .ForMember(dest => dest.Life, opt => opt.Ignore());
             Mapper
                 .CreateMap<OpaqueMaterial, ArchsimLib.OpaqueMaterial>()
                 .IncludeBase<MaterialBase, ArchsimLib.BaseMaterial>()

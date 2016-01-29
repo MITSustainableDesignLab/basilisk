@@ -28,20 +28,23 @@ namespace Basilisk.Controls
             if (inType == type) { return value; }
             else if (inType == typeof(string))
             {
+                var entry = (string)value;
                 if (type == typeof(double) || type == typeof(double?))
                 {
-                    var entry = (string)value;
                     return String.IsNullOrEmpty(entry) ? default(double?) : Double.Parse(entry);
                 }
                 else if (type == typeof(int) || type == typeof(int?))
                 {
-                    var entry = (string)value;
                     return String.IsNullOrEmpty(entry) ? default(int?) : Int32.Parse(entry);
                 }
-                else if (type.IsEnum) { return Enum.Parse(type, (string)value); }
+                else if (type.IsEnum) { return Enum.Parse(type, entry, ignoreCase: true); }
+                else if (type == typeof(double[]))
+                {
+                    return entry.Split(',').Select(Double.Parse).ToArray();
+                }
                 else
                 {
-                    throw new NotSupportedException("Simulation settings can only be bound to numeric, string, or enum types");
+                    throw new NotSupportedException($"Unsupported simulation setting type '{type}'");
                 }
             }
             else
