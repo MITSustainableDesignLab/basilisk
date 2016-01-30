@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 using Basilisk.Core;
 using Basilisk.Controls.Attributes;
-using System;
-using System.Collections.Generic;
 
 namespace Basilisk.Controls.InterfaceModels
 {

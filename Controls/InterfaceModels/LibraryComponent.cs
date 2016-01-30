@@ -29,6 +29,7 @@ namespace Basilisk.Controls.InterfaceModels
         public virtual string DataSource { get; set; }
         public virtual bool IsCategoryNameMutable => true;
         public virtual bool IsNameMutable => true;
+        public string TypeDisplayName => GetType().GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? GetType().Name;
 
         public virtual string Name
         {

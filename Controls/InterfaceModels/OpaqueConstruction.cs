@@ -1,4 +1,6 @@
-﻿using Basilisk.Controls.Attributes;
+﻿using System.ComponentModel;
+
+using Basilisk.Controls.Attributes;
 
 using ArchsimLib;
 
