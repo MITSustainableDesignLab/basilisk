@@ -246,7 +246,9 @@ namespace Basilisk.Controls.InterfaceModels
             .Concat(OpaqueConstructions)
             .Concat(WindowConstructions)
             .Concat(StructureDefinitions)
-            .Concat(Schedules)
+            .Concat(DaySchedules)
+            .Concat(WeekSchedules)
+            .Concat(YearSchedules)
             .Concat(ZoneConstructions)
             .Concat(ZoneLoads)
             .Concat(ZoneConditionings)
@@ -264,7 +266,9 @@ namespace Basilisk.Controls.InterfaceModels
         public ICollection<LibraryComponent> WindowConstructions { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> StructureDefinitions { get; set; } = new List<LibraryComponent>();
 
-        public ICollection<LibraryComponent> Schedules { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> DaySchedules { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> WeekSchedules { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> YearSchedules { get; set; } = new List<LibraryComponent>();
 
         public ICollection<LibraryComponent> ZoneConstructions { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> ZoneLoads { get; set; } = new List<LibraryComponent>();
@@ -350,14 +354,6 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .ToDictionary(s => s.Name);
 
-            var allSchedules =
-                days
-                .Values
-                .Cast<LibraryComponent>()
-                .Concat(weeks.Values)
-                .Concat(years.Values)
-                .ToList();
-
             var zoneConstructions =
                 sourceLib
                 .ZoneConstructionSets
@@ -431,7 +427,9 @@ namespace Basilisk.Controls.InterfaceModels
                 OpaqueConstructions = opaqueConstructions.Values.Cast<LibraryComponent>().ToList(),
                 WindowConstructions = windowConstructions.Values.Cast<LibraryComponent>().ToList(),
                 StructureDefinitions = structureDefinitions.Values.Cast<LibraryComponent>().ToList(),
-                Schedules = allSchedules,
+                DaySchedules = days.Values.Cast<LibraryComponent>().ToList(),
+                WeekSchedules = weeks.Values.Cast<LibraryComponent>().ToList(),
+                YearSchedules = years.Values.Cast<LibraryComponent>().ToList(),
                 ZoneConstructions = zoneConstructions.Values.Cast<LibraryComponent>().ToList(),
                 ZoneLoads = zoneLoads.Values.Cast<LibraryComponent>().ToList(),
                 ZoneConditionings = zoneConditionings.Values.Cast<LibraryComponent>().ToList(),
@@ -455,7 +453,9 @@ namespace Basilisk.Controls.InterfaceModels
             OpaqueConstructions = OpaqueConstructions.Concat(other.OpaqueConstructions).ToList();
             WindowConstructions = WindowConstructions.Concat(other.WindowConstructions).ToList();
             StructureDefinitions = StructureDefinitions.Concat(other.StructureDefinitions).ToList();
-            Schedules = Schedules.Concat(other.Schedules).ToList();
+            DaySchedules = DaySchedules.Concat(other.DaySchedules).ToList();
+            WeekSchedules = WeekSchedules.Concat(other.WeekSchedules).ToList();
+            YearSchedules = YearSchedules.Concat(other.YearSchedules).ToList();
             ZoneConstructions = ZoneConstructions.Concat(other.ZoneConstructions).ToList();
             ZoneLoads = ZoneLoads.Concat(other.ZoneLoads).ToList();
             ZoneConditionings = ZoneConditionings.Concat(other.ZoneConditionings).ToList();
@@ -526,52 +526,50 @@ namespace Basilisk.Controls.InterfaceModels
                     .ToList();
             }
 
-            var schedules = Schedules.GroupBy(s => s.GetType()).ToDictionary(g => g.Key);
-            if (schedules.ContainsKey(typeof(DaySchedule)))
-            {
-                newLib.DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(schedules[typeof(DaySchedule)].Cast<DaySchedule>()).ToList();
-            }
-            if (schedules.ContainsKey(typeof(WeekSchedule)))
-            {
-                var dayDict = newLib.DaySchedules.ToDictionary(day => day.Name);
-                newLib.WeekSchedules =
-                    schedules[typeof(WeekSchedule)]
-                    .Cast<WeekSchedule>()
-                    .Select(week =>
+            newLib.DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(DaySchedules.Cast<DaySchedule>()).ToList();
+            var dayDict = newLib.DaySchedules.ToDictionary(s => s.Name);
+            newLib.WeekSchedules =
+                WeekSchedules
+                .Cast<WeekSchedule>()
+                .Select(week =>
+                {
+                    var mapped = Mapper.Map<Core.WeekSchedule>(week);
+                    if (week.Days == null)
                     {
-                        var mapped = Mapper.Map<Core.WeekSchedule>(week);
-                        mapped.Days =
-                            week
-                            .Days
-                            .Select(day => dayDict[day.Name])
-                            .ToArray();
-                        return mapped;
-                    })
-                    .ToList();
-            }
-            if (schedules.ContainsKey(typeof(YearSchedule)))
-            {
-                var weekDict = newLib.WeekSchedules.ToDictionary(day => day.Name);
-                newLib.YearSchedules =
-                    schedules[typeof(YearSchedule)]
-                    .Cast<YearSchedule>()
-                    .Select(year =>
+                        throw new InvalidOperationException("A week with a null days collection cannot be saved.");
+                    }
+                    mapped.Days =
+                        week
+                        .Days
+                        .Select(day => day != null ? dayDict[day.Name] : null)
+                        .ToArray();
+                    return mapped;
+                })
+                .ToList();
+            var weekDict = newLib.WeekSchedules.ToDictionary(s => s.Name);
+            newLib.YearSchedules =
+                YearSchedules
+                .Cast<YearSchedule>()
+                .Select(year =>
+                {
+                    var mapped = Mapper.Map<Core.YearSchedule>(year);
+                    if (year.Parts == null)
                     {
-                        var mapped = Mapper.Map<Core.YearSchedule>(year);
-                        mapped.Parts =
-                            year
-                            .Parts
-                            .Select(part =>
-                            {
-                                var mappedPart = Mapper.Map<Core.YearSchedulePart>(part);
-                                mappedPart.Schedule = weekDict[part.Schedule.Name];
-                                return mappedPart;
-                            })
-                            .ToList();
-                        return mapped;
-                    })
-                    .ToList();
-            }
+                        throw new InvalidOperationException("Internal error: A year with a null parts collection cannot be saved.");
+                    }
+                    mapped.Parts =
+                        year
+                        .Parts
+                        .Select(part =>
+                        {
+                            var mappedPart = Mapper.Map<Core.YearSchedulePart>(part);
+                            mappedPart.Schedule = weekDict[part.Schedule.Name];
+                            return mappedPart;
+                        })
+                        .ToList();
+                    return mapped;
+                })
+                .ToList();
             var knownSchedules = newLib.YearSchedules.ToDictionary(s => s.Name);
 
             var knownOpaqueConstructions = newLib.OpaqueConstructions.ToDictionary(c => c.Name);
@@ -742,11 +740,6 @@ namespace Basilisk.Controls.InterfaceModels
                 List<LibraryComponent> res;
                 return typed.TryGetValue(t, out res) ? res : new List<LibraryComponent>();
             };
-            var allSchedules =
-                retrieve(typeof(DaySchedule))
-                .Concat(retrieve(typeof(WeekSchedule)))
-                .Concat(retrieve(typeof(YearSchedule)))
-                .ToList();
             var sub = new Library()
             {
                 OpaqueMaterials = retrieve(typeof(OpaqueMaterial)),
@@ -755,7 +748,9 @@ namespace Basilisk.Controls.InterfaceModels
                 OpaqueConstructions = retrieve(typeof(OpaqueConstruction)),
                 WindowConstructions = retrieve(typeof(WindowConstruction)),
                 StructureDefinitions = retrieve(typeof(StructureInformation)),
-                Schedules = allSchedules,
+                DaySchedules = retrieve(typeof(DaySchedule)),
+                WeekSchedules = retrieve(typeof(WeekSchedule)),
+                YearSchedules = retrieve(typeof(YearSchedule)),
                 ZoneConstructions = retrieve(typeof(ZoneConstructions)),
                 ZoneLoads = retrieve(typeof(ZoneLoads)),
                 ZoneConditionings = retrieve(typeof(ZoneConditioning)),

@@ -89,6 +89,10 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         private void CreateNewComponent(object componentType)
         {
+            if (componentType == null)
+            {
+                throw new ArgumentNullException(nameof(componentType));
+            }
             var cType = (Type)componentType;
             var newComponent = CreateComponentWithDefaults(cType);
             var vm = new MetadataEditorViewModel(newComponent)

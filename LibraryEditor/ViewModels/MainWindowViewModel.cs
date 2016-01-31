@@ -115,18 +115,17 @@ namespace Basilisk.LibraryEditor.ViewModels
         }
 
         public IEnumerable<LibraryComponent> AllLoadedComponents => loadedLibrary?.AllComponents;
-
-        public IEnumerable<DaySchedule> LoadedDaySchedules => LoadedSchedules?.Select(s => s as DaySchedule).Where(s => s != null);
-        public IEnumerable<WeekSchedule> LoadedWeekSchedules => LoadedSchedules?.Select(s => s as WeekSchedule).Where(s => s != null);
-        public IEnumerable<YearSchedule> LoadedYearSchedules => LoadedSchedules?.Select(s => s as YearSchedule).Where(s => s != null);
+        
         public ICollection<LibraryComponent> LoadedGasMaterials => loadedLibrary?.GasMaterials;
         public ICollection<LibraryComponent> LoadedGlazingMaterials => loadedLibrary?.GlazingMaterials;
         public ICollection<LibraryComponent> LoadedOpaqueConstructions => loadedLibrary?.OpaqueConstructions;
         public ICollection<LibraryComponent> LoadedOpaqueMaterials => loadedLibrary?.OpaqueMaterials;
-        public ICollection<LibraryComponent> LoadedSchedules => loadedLibrary?.Schedules;
         public ICollection<LibraryComponent> LoadedStructureDefinitions => loadedLibrary?.StructureDefinitions;
         public ICollection<LibraryComponent> LoadedWindowConstructions => loadedLibrary?.WindowConstructions;
         public ICollection<LibraryComponent> LoadedWindowMaterials => LoadedGlazingMaterials?.Concat(LoadedGasMaterials).ToArray();
+        public ICollection<LibraryComponent> LoadedDaySchedules => loadedLibrary?.DaySchedules;
+        public ICollection<LibraryComponent> LoadedWeekSchedules => loadedLibrary?.WeekSchedules;
+        public ICollection<LibraryComponent> LoadedYearSchedules => loadedLibrary?.YearSchedules;
         public ICollection<LibraryComponent> LoadedZoneConstructions => loadedLibrary?.ZoneConstructions;
         public ICollection<LibraryComponent> LoadedZoneLoads => loadedLibrary?.ZoneLoads;
         public ICollection<LibraryComponent> LoadedZoneConditionings => loadedLibrary?.ZoneConditionings;

@@ -28,16 +28,16 @@ namespace Basilisk.Controls
             InitializeComponent();
         }
 
-        public IEnumerable<DaySchedule> AvailableDaySchedules
+        public IEnumerable<LibraryComponent> AvailableDaySchedules
         {
-            get { return (IEnumerable<DaySchedule>)GetValue(AvailableDaySchedulesProperty); }
+            get { return (IEnumerable<LibraryComponent>)GetValue(AvailableDaySchedulesProperty); }
             set { SetValue(AvailableDaySchedulesProperty, value); }
         }
 
         public static readonly DependencyProperty AvailableDaySchedulesProperty =
             DependencyProperty.Register(
                 nameof(AvailableDaySchedules),
-                typeof(IEnumerable<DaySchedule>),
+                typeof(IEnumerable<LibraryComponent>),
                 typeof(WeekScheduleEditor));
 
         public ObservableCollection<DaySchedule> Days

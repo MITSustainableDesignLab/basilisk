@@ -181,16 +181,17 @@
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>
                 </TabItem>
-                <TabItem Header="Schedules"
-                         basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedSchedules}">
+                <TabItem Header="Schedules">
                     <basilisk:ComponentEditorTabControl x:Name="schedulesTabControl">
                         <TabItem Header="Day"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedDaySchedules}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:DaySchedule}"
                                  IsSelected="{Binding ElementName=componentsTree, Path=SelectedComponent, Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type models:DaySchedule}, Mode=OneWay}">
                             <basilisk:DayScheduleEditor Settings="{Binding SelectedComponentSettings}"
                                                         Values="{Binding SelectedDayScheduleValues}" />
                         </TabItem>
                         <TabItem Header="Week"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedWeekSchedules}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:WeekSchedule}"
                                  IsSelected="{Binding ElementName=componentsTree, Path=SelectedComponent, Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type models:WeekSchedule}, Mode=OneWay}">
                             <basilisk:WeekScheduleEditor Settings="{Binding SelectedComponentSettings}"
@@ -198,6 +199,8 @@
                                                          Days="{Binding SelectedWeekScheduleDays}" />
                         </TabItem>
                         <TabItem Header="Year"
+                                 basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedYearSchedules}"
+                                 basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:YearSchedule}"
                                  IsSelected="{Binding ElementName=componentsTree, Path=SelectedComponent, Converter={StaticResource TypeMatchConverter}, ConverterParameter={x:Type models:YearSchedule}, Mode=OneWay}">
                             <basilisk:YearScheduleEditor Settings="{Binding SelectedComponentSettings}"
                                                          WeekScheduleChoices="{Binding LoadedWeekSchedules}"

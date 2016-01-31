@@ -20,9 +20,9 @@ namespace Basilisk.Controls
             else if (type == typeof(OpaqueConstruction)) { return lib.OpaqueConstructions; }
             else if (type == typeof(WindowConstruction)) { return lib.WindowConstructions; }
             else if (type == typeof(StructureInformation)) { return lib.StructureDefinitions; }
-            else if (type == typeof(DaySchedule)) { return lib.Schedules.Where(s => s is DaySchedule); }
-            else if (type == typeof(WeekSchedule)) { return lib.Schedules.Where(s => s is WeekSchedule); }
-            else if (type == typeof(YearSchedule)) { return lib.Schedules.Where(s => s is YearSchedule); }
+            else if (type == typeof(DaySchedule)) { return lib.DaySchedules; }
+            else if (type == typeof(WeekSchedule)) { return lib.WeekSchedules; }
+            else if (type == typeof(YearSchedule)) { return lib.YearSchedules; }
             else if (type == typeof(ZoneConditioning)) { return lib.ZoneConditionings; }
             else if (type == typeof(ZoneConstructions)) { return lib.ZoneConstructions; }
             else if (type == typeof(ZoneHotWater)) { return lib.ZoneHotWaters; }
