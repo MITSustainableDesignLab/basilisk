@@ -226,15 +226,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             }
         }
 
-        public ObservableCollection<DaySchedule> SelectedWeekScheduleDays
-        {
-            get { return (SelectedComponent as WeekSchedule)?.Days; }
-            set
-            {
-                ((WeekSchedule)selectedComponent).Days = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
-            }
-        }
+        public ObservableCollection<DaySchedule> SelectedWeekScheduleDays => (SelectedComponent as WeekSchedule)?.Days;
 
         public ObservableCollection<YearSchedulePart> SelectedYearScheduleParts
         {

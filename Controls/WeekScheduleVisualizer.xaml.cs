@@ -66,7 +66,7 @@ namespace Basilisk.Controls
             };
             var points =
                 days
-                .SelectMany(day => day.Values)
+                .SelectMany(day => day == null ? new double[24] : day.Values)
                 .Select((y, i) => new DataPoint(i + 1, y));
             foreach (var dp in points) { newSeries.Points.Add(dp); }
             chart.Series[SeriesName] = newSeries;

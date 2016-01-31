@@ -312,16 +312,15 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(coreWeek =>
                 {
                     var mapped = Mapper.Map<WeekSchedule>(coreWeek);
-                    var theseDays =
-                        coreWeek
-                        .Days
-                        .Select(coreDay =>
+                    for (var i = 0; i < 7; ++i)
+                    {
+                        var day = default(DaySchedule);
+                        if (coreWeek.Days.Length > i && coreWeek.Days[i]?.Name != null)
                         {
-                            var day = default(DaySchedule);
-                            days.TryGetValue(coreDay.Name, out day);
-                            return day;
-                        });
-                    mapped.Days = new ObservableCollection<DaySchedule>(theseDays);
+                            days.TryGetValue(coreWeek.Days[i].Name, out day);
+                        }
+                        mapped.Days[i] = day;
+                    }
                     return mapped;
                 })
                 .ToDictionary(week => week.Name);

@@ -23,7 +23,7 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting]
         public string Type { get; set; }
 
-        public ObservableCollection<DaySchedule> Days { get; set; }
+        public ObservableCollection<DaySchedule> Days { get; private set; } = new ObservableCollection<DaySchedule>(Enumerable.Repeat(default(DaySchedule), 7));
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
             Days

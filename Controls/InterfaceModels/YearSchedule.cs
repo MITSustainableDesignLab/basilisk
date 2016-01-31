@@ -23,7 +23,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override bool IsCategoryNameMutable => false;
 
-        public ObservableCollection<YearSchedulePart> Parts { get; set; }
+        public ObservableCollection<YearSchedulePart> Parts { get; set; } = new ObservableCollection<YearSchedulePart>();
 
         public string Type { get; set; }
 
