@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Windows;
-using System.Windows.Input;
-
-using Microsoft.Win32;
-
-using Newtonsoft.Json;
 
 using Basilisk.Controls;
 using Basilisk.Controls.InterfaceModels;
@@ -101,8 +94,23 @@ namespace Basilisk.LibraryEditor.ViewModels
             get { return loadedLibrary; }
             set
             {
+                if (loadedLibrary == value) { return; }
+                if (loadedLibrary != null)
+                {
+                    foreach (var week in loadedLibrary.WeekSchedules.Cast<WeekSchedule>())
+                    {
+                        week.Days.CollectionChanged -= SetUnsavedChangesOnCollectionChanged;
+                    }
+                }
                 loadedLibrary = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
+                if (loadedLibrary != null)
+                {
+                    foreach (var week in loadedLibrary.WeekSchedules.Cast<WeekSchedule>())
+                    {
+                        week.Days.CollectionChanged += SetUnsavedChangesOnCollectionChanged;
+                    }
+                }
             }
         }
 
@@ -249,8 +257,13 @@ namespace Basilisk.LibraryEditor.ViewModels
             HasUnsavedChanges = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
         }
-        
+
         internal void SetUnsavedChangesOnPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            HasUnsavedChanges = true;
+        }
+
+        private void SetUnsavedChangesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             HasUnsavedChanges = true;
         }
