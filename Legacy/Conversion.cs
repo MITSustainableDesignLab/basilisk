@@ -289,6 +289,7 @@ namespace Basilisk.Legacy
                 Category = src.Type,
                 DataSource = src.DataSource,
                 EquipmentAvailabilitySchedule = getMappedSchedule(src.EquipSchd),
+                EquipmentPowerDensity = src.EquipDnst,
                 IlluminanceTarget = src.LuxTarget,
                 LightingPowerDensity = src.LightDnst,
                 LightsAvailabilitySchedule = getMappedSchedule(src.LightSchd),
