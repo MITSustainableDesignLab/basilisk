@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 
 using Basilisk.Controls.Attributes;
+using System;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -42,6 +43,19 @@ namespace Basilisk.Controls.InterfaceModels
             res.Days = new ObservableCollection<DaySchedule>(Days.ToArray());
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (WeekSchedule)other;
+            Type = c.Type;
+            var days =
+                c
+                .Days
+                .Select(coord.GetWithSameName)
+                .Cast<DaySchedule>();
+            Days = new ObservableCollection<DaySchedule>(days);
+            CopyBasePropertiesFrom(c);
         }
     }
 }

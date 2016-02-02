@@ -107,6 +107,7 @@
       <DependentUpon>ConstructionEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="InterfaceModels\MassRatios.cs" />
+    <Compile Include="MergeCollision.cs" />
     <Compile Include="Multiselect.cs" />
     <Compile Include="SettingsCollection.cs" />
     <Compile Include="SettingsGrid.xaml.cs">

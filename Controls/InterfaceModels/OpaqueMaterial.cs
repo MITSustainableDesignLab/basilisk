@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -38,15 +39,26 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override LibraryComponent Duplicate()
         {
-            var res = new OpaqueMaterial()
-            {
-                SolarAbsorptance = SolarAbsorptance,
-                SpecificHeat = SpecificHeat,
-                ThermalEmittance = ThermalEmittance,
-                VisibleAbsorptance = VisibleAbsorptance
-            };
+            var res = new OpaqueMaterial();
+            CopyProperties(res, this);
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator _)
+        {
+            var c = (OpaqueMaterial)other;
+            CopyProperties(this, c);
+            CopyBasePropertiesFrom(c);
+        }
+
+        private static void CopyProperties(OpaqueMaterial to, OpaqueMaterial from)
+        {
+            to.Roughness = from.Roughness;
+            to.SolarAbsorptance = from.SolarAbsorptance;
+            to.SpecificHeat = from.SpecificHeat;
+            to.ThermalEmittance = from.ThermalEmittance;
+            to.VisibleAbsorptance = from.VisibleAbsorptance;
         }
     }
 }

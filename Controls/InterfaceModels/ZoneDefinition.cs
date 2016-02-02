@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -82,6 +83,21 @@ namespace Basilisk.Controls.InterfaceModels
             };
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (ZoneDefinition)other;
+            Constructions = coord.GetWithSameName(c.Constructions);
+            Loads = coord.GetWithSameName(c.Loads);
+            Conditioning = coord.GetWithSameName(c.Conditioning);
+            Ventilation = coord.GetWithSameName(c.Ventilation);
+            DomesticHotWater = coord.GetWithSameName(c.DomesticHotWater);
+            InternalMassConstruction = coord.GetWithSameName(c.InternalMassConstruction);
+            DaylightMeshResolution = c.DaylightMeshResolution;
+            DaylightWorkplaneHeight = c.DaylightWorkplaneHeight;
+            InternalMassExposedPerFloorArea = c.InternalMassExposedPerFloorArea;
+            CopyBasePropertiesFrom(c);
         }
     }
 }

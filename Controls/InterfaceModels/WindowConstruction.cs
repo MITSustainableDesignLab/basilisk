@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 using ArchsimLib;
 
@@ -13,9 +14,19 @@ namespace Basilisk.Controls.InterfaceModels
     {
         public override LibraryComponent Duplicate()
         {
-            var res = new WindowConstruction();
+            var res = new WindowConstruction()
+            {
+                Type = Type
+            };
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (WindowConstruction)other;
+            Type = c.Type;
+            CopyBasePropertiesFrom(c, coord);
         }
 
         [SimulationSetting]

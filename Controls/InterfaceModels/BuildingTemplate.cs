@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using Basilisk.Controls.Attributes;
+using System;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -67,6 +68,18 @@ namespace Basilisk.Controls.InterfaceModels
             };
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (BuildingTemplate)other;
+            Core = coord.GetWithSameName(c.Core);
+            Perimeter = coord.GetWithSameName(c.Perimeter);
+            Structure = coord.GetWithSameName(c.Structure);
+            Windows = coord.GetWithSameName(c.Windows);
+            PartitionRatio = c.PartitionRatio;
+            Lifespan = c.Lifespan;
+            CopyBasePropertiesFrom(c);
         }
     }
 }

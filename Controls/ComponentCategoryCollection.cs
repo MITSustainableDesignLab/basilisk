@@ -13,13 +13,12 @@ namespace Basilisk.Controls
 {
     public class ComponentCategoryCollection : IEnumerable<ComponentCategory>, INotifyCollectionChanged
     {
-        private ICollection<LibraryComponent> backingCollection;
-        private List<ComponentCategory> categorized;
+        private readonly List<ComponentCategory> categorized;
 
         public ComponentCategoryCollection(ICollection<LibraryComponent> components)
         {
-            backingCollection = components;
-            this.categorized =
+            BackingCollection = components;
+            categorized =
                 components
                 .GroupBy(c => c.Category)
                 .Select(g => new ComponentCategory(g, g.Key))
@@ -28,7 +27,7 @@ namespace Basilisk.Controls
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public IEnumerable<LibraryComponent> AllComponents => categorized.SelectMany(x => x);
+        public ICollection<LibraryComponent> BackingCollection { get; }
 
         public void AddComponent(LibraryComponent component)
         {
@@ -41,7 +40,7 @@ namespace Basilisk.Controls
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, category));
             }
             category.AddComponent(component);
-            backingCollection.Add(component);
+            BackingCollection.Add(component);
         }
 
         public void AddComponent(LibraryComponentSet set)
@@ -63,7 +62,7 @@ namespace Basilisk.Controls
                 categorized.RemoveAt(ix);
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, category, ix));
             }
-            backingCollection.Remove(component);
+            BackingCollection.Remove(component);
         }
 
         public IEnumerator<ComponentCategory> GetEnumerator() => categorized.GetEnumerator();

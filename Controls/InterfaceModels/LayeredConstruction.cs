@@ -36,18 +36,18 @@ namespace Basilisk.Controls.InterfaceModels
         public override bool DirectlyReferences(LibraryComponent component) =>
             Layers.Any(layer => layer.Material == component);
 
-        protected void CopyBasePropertiesFrom(LayeredConstruction source)
+        protected void CopyBasePropertiesFrom(LayeredConstruction source, ComponentCoordinator coord)
         {
             var layers =
                 source
                 .Layers
                 .Select(layer => new MaterialLayer()
                 {
-                    Material = layer.Material,
+                    Material = coord.GetWithSameName(layer.Material),
                     Thickness = layer.Thickness
                 });
             Layers = new ObservableCollection<MaterialLayer>(layers);
-            CopyBasePropertiesFrom((ConstructionBase)source);
+            CopyBasePropertiesFrom(source);
         }
 
         private void OnLayersChanged(object sender, EventArgs e)

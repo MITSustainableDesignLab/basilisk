@@ -50,21 +50,31 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override LibraryComponent Duplicate()
         {
-            var res = new GlazingMaterial()
-            {
-                DirtFactor = DirtFactor,
-                IREmissivityBack = IREmissivityBack,
-                IREmissivityFront = IREmissivityFront,
-                IRTransmittance = IRTransmittance,
-                SolarReflectanceBack = SolarReflectanceBack,
-                SolarReflectanceFront = SolarReflectanceFront,
-                SolarTransmittance = SolarTransmittance,
-                VisibleReflectanceBack = VisibleReflectanceBack,
-                VisibleReflectanceFront = VisibleReflectanceFront,
-                VisibleTransmittance = VisibleTransmittance
-            };
+            var res = new GlazingMaterial();
+            CopyProperties(res, this);
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator _)
+        {
+            var c = (GlazingMaterial)other;
+            CopyProperties(this, c);
+            CopyBasePropertiesFrom(c);
+        }
+
+        private static void CopyProperties(GlazingMaterial to, GlazingMaterial from)
+        {
+            to.DirtFactor = from.DirtFactor;
+            to.IREmissivityBack = from.IREmissivityBack;
+            to.IREmissivityFront = from.IREmissivityFront;
+            to.IRTransmittance = from.IRTransmittance;
+            to.SolarReflectanceBack = from.SolarReflectanceBack;
+            to.SolarReflectanceFront = from.SolarReflectanceFront;
+            to.SolarTransmittance = from.SolarTransmittance;
+            to.VisibleReflectanceBack = from.VisibleReflectanceBack;
+            to.VisibleReflectanceFront = from.VisibleReflectanceFront;
+            to.VisibleTransmittance = from.VisibleTransmittance;
         }
     }
 }

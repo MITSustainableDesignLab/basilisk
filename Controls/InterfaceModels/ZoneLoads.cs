@@ -4,6 +4,7 @@ using System.Linq;
 
 using Basilisk.Core;
 using Basilisk.Controls.Attributes;
+using System;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -71,20 +72,35 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var res = new ZoneLoads()
             {
-                DimmingType = DimmingType,
                 EquipmentAvailabilitySchedule = EquipmentAvailabilitySchedule,
-                EquipmentPowerDensity = EquipmentPowerDensity,
-                IlluminanceTarget = IlluminanceTarget,
-                LightingPowerDensity = LightingPowerDensity,
                 LightsAvailabilitySchedule = LightsAvailabilitySchedule,
                 OccupancySchedule = OccupancySchedule,
-                IsEquipmentOn = IsEquipmentOn,
-                IsLightingOn = IsLightingOn,
-                IsPeopleOn = IsPeopleOn,
-                PeopleDensity = PeopleDensity
             };
+            CopyNonReferenceProperties(res, this);
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (ZoneLoads)other;
+            CopyNonReferenceProperties(this, c);
+            EquipmentAvailabilitySchedule = coord.GetWithSameName(c.EquipmentAvailabilitySchedule);
+            LightsAvailabilitySchedule = coord.GetWithSameName(c.LightsAvailabilitySchedule);
+            OccupancySchedule = coord.GetWithSameName(c.OccupancySchedule);
+            CopyBasePropertiesFrom(c);
+        }
+
+        private static void CopyNonReferenceProperties(ZoneLoads to, ZoneLoads from)
+        {
+            to.DimmingType = from.DimmingType;
+            to.EquipmentPowerDensity = from.EquipmentPowerDensity;
+            to.IlluminanceTarget = from.IlluminanceTarget;
+            to.LightingPowerDensity = from.LightingPowerDensity;
+            to.IsEquipmentOn = from.IsEquipmentOn;
+            to.IsLightingOn = from.IsLightingOn;
+            to.IsPeopleOn = from.IsPeopleOn;
+            to.PeopleDensity = from.PeopleDensity;
         }
     }
 }

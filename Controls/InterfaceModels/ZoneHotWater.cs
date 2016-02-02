@@ -50,5 +50,16 @@ namespace Basilisk.Controls.InterfaceModels
             res.CopyBasePropertiesFrom(this);
             return res;
         }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (ZoneHotWater)other;
+            IsOn = c.IsOn;
+            WaterSchedule = coord.GetWithSameName(c.WaterSchedule);
+            WaterSupplyTemperature = c.WaterSupplyTemperature;
+            WaterTemperatureInlet = c.WaterTemperatureInlet;
+            FlowRatePerFloorArea = c.FlowRatePerFloorArea;
+            CopyBasePropertiesFrom(c);
+        }
     }
 }

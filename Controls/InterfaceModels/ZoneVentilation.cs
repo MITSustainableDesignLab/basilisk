@@ -81,24 +81,38 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var res = new ZoneVentilation()
             {
-                IsInfiltrationOn = IsInfiltrationOn,
-                Infiltration = Infiltration,
-                IsNatVentOn = IsNatVentOn,
-                NatVentMinOutdoorAirTemp = NatVentMinOutdoorAirTemp,
-                NatVentMaxOutdoorAirTemp = NatVentMaxOutdoorAirTemp,
-                NatVentMaxRelHumidity = NatVentMaxRelHumidity,
                 NatVentSchedule = NatVentSchedule,
-                NatVentZoneTempSetpoint = NatVentZoneTempSetpoint,
-                IsScheduledVentilationOn = IsScheduledVentilationOn,
-                ScheduledVentilationAch = ScheduledVentilationAch,
                 ScheduledVentilationSchedule = ScheduledVentilationSchedule,
-                ScheduledVentilationSetpoint = ScheduledVentilationSetpoint,
-                IsBuoyancyOn = IsBuoyancyOn,
-                IsWindOn = IsWindOn,
-                Afn = Afn,
             };
+            CopyNonReferenceProperties(res, this);
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (ZoneVentilation)other;
+            NatVentSchedule = coord.GetWithSameName(c.NatVentSchedule);
+            ScheduledVentilationSchedule = coord.GetWithSameName(c.ScheduledVentilationSchedule);
+            CopyNonReferenceProperties(this, c);
+            CopyBasePropertiesFrom(c);
+        }
+
+        private static void CopyNonReferenceProperties(ZoneVentilation to, ZoneVentilation from)
+        {
+            to.IsInfiltrationOn = from.IsInfiltrationOn;
+            to.Infiltration = from.Infiltration;
+            to.IsNatVentOn = from.IsNatVentOn;
+            to.NatVentMinOutdoorAirTemp = from.NatVentMinOutdoorAirTemp;
+            to.NatVentMaxOutdoorAirTemp = from.NatVentMaxOutdoorAirTemp;
+            to.NatVentMaxRelHumidity = from.NatVentMaxRelHumidity;
+            to.NatVentZoneTempSetpoint = from.NatVentZoneTempSetpoint;
+            to.IsScheduledVentilationOn = from.IsScheduledVentilationOn;
+            to.ScheduledVentilationAch = from.ScheduledVentilationAch;
+            to.ScheduledVentilationSetpoint = from.ScheduledVentilationSetpoint;
+            to.IsBuoyancyOn = from.IsBuoyancyOn;
+            to.IsWindOn = from.IsWindOn;
+            to.Afn = from.Afn;
         }
     }
 }

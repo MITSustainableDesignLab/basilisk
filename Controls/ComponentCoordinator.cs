@@ -12,7 +12,38 @@ namespace Basilisk.Controls
 
         public ComponentCoordinator(Library lib) { this.lib = lib; }
 
-        public IEnumerable<LibraryComponent> ComponentsOfType(Type type)
+        public IEnumerable<LibraryComponent> AllComponents =>
+            lib.OpaqueMaterials
+            .Concat(lib.GlazingMaterials)
+            .Concat(lib.GasMaterials)
+            .Concat(lib.OpaqueConstructions)
+            .Concat(lib.WindowConstructions)
+            .Concat(lib.StructureDefinitions)
+            .Concat(lib.DaySchedules)
+            .Concat(lib.WeekSchedules)
+            .Concat(lib.YearSchedules)
+            .Concat(lib.ZoneConditionings)
+            .Concat(lib.ZoneConstructions)
+            .Concat(lib.ZoneHotWaters)
+            .Concat(lib.ZoneLoads)
+            .Concat(lib.ZoneVentilations)
+            .Concat(lib.Zones)
+            .Concat(lib.BuildingTemplates)
+            .Concat(lib.WindowSettings);
+
+        public IEnumerable<LibraryComponent> ComponentsOfType(Type type) => ComponentsOfTypeMutable(type);
+
+        public T Get<T>(string name) where T : LibraryComponent =>
+            // Linear scan until performance gets noticeably bad
+            ComponentsOfType(typeof(T)).SingleOrDefault(c => c.Name == name) as T;
+
+        public LibraryComponent Get(string name, Type concreteType) =>
+            ComponentsOfType(concreteType).SingleOrDefault(c => c.Name == name);
+
+        public T GetWithSameName<T>(T c) where T : LibraryComponent =>
+            Get<T>(c?.Name);
+
+        internal ICollection<LibraryComponent> ComponentsOfTypeMutable(Type type)
         {
             if (type == typeof(OpaqueMaterial)) { return lib.OpaqueMaterials; }
             else if (type == typeof(GlazingMaterial)) { return lib.GlazingMaterials; }

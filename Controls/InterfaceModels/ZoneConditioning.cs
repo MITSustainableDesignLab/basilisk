@@ -4,6 +4,7 @@ using System.Linq;
 
 using Basilisk.Core;
 using Basilisk.Controls.Attributes;
+using System;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -104,31 +105,46 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var res = new ZoneConditioning()
             {
-                IsHeatingOn = IsHeatingOn,
-                HeatingSetpoint = HeatingSetpoint,
                 HeatingSchedule = HeatingSchedule,
-                HeatingLimitType = HeatingLimitType,
-                MaxHeatingCapacity = MaxHeatingCapacity,
-                MaxHeatFlow = MaxHeatFlow,
-                IsCoolingOn = IsCoolingOn,
-                CoolingCoeffOfPerf = CoolingCoeffOfPerf,
-                CoolingSetpoint = CoolingSetpoint,
                 CoolingSchedule = CoolingSchedule,
-                CoolingLimitType = CoolingLimitType,
-                MaxCoolingCapacity = MaxCoolingCapacity,
-                MaxCoolFlow = MaxCoolFlow,
-                IsMechVentOn = IsMechVentOn,
                 MechVentSchedule = MechVentSchedule,
-                MinFreshAirPerArea = MinFreshAirPerArea,
-                MinFreshAirPerPerson = MinFreshAirPerPerson,
-                EconomizerType = EconomizerType,
-                HeatRecoveryType = HeatRecoveryType,
-                HeatRecoveryEfficiencyLatent = HeatRecoveryEfficiencyLatent,
-                HeatRecoveryEfficiencySensible = HeatRecoveryEfficiencySensible,
-                HeatingCoeffOfPerf = HeatingCoeffOfPerf
             };
+            CopyNonReferenceProperties(res, this);
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (ZoneConditioning)other;
+            CopyNonReferenceProperties(this, c);
+            HeatingSchedule = coord.GetWithSameName(c.HeatingSchedule);
+            CoolingSchedule = coord.GetWithSameName(c.CoolingSchedule);
+            MechVentSchedule = coord.GetWithSameName(c.MechVentSchedule);
+            CopyBasePropertiesFrom(c);
+        }
+
+        private static void CopyNonReferenceProperties(ZoneConditioning to, ZoneConditioning from)
+        {
+            to.IsHeatingOn = from.IsHeatingOn;
+            to.HeatingSetpoint = from.HeatingSetpoint;
+            to.HeatingLimitType = from.HeatingLimitType;
+            to.MaxHeatingCapacity = from.MaxHeatingCapacity;
+            to.MaxHeatFlow = from.MaxHeatFlow;
+            to.IsCoolingOn = from.IsCoolingOn;
+            to.CoolingCoeffOfPerf = from.CoolingCoeffOfPerf;
+            to.CoolingSetpoint = from.CoolingSetpoint;
+            to.CoolingLimitType = from.CoolingLimitType;
+            to.MaxCoolingCapacity = from.MaxCoolingCapacity;
+            to.MaxCoolFlow = from.MaxCoolFlow;
+            to.IsMechVentOn = from.IsMechVentOn;
+            to.MinFreshAirPerArea = from.MinFreshAirPerArea;
+            to.MinFreshAirPerPerson = from.MinFreshAirPerPerson;
+            to.EconomizerType = from.EconomizerType;
+            to.HeatRecoveryType = from.HeatRecoveryType;
+            to.HeatRecoveryEfficiencyLatent = from.HeatRecoveryEfficiencyLatent;
+            to.HeatRecoveryEfficiencySensible = from.HeatRecoveryEfficiencySensible;
+            to.HeatingCoeffOfPerf = from.HeatingCoeffOfPerf;
         }
     }
 }

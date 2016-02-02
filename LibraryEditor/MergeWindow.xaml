@@ -1,0 +1,93 @@
+﻿<Window x:Class="Basilisk.LibraryEditor.MergeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Basilisk.LibraryEditor.ViewModels"
+        xmlns:local="clr-namespace:Basilisk.LibraryEditor"
+        mc:Ignorable="d"
+        Title="Merge conflicts"
+        Height="400"
+        Width="515"
+        ResizeMode="NoResize"
+        local:DialogCloser.DialogResult="{Binding PerformMerge}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0"
+                   Grid.ColumnSpan="2"
+                   Text="Some objects that would be imported have the same names as existing objects. Choose what you would like to do for each conflict."
+                   TextAlignment="Center"
+                   TextWrapping="Wrap" />
+        <ListView Grid.Row="1"
+                  Grid.ColumnSpan="2"
+                  ItemsSource="{Binding Collisions}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Control.Background" Value="Transparent" />
+                            <Setter Property="Control.BorderBrush" Value="Transparent" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Control.Background" Value="Transparent" />
+                            <Setter Property="Control.BorderBrush" Value="Transparent" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn Header="Name"
+                                    DisplayMemberBinding="{Binding NewComponent.Name}"
+                                    Width="215" />
+                    <GridViewColumn Header="Type"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ComponentTypeName}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Overwrite"
+                                    Width="55">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Overwrite}"
+                                          HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Ignore"
+                                    Width="55">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Ignore}"
+                                          HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Grid.Row="2" Grid.Column="0"
+                Content="OK"
+                Command="{Binding OkCommand, Mode=OneTime}" />
+        <Button Grid.Row="2" Grid.Column="1"
+                Content="Cancel"
+                Command="{Binding CancelCommand, Mode=OneTime}" />
+    </Grid>
+</Window>

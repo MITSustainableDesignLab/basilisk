@@ -242,9 +242,17 @@ namespace Basilisk.LibraryEditor.ViewModels
             return !HasUnsavedChanges || ActionBarViewModel.CheckForSaveAndProceed();
         }
 
-        internal void ImportIntoCurrentLibrary(Library lib)
+        internal void AddToCurrentLibrary(IEnumerable<LibraryComponent> components)
         {
-            LoadedLibrary.Import(lib);
+            loadedLibrary.Add(components);
+            CurrentCategorizedComponents = new ComponentCategoryCollection(CurrentCategorizedComponents.BackingCollection);
+            HasUnsavedChanges = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
+        }
+
+        internal void OverwriteInCurrentLibrary(IEnumerable<LibraryComponent> components)
+        {
+            LoadedLibrary.Overwrite(components);
             HasUnsavedChanges = true;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
         }

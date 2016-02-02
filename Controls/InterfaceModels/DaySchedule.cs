@@ -46,5 +46,13 @@ namespace Basilisk.Controls.InterfaceModels
             res.CopyBasePropertiesFrom(this);
             return res;
         }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator _)
+        {
+            var c = (DaySchedule)other;
+            Type = c.Type;
+            Values = c.Values?.ToList();
+            CopyBasePropertiesFrom(c);
+        }
     }
 }

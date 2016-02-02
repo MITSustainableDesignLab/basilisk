@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -84,6 +85,22 @@ namespace Basilisk.Controls.InterfaceModels
             };
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (ZoneConstructions)other;
+            Facade = coord.GetWithSameName(c.Facade);
+            Ground = coord.GetWithSameName(c.Ground);
+            Roof = coord.GetWithSameName(c.Roof);
+            Slab = coord.GetWithSameName(c.Slab);
+            Partition = coord.GetWithSameName(c.Partition);
+            IsFacadeAdiabatic = c.IsFacadeAdiabatic;
+            IsGroundAdiabatic = c.IsGroundAdiabatic;
+            IsPartitionAdiabatic = c.IsPartitionAdiabatic;
+            IsRoofAdiabatic = c.IsRoofAdiabatic;
+            IsSlabAdiabatic = c.IsSlabAdiabatic;
+            CopyBasePropertiesFrom(c);
         }
     }
 }

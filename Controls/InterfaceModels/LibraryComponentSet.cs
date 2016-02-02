@@ -98,6 +98,11 @@ namespace Basilisk.Controls.InterfaceModels
                 .ToArray();
         }
 
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator _)
+        {
+            throw new NotSupportedException("Library components sets cannot be overwritten");
+        }
+
         private static string SingleIfExists(IEnumerable<string> sources)
         {
             System.Diagnostics.Debug.Assert(sources.Any());

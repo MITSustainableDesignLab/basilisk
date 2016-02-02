@@ -66,5 +66,24 @@ namespace Basilisk.Controls.InterfaceModels
             res.CopyBasePropertiesFrom(this);
             return res;
         }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (YearSchedule)other;
+            Type = c.Type;
+            var parts =
+                c
+                .Parts
+                .Select(p => new YearSchedulePart()
+                {
+                    Schedule = coord.GetWithSameName(p.Schedule),
+                    FromDay = p.FromDay,
+                    ToDay = p.ToDay,
+                    FromMonth = p.FromMonth,
+                    ToMonth = p.ToMonth
+                });
+            Parts = new ObservableCollection<YearSchedulePart>(parts);
+            CopyBasePropertiesFrom(c);
+        }
     }
 }

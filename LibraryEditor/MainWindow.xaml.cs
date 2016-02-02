@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 using Basilisk.Controls;
@@ -61,18 +62,32 @@ namespace Basilisk.LibraryEditor
         private void TryImport(Library lib)
         {
             var vm = (MainWindowViewModel)this.DataContext;
-            var collisions = vm.LoadedLibrary.WouldCollide(lib).ToArray();
+            var collisions =
+                vm
+                .LoadedLibrary
+                .WouldCollide(lib.AllComponents)
+                .Select(c => new MergeCollisionViewModel(c))
+                .ToArray();
+            var add =
+                lib
+                .AllComponents
+                .Except(collisions.Select(c => c.NewComponent));
+            var mergeVM = new MergeWindowViewModel() { Collisions = collisions };
+
             if (collisions.Any())
             {
-                MessageBox.Show(
-                    "The components could not be imported because there would be name collisions (name merging is not yet supported).",
-                    "Name collisions",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var mergeWindow = new MergeWindow() { DataContext = mergeVM };
+                var res = mergeWindow.ShowDialog();
+                if (res.HasValue && res.Value)
+                {
+                    var overwrite = mergeVM.Collisions.Where(c => c.Overwrite).Select(c => c.NewComponent);
+                    vm.AddToCurrentLibrary(add);
+                    vm.OverwriteInCurrentLibrary(overwrite);
+                }
             }
             else
             {
-                vm.ImportIntoCurrentLibrary(lib);
+                vm.AddToCurrentLibrary(add);
             }
         }
     }

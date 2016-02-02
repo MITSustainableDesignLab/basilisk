@@ -52,8 +52,8 @@ namespace Basilisk.Controls.InterfaceModels
         }
 
         public abstract bool DirectlyReferences(LibraryComponent component);
-
         public abstract LibraryComponent Duplicate();
+        public abstract void OverwriteWith(LibraryComponent other, ComponentCoordinator lookupFrom);
 
         public override string ToString() => Name;
 

@@ -1,12 +1,15 @@
-﻿using Basilisk.Core;
-using Basilisk.Controls.Attributes;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+
+
+using Basilisk.Core;
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
     [UseDefaultValuesOf(typeof(Core.WindowSettings))]
+    [DisplayName("window settings")]
     [ComponentNamespace]
     public class WindowSettings : LibraryComponent
     {
@@ -86,25 +89,41 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var res = new WindowSettings()
             {
-                Type = Type,
                 Construction = Construction,
-                OperableArea = OperableArea,
-                IsShadingSystemOn = IsShadingSystemOn,
                 ShadingSystemAvailabilitySchedule = ShadingSystemAvailabilitySchedule,
-                ShadingSystemSetpoint = ShadingSystemSetpoint,
-                ShadingSystemTransmittance = ShadingSystemTransmittance,
-                ShadingSystemType = ShadingSystemType,
-                IsZoneMixingOn = IsZoneMixingOn,
                 ZoneMixingAvailabilitySchedule = ZoneMixingAvailabilitySchedule,
-                ZoneMixingDeltaTemperature = ZoneMixingDeltaTemperature,
-                ZoneMixingFlowRate = ZoneMixingFlowRate,
-                IsVirtualPartition = IsVirtualPartition,
-                AfnDischargeC = AfnDischargeC,
-                AfnTempSetpoint = AfnTempSetpoint,
                 AfnWindowAvailability = AfnWindowAvailability
             };
+            CopyNonReferenceProperties(res, this);
             res.CopyBasePropertiesFrom(this);
             return res;
+        }
+
+        public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
+        {
+            var c = (WindowSettings)other;
+            CopyNonReferenceProperties(this, c);
+            Construction = coord.GetWithSameName(c.Construction);
+            ShadingSystemAvailabilitySchedule = coord.GetWithSameName(c.ShadingSystemAvailabilitySchedule);
+            ZoneMixingAvailabilitySchedule = coord.GetWithSameName(c.ZoneMixingAvailabilitySchedule);
+            AfnWindowAvailability = coord.GetWithSameName(c.AfnWindowAvailability);
+            CopyBasePropertiesFrom(c);
+        }
+
+        private static void CopyNonReferenceProperties(WindowSettings to, WindowSettings from)
+        {
+            to.Type = from.Type;
+            to.OperableArea = from.OperableArea;
+            to.IsShadingSystemOn = from.IsShadingSystemOn;
+            to.ShadingSystemSetpoint = from.ShadingSystemSetpoint;
+            to.ShadingSystemTransmittance = from.ShadingSystemTransmittance;
+            to.ShadingSystemType = from.ShadingSystemType;
+            to.IsZoneMixingOn = from.IsZoneMixingOn;
+            to.ZoneMixingDeltaTemperature = from.ZoneMixingDeltaTemperature;
+            to.ZoneMixingFlowRate = from.ZoneMixingFlowRate;
+            to.IsVirtualPartition = from.IsVirtualPartition;
+            to.AfnDischargeC = from.AfnDischargeC;
+            to.AfnTempSetpoint = from.AfnTempSetpoint;
         }
     }
 }

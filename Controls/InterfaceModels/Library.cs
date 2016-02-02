@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Basilisk.Controls;
 using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
@@ -239,46 +239,24 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper.AssertConfigurationIsValid();
         }
 
-        public IEnumerable<LibraryComponent> AllComponents =>
-            GasMaterials
-            .Concat(GlazingMaterials)
-            .Concat(OpaqueMaterials)
-            .Concat(OpaqueConstructions)
-            .Concat(WindowConstructions)
-            .Concat(StructureDefinitions)
-            .Concat(DaySchedules)
-            .Concat(WeekSchedules)
-            .Concat(YearSchedules)
-            .Concat(ZoneConstructions)
-            .Concat(ZoneLoads)
-            .Concat(ZoneConditionings)
-            .Concat(ZoneVentilations)
-            .Concat(ZoneHotWaters)
-            .Concat(Zones)
-            .Concat(WindowSettings)
-            .Concat(BuildingTemplates);
+        public IEnumerable<LibraryComponent> AllComponents => new ComponentCoordinator(this).AllComponents;
 
-        public ICollection<LibraryComponent> GasMaterials { get; set; } = new List<LibraryComponent>();
-        public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> OpaqueMaterials { get; set; } = new List<LibraryComponent>();
-
+        public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> GasMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> OpaqueConstructions { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> WindowConstructions { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> StructureDefinitions { get; set; } = new List<LibraryComponent>();
-
         public ICollection<LibraryComponent> DaySchedules { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> WeekSchedules { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> YearSchedules { get; set; } = new List<LibraryComponent>();
-
-        public ICollection<LibraryComponent> ZoneConstructions { get; set; } = new List<LibraryComponent>();
-        public ICollection<LibraryComponent> ZoneLoads { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> ZoneConditionings { get; set; } = new List<LibraryComponent>();
-        public ICollection<LibraryComponent> ZoneVentilations { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneConstructions { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> ZoneHotWaters { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneLoads { get; set; } = new List<LibraryComponent>();
+        public ICollection<LibraryComponent> ZoneVentilations { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> Zones { get; set; } = new List<LibraryComponent>();
-
         public ICollection<LibraryComponent> WindowSettings { get; set; } = new List<LibraryComponent>();
-
         public ICollection<LibraryComponent> BuildingTemplates { get; set; } = new List<LibraryComponent>();
 
         public static Library Create(Core.Library sourceLib)
@@ -441,29 +419,22 @@ namespace Basilisk.Controls.InterfaceModels
             };
         }
 
-        public void Import(Library other)
+        public void Add(IEnumerable<LibraryComponent> components)
         {
-            if (WouldCollide(other).Any())
+            var coordinator = new ComponentCoordinator(this);
+            foreach (var c in components)
             {
-                throw new InvalidOperationException("The library could not be imported because it would cause at least one name collision.");
+                coordinator.ComponentsOfTypeMutable(c.GetType()).Add(c);
             }
-            OpaqueMaterials = OpaqueMaterials.Concat(other.OpaqueMaterials).ToList();
-            GlazingMaterials = GlazingMaterials.Concat(other.GlazingMaterials).ToList();
-            GasMaterials = GasMaterials.Concat(other.GasMaterials).ToList();
-            OpaqueConstructions = OpaqueConstructions.Concat(other.OpaqueConstructions).ToList();
-            WindowConstructions = WindowConstructions.Concat(other.WindowConstructions).ToList();
-            StructureDefinitions = StructureDefinitions.Concat(other.StructureDefinitions).ToList();
-            DaySchedules = DaySchedules.Concat(other.DaySchedules).ToList();
-            WeekSchedules = WeekSchedules.Concat(other.WeekSchedules).ToList();
-            YearSchedules = YearSchedules.Concat(other.YearSchedules).ToList();
-            ZoneConstructions = ZoneConstructions.Concat(other.ZoneConstructions).ToList();
-            ZoneLoads = ZoneLoads.Concat(other.ZoneLoads).ToList();
-            ZoneConditionings = ZoneConditionings.Concat(other.ZoneConditionings).ToList();
-            ZoneVentilations = ZoneVentilations.Concat(other.ZoneVentilations).ToList();
-            ZoneHotWaters = ZoneHotWaters.Concat(other.ZoneHotWaters).ToList();
-            Zones = Zones.Concat(other.Zones).ToList();
-            WindowSettings = WindowSettings.Concat(other.WindowSettings).ToList();
-            BuildingTemplates = BuildingTemplates.Concat(other.BuildingTemplates).ToList();
+        }
+
+        public void Overwrite(IEnumerable<LibraryComponent> newComponents)
+        {
+            var coord = new ComponentCoordinator(this);
+            foreach (var c in newComponents)
+            {
+                coord.Get(c.Name, c.GetType()).OverwriteWith(c, coord);
+            }
         }
 
         public Core.Library ToCoreLibrary()
@@ -689,6 +660,28 @@ namespace Basilisk.Controls.InterfaceModels
             return newLib;
         }
 
+        public IEnumerable<MergeCollision> WouldCollide(IEnumerable<LibraryComponent> newComponents) =>
+            newComponents
+            .Join(
+                AllComponents,
+                newC => newC.Name,
+                oldC => oldC.Name,
+                (newC, oldC) => new MergeCollision(oldC, newC))
+            .Where(x =>
+                x.OriginalComponent.GetType() == x.NewComponent.GetType() ||
+                ComponentNamespaceAttribute
+                    .NamespaceTypes(x.OriginalComponent.GetType())
+                    .Any(n => n.IsAssignableFrom(x.NewComponent.GetType())));
+
+        public bool WouldCollide(string name, Type type) =>
+            AllComponents
+            .Any(c =>
+                c.Name == name &&
+                (c.GetType() == type ||
+                 ComponentNamespaceAttribute
+                 .NamespaceTypes(type)
+                 .Any(t => t.IsAssignableFrom(c.GetType()))));
+
         private static DestT BuildLayeredConstruction<SourceT, DestT, MaterialT>(SourceT src, Dictionary<string, LibraryComponent> matDict)
             where SourceT : Core.LayeredConstruction<MaterialT>
             where DestT : LayeredConstruction
@@ -714,19 +707,6 @@ namespace Basilisk.Controls.InterfaceModels
                 .Where(layer => layer != null);
             dest.Layers = new ObservableCollection<MaterialLayer>(layers);
             return dest;
-        }
-
-        public IEnumerable<LibraryComponent> WouldCollide(Library other) =>
-            // TODO: Make sure this performance isn't terrible (it sure looks terrible here)
-            other.AllComponents.Where(c => WouldCollide(c.Name, c.GetType()));
-
-        public bool WouldCollide(string name, Type type)
-        {
-            var nameMatches = AllComponents.Where(c => String.Equals(name, c.Name, StringComparison.InvariantCultureIgnoreCase)).ToArray();
-            if (!nameMatches.Any()) { return false; }
-            var namespaceTypes = ComponentNamespaceAttribute.NamespaceTypes(type);
-            var nameMatchTypes = nameMatches.Select(c => c.GetType());
-            return namespaceTypes.Any(n => nameMatchTypes.Any(m => n.IsAssignableFrom(m)));
         }
 
         internal static Core.Library CreateSublibrary(IEnumerable<LibraryComponent> withComponents)
