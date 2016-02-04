@@ -15,6 +15,7 @@ namespace Basilisk.Controls.InterfaceModels
         public double MoistureDiffusionResistance { get; set; }
 
         [SimulationSetting]
+        [DefaultValue("")]
         public string Roughness { get; set; }
 
         [SimulationSetting(DisplayName = "Solar Absorptance")]

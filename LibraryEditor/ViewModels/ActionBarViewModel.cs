@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -60,30 +61,30 @@ namespace Basilisk.LibraryEditor.ViewModels
         private static LibraryComponent CreateComponentWithDefaults(Type type)
         {
             var newComponent = (LibraryComponent)Activator.CreateInstance(type);
-            var useDefaultsOf = type.GetCustomAttribute<UseDefaultValuesOfAttribute>();
-            if (useDefaultsOf != null)
+
+            Func<Type, Dictionary<string, object>> getDefaults = t =>
             {
-                var source =
-                    useDefaultsOf
-                    .SourceType
+                if (t == null) { return new Dictionary<string, object>(); }
+                return
+                    t
                     .GetProperties()
-                    .Select(prop => new { Prop = prop, Default = prop.GetCustomAttribute<DefaultValueAttribute>() })
-                    .Where(x => x.Default != null)
-                    .Select(x => new { Name = x.Prop.Name, Value = x.Default.Value });
-                var matched =
-                    type
-                    .GetProperties()
-                    .Where(p => p.SetMethod != null)
-                    .Join(
-                        source,
-                        prop => prop.Name,
-                        x => x.Name,
-                        (prop, match) => new { Prop = prop, Value = match.Value });
-                foreach (var match in matched)
+                    .Where(prop => prop.GetCustomAttribute<DefaultValueAttribute>() != null)
+                    .ToDictionary(prop => prop.Name, prop => prop.GetCustomAttribute<DefaultValueAttribute>().Value);
+            };
+
+            var localDefaults = getDefaults(type);
+            var sourceDefaults = getDefaults(type.GetCustomAttribute<UseDefaultValuesOfAttribute>()?.SourceType);
+
+            foreach (var prop in type.GetProperties())
+            {
+                object def;
+                if (localDefaults.TryGetValue(prop.Name, out def) ||
+                    sourceDefaults.TryGetValue(prop.Name, out def))
                 {
-                    match.Prop.SetValue(newComponent, match.Value);
+                    prop.SetValue(newComponent, def);
                 }
             }
+
             return newComponent;
         }
 

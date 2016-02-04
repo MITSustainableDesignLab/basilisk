@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using System.ComponentModel;
 
 using Basilisk.Controls.Attributes;
 
@@ -28,6 +22,7 @@ namespace Basilisk.Controls.InterfaceModels
         public double EmbodiedEnergy { get; set; }
 
         [SimulationSetting(DisplayName = "Substitution Rate Pattern")]
+        [DefaultValue(new double[] { 1.0 })]
         public double[] SubstitutionRatePattern { get; set; }
 
         [SimulationSetting(DisplayName = "Substitution Timestep")]
