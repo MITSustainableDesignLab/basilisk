@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 
 using Basilisk.Controls.Attributes;
 
@@ -44,6 +45,7 @@ namespace Basilisk.Controls.InterfaceModels
             Density = source.Density;
             EmbodiedCarbon = source.EmbodiedCarbon;
             EmbodiedEnergy = source.EmbodiedEnergy;
+            SubstitutionRatePattern = source.SubstitutionRatePattern.ToArray();
             SubstitutionTimestep = source.SubstitutionTimestep;
             TransportCarbon = source.TransportCarbon;
             TransportDistance = source.TransportDistance;
