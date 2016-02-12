@@ -13,34 +13,44 @@ namespace Basilisk.Controls.InterfaceModels
     public class GlazingMaterial : WindowMaterialBase
     {
         [SimulationSetting(DisplayName = "Dirt Factor")]
-        public double DirtFactor { get; set; }
+        [DefaultValue(1)]
+        public double DirtFactor { get; set; } = 1;
 
         [SimulationSetting(DisplayName = "Back-side IR Emissivity")]
-        public double IREmissivityBack { get; set; }
+        [DefaultValue(0.84)]
+        public double IREmissivityBack { get; set; } = 0.84;
 
         [SimulationSetting(DisplayName = "Front-side IR Emissivity")]
-        public double IREmissivityFront { get; set; }
+        [DefaultValue(0.84)]
+        public double IREmissivityFront { get; set; } = 0.84;
 
         [SimulationSetting(DisplayName = "IR Transmittance")]
-        public double IRTransmittance { get; set; }
+        [DefaultValue(0.0)]
+        public double IRTransmittance { get; set; } = 0.0;
 
         [SimulationSetting(DisplayName = "Back-side Solar Reflectance")]
-        public double SolarReflectanceBack { get; set; }
+        [DefaultValue(0.075)]
+        public double SolarReflectanceBack { get; set; } = 0.075;
 
         [SimulationSetting(DisplayName = "Front-side Solar Reflectance")]
-        public double SolarReflectanceFront { get; set; }
+        [DefaultValue(0.075)]
+        public double SolarReflectanceFront { get; set; } = 0.075;
 
         [SimulationSetting(DisplayName = "Solar Transmittance")]
-        public double SolarTransmittance { get; set; }
+        [DefaultValue(0.837)]
+        public double SolarTransmittance { get; set; } = 0.837;
 
         [SimulationSetting(DisplayName = "Back-side Visible Reflectance")]
-        public double VisibleReflectanceBack { get; set; }
+        [DefaultValue(0.081)]
+        public double VisibleReflectanceBack { get; set; } = 0.081;
 
         [SimulationSetting(DisplayName = "Front-side Visible Reflectance")]
-        public double VisibleReflectanceFront { get; set; }
+        [DefaultValue(0.081)]
+        public double VisibleReflectanceFront { get; set; } = 0.081;
 
         [SimulationSetting(DisplayName = "Visible Transmittance")]
-        public double VisibleTransmittance { get; set; }
+        [DefaultValue(0.898)]
+        public double VisibleTransmittance { get; set; } = 0.898;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
             Enumerable.Empty<LibraryComponent>();

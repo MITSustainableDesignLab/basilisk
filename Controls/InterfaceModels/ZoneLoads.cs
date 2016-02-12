@@ -14,28 +14,33 @@ namespace Basilisk.Controls.InterfaceModels
     public class ZoneLoads : LibraryComponent
     {
         [SimulationSetting(DisplayName = "People")]
-        public bool IsPeopleOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsPeopleOn { get; set; } = true;
 
-        [SimulationSetting(DisplayName = "Occupancy density (p/m2)")]
+        [SimulationSetting(DisplayName = "Occupancy density", Units = "p/m2")]
         public double PeopleDensity { get; set; }
 
         [SimulationSetting(DisplayName = "Occupancy schedule")]
         public YearSchedule OccupancySchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Equipment")]
-        public bool IsEquipmentOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsEquipmentOn { get; set; } = true;
 
-        [SimulationSetting(DisplayName = "Equipment power density (W/m2)")]
-        public double EquipmentPowerDensity { get; set; }
+        [SimulationSetting(DisplayName = "Equipment power density", Units = "W/m2")]
+        [DefaultValue(12)]
+        public double EquipmentPowerDensity { get; set; } = 12;
 
         [SimulationSetting(DisplayName = "Equipment availability schedule")]
         public YearSchedule EquipmentAvailabilitySchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Lighting")]
-        public bool IsLightingOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsLightingOn { get; set; } = true;
 
-        [SimulationSetting(DisplayName = "Lighting power density (W/m2)")]
-        public double LightingPowerDensity { get; set; }
+        [SimulationSetting(DisplayName = "Lighting power density", Units = "W/m2")]
+        [DefaultValue(12)]
+        public double LightingPowerDensity { get; set; } = 12;
 
         [SimulationSetting(DisplayName = "Lighting availability schedule")]
         public YearSchedule LightsAvailabilitySchedule { get; set; }
@@ -43,8 +48,9 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Dimming type")]
         public DimmingType DimmingType { get; set; }
 
-        [SimulationSetting(DisplayName = "Illuminance target (lux)")]
-        public double IlluminanceTarget { get; set; }
+        [SimulationSetting(DisplayName = "Illuminance target", Units = "lux")]
+        [DefaultValue(500)]
+        public double IlluminanceTarget { get; set; } = 500;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {

@@ -27,18 +27,21 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Domestic hot water")]
         public ZoneHotWater DomesticHotWater { get; set; }
 
-        [SimulationSetting(DisplayName = "Daylight mesh resolution")]
+        [SimulationSetting(DisplayName = "Daylight mesh resolution", Units = "m")]
+        [DefaultValue(1.0)]
         public double DaylightMeshResolution { get; set; } = 1;
 
-        [SimulationSetting(DisplayName = "Daylight workplane height (m)")]
+        [SimulationSetting(DisplayName = "Daylight workplane height", Units = "m")]
+        [DefaultValue(0.8)]
         public double DaylightWorkplaneHeight { get; set; } = 0.8;
 
         [SimulationSetting(DisplayName = "Internal mass construction")]
         public OpaqueConstruction InternalMassConstruction { get; set; }
 
         [SimulationSetting(DisplayName = "Internal mass exposed per floor area")]
-        public double InternalMassExposedPerFloorArea { get; set; }
-
+        [DefaultValue(0)]
+        public double InternalMassExposedPerFloorArea { get; set; } = 0;
+         
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {
             get

@@ -25,7 +25,9 @@ namespace Basilisk.Controls.InterfaceModels
 
         public ObservableCollection<YearSchedulePart> Parts { get; set; } = new ObservableCollection<YearSchedulePart>();
 
-        public string Type { get; set; }
+        [SimulationSetting]
+        [DefaultValue("Fraction")]
+        public string Type { get; set; } = "Fraction";
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {

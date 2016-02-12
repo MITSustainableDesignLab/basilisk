@@ -24,7 +24,7 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Partition ratio")]
         public double PartitionRatio { get; set; }
 
-        [SimulationSetting]
+        [SimulationSetting(Units = "years")]
         public int Lifespan { get; set; }
 
         [SimulationSetting]

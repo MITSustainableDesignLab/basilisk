@@ -55,7 +55,7 @@
         </DataTemplate>
     </DataGrid.Resources>
     <DataGrid.Columns>
-        <DataGridTextColumn Header="Setting" Binding="{Binding DisplayName}" IsReadOnly="True">
+        <DataGridTextColumn Header="Setting" Binding="{Binding DisplayName, Mode=OneTime}" IsReadOnly="True">
             <DataGridTextColumn.ElementStyle>
                 <Style TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -74,6 +74,16 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
+        <DataGridTextColumn Header="Units" Binding="{Binding Units, Mode=OneTime}" IsReadOnly="True">
+            <DataGridTextColumn.ElementStyle>
+                <Style TargetType="TextBlock">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="4,2,4,2" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="TextAlignment" Value="Left" />
+                </Style>
+            </DataGridTextColumn.ElementStyle>
+        </DataGridTextColumn>
     </DataGrid.Columns>
     <DataGrid.RowValidationErrorTemplate>
         <ControlTemplate />

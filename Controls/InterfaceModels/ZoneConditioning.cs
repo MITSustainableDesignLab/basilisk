@@ -14,70 +14,87 @@ namespace Basilisk.Controls.InterfaceModels
     public class ZoneConditioning : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Heating")]
-        public bool IsHeatingOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsHeatingOn { get; set; } = true;
 
-        [SimulationSetting(DisplayName = "Heating setpoint (C)")]
-        public double HeatingSetpoint { get; set; }
+        [SimulationSetting(DisplayName = "Heating setpoint", Units = "degC")]
+        [DefaultValue(20)]
+        public double HeatingSetpoint { get; set; } = 20;
 
         [SimulationSetting(DisplayName = "Heating schedule")]
         public YearSchedule HeatingSchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Heating limit type")]
-        public IdealSystemLimit HeatingLimitType { get; set; }
+        [DefaultValue(IdealSystemLimit.NoLimit)]
+        public IdealSystemLimit HeatingLimitType { get; set; } = IdealSystemLimit.NoLimit;
 
-        [SimulationSetting(DisplayName = "Max heating capacity (W/m2)")]
-        public double MaxHeatingCapacity { get; set; }
+        [SimulationSetting(DisplayName = "Max heating capacity", Units = "W/m2")]
+        [DefaultValue(100)]
+        public double MaxHeatingCapacity { get; set; } = 100;
 
-        [SimulationSetting(DisplayName = "Max heat flow (m3/s)")]
-        public double MaxHeatFlow { get; set; }
+        [SimulationSetting(DisplayName = "Max heat flow", Units = "m3/s/m2")]
+        [DefaultValue(100)]
+        public double MaxHeatFlow { get; set; } = 100;
 
         [SimulationSetting(DisplayName = "Heating CoP")]
-        public double HeatingCoeffOfPerf { get; set; }
+        [DefaultValue(1.0)]
+        public double HeatingCoeffOfPerf { get; set; } = 1.0;
 
         [SimulationSetting(DisplayName = "Cooling")]
-        public bool IsCoolingOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsCoolingOn { get; set; } = true;
 
-        [SimulationSetting(DisplayName = "Cooling setpoint (C)")]
-        public double CoolingSetpoint { get; set; }
+        [SimulationSetting(DisplayName = "Cooling setpoint", Units = "degC")]
+        [DefaultValue(26)]
+        public double CoolingSetpoint { get; set; } = 26;
 
         [SimulationSetting(DisplayName = "Cooling schedule")]
         public YearSchedule CoolingSchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Cooling limit type")]
-        public IdealSystemLimit CoolingLimitType { get; set; }
+        [DefaultValue(IdealSystemLimit.NoLimit)]
+        public IdealSystemLimit CoolingLimitType { get; set; } = IdealSystemLimit.NoLimit;
 
-        [SimulationSetting(DisplayName = "Max cooling capacity (W/m2)")]
-        public double MaxCoolingCapacity { get; set; }
+        [SimulationSetting(DisplayName = "Max cooling capacity", Units = "W/m2")]
+        [DefaultValue(100)]
+        public double MaxCoolingCapacity { get; set; } = 100;
 
-        [SimulationSetting(DisplayName = "Max cool flow (m3/s/m2)")]
-        public double MaxCoolFlow { get; set; }
+        [SimulationSetting(DisplayName = "Max cool flow", Units = "m3/s/m2")]
+        [DefaultValue(100)]
+        public double MaxCoolFlow { get; set; } = 100;
 
         [SimulationSetting(DisplayName = "Cooling CoP")]
-        public double CoolingCoeffOfPerf { get; set; }
+        [DefaultValue(1.0)]
+        public double CoolingCoeffOfPerf { get; set; } = 1.0;
 
         [SimulationSetting(DisplayName = "Mechanical ventilation")]
-        public bool IsMechVentOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsMechVentOn { get; set; } = true;
 
         [SimulationSetting(DisplayName = "Mechanical ventilation schedule")]
         public YearSchedule MechVentSchedule { get; set; }
 
-        [SimulationSetting(DisplayName = "Min fresh air per area (m3/s/m2)")]
-        public double MinFreshAirPerArea { get; set; }
+        [SimulationSetting(DisplayName = "Min fresh air per area", Units = "m3/s/m2")]
+        [DefaultValue(0.001)]
+        public double MinFreshAirPerArea { get; set; } = 0.001;
 
-        [SimulationSetting(DisplayName = "Min fresh air per person (m3/s/p)")]
-        public double MinFreshAirPerPerson { get; set; }
+        [SimulationSetting(DisplayName = "Min fresh air per person", Units = "m3/s/p")]
+        [DefaultValue(0.001)]
+        public double MinFreshAirPerPerson { get; set; } = 0.001;
 
         [SimulationSetting(DisplayName = "Economizer type")]
-        public EconomizerType EconomizerType { get; set; }
+        [DefaultValue(EconomizerType.NoEconomizer)]
+        public EconomizerType EconomizerType { get; set; } = EconomizerType.NoEconomizer;
 
         [SimulationSetting(DisplayName = "Heat recovery type")]
-        public HeatRecoveryType HeatRecoveryType { get; set; }
+        [DefaultValue(HeatRecoveryType.None)]
+        public HeatRecoveryType HeatRecoveryType { get; set; } = HeatRecoveryType.None;
 
         [SimulationSetting(DisplayName = "Heat recovery efficiency (latent)")]
-        public double HeatRecoveryEfficiencyLatent { get; set; }
+        public double HeatRecoveryEfficiencyLatent { get; set; } = 0.65;
 
         [SimulationSetting(DisplayName = "Heat recovery efficiency (sensible)")]
-        public double HeatRecoveryEfficiencySensible { get; set; }
+        public double HeatRecoveryEfficiencySensible { get; set; } = 0.7;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {

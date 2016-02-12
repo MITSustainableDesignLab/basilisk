@@ -13,23 +13,27 @@ namespace Basilisk.Controls.InterfaceModels
     public class OpaqueMaterial : MaterialBase
     {
         [SimulationSetting(DisplayName = "Moisture Diffusion Resistance")]
-        public double MoistureDiffusionResistance { get; set; }
+        public double MoistureDiffusionResistance { get; set; } = 50;
 
         [SimulationSetting]
-        [DefaultValue("")]
-        public string Roughness { get; set; }
+        [DefaultValue("Rough")]
+        public string Roughness { get; set; } = "Rough";
 
         [SimulationSetting(DisplayName = "Solar Absorptance")]
-        public double SolarAbsorptance { get; set; }
+        [DefaultValue(0.7)]
+        public double SolarAbsorptance { get; set; } = 0.7;
 
-        [SimulationSetting(DisplayName = "Specific Heat")]
-        public double SpecificHeat { get; set; }
+        [SimulationSetting(DisplayName = "Specific Heat", Units = "J/kgK")]
+        [DefaultValue(840)]
+        public double SpecificHeat { get; set; } = 840;
 
         [SimulationSetting(DisplayName = "Thermal Emittance")]
-        public double ThermalEmittance { get; set; }
+        [DefaultValue(0.9)]
+        public double ThermalEmittance { get; set; } = 0.9;
 
         [SimulationSetting(DisplayName = "Visible Absorptance")]
-        public double VisibleAbsorptance { get; set; }
+        [DefaultValue(0.7)]
+        public double VisibleAbsorptance { get; set; } = 0.7;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
             Enumerable.Empty<LibraryComponent>();

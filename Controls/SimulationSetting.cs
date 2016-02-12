@@ -23,6 +23,7 @@ namespace Basilisk.Controls
             LibraryComponent component,
             PropertyInfo prop,
             string displayName,
+            string units,
             ComponentCoordinator coordinator,
             SettingType type = SettingType.Unspecified)
         {
@@ -73,6 +74,8 @@ namespace Basilisk.Controls
             {
                 EnumChoices = Enum.GetValues(prop.PropertyType);
             }
+
+            Units = units;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,6 +86,7 @@ namespace Basilisk.Controls
         public IEnumerable<LibraryComponent> ReferenceChoices => coordinator.ComponentsOfType(prop.PropertyType);
         public bool ShowMultivalueDescription => MultipleValueDescriptionText != null;
         public Type TargetType => prop.PropertyType;
+        public string Units { get; }
 
         public object SingleValue
         {

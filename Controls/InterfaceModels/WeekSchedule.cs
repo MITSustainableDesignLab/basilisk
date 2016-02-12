@@ -22,7 +22,8 @@ namespace Basilisk.Controls.InterfaceModels
         public override bool IsCategoryNameMutable => false;
 
         [SimulationSetting]
-        public string Type { get; set; }
+        [DefaultValue("Fraction")]
+        public string Type { get; set; } = "Fraction";
 
         public ObservableCollection<DaySchedule> Days { get; private set; } = new ObservableCollection<DaySchedule>(Enumerable.Repeat(default(DaySchedule), 7));
 

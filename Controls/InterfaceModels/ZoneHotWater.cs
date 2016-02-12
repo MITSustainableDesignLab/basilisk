@@ -18,14 +18,17 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Schedule")]
         public YearSchedule WaterSchedule { get; set; }
 
-        [SimulationSetting(DisplayName = "Supply temperature")]
-        public double WaterSupplyTemperature { get; set; }
+        [SimulationSetting(DisplayName = "Supply temperature", Units = "degC")]
+        [DefaultValue(65)]
+        public double WaterSupplyTemperature { get; set; } = 65;
 
-        [SimulationSetting(DisplayName = "Inlet temperature")]
-        public double WaterTemperatureInlet { get; set; }
+        [SimulationSetting(DisplayName = "Inlet temperature", Units = "degC")]
+        [DefaultValue(10)]
+        public double WaterTemperatureInlet { get; set; } = 10;
 
-        [SimulationSetting(DisplayName = "Flow rate (m3/h/m2)")]
-        public double FlowRatePerFloorArea { get; set; }
+        [SimulationSetting(DisplayName = "Flow rate", Units = "m3/h/m2")]
+        [DefaultValue(0.03)]
+        public double FlowRatePerFloorArea { get; set; } = 0.03;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
             Enumerable

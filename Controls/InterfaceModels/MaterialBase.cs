@@ -7,14 +7,16 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public abstract class MaterialBase : LibraryComponent
     {
-        [SimulationSetting]
-        public double Conductivity { get; set; }
+        [SimulationSetting(Units = "W/mK")]
+        [DefaultValue(2.4)]
+        public double Conductivity { get; set; } = 2.4;
 
         [SimulationSetting]
         public double Cost { get; set; }
 
-        [SimulationSetting]
-        public double Density { get; set; }
+        [SimulationSetting(Units = "kg/m3")]
+        [DefaultValue(2400)]
+        public double Density { get; set; } = 2400;
 
         [SimulationSetting(DisplayName = "Embodied Carbon")]
         public double EmbodiedCarbon { get; set; }

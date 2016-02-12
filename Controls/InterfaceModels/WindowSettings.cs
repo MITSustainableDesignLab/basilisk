@@ -14,7 +14,8 @@ namespace Basilisk.Controls.InterfaceModels
     public class WindowSettings : LibraryComponent
     {
         [SimulationSetting]
-        public WindowType Type { get; set; }
+        [DefaultValue(WindowType.External)]
+        public WindowType Type { get; set; } = WindowType.External;
 
         [SimulationSetting]
         public WindowConstruction Construction { get; set; }
@@ -28,11 +29,13 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Shading system availability schedule")]
         public YearSchedule ShadingSystemAvailabilitySchedule { get; set; }
 
-        [SimulationSetting(DisplayName = "Shading system setpoint (W)")]
+        [SimulationSetting(DisplayName = "Shading system setpoint", Units = "W/m2")]
+        [DefaultValue(180)]
         public double ShadingSystemSetpoint { get; set; }
 
         [SimulationSetting(DisplayName = "Shading system transmittance")]
-        public double ShadingSystemTransmittance { get; set; }
+        [DefaultValue(0.5)]
+        public double ShadingSystemTransmittance { get; set; } = 0.5;
 
         [SimulationSetting(DisplayName = "Shading system type")]
         public ShadingType ShadingSystemType { get; set; }
@@ -44,21 +47,25 @@ namespace Basilisk.Controls.InterfaceModels
         public YearSchedule ZoneMixingAvailabilitySchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Zone mixing delta temperature")]
-        public double ZoneMixingDeltaTemperature { get; set; }
+        [DefaultValue(2.0)]
+        public double ZoneMixingDeltaTemperature { get; set; } = 2.0;
 
-        [SimulationSetting(DisplayName = "Zone mixing flow rate")]
-        public double ZoneMixingFlowRate { get; set; }
+        [SimulationSetting(DisplayName = "Zone mixing flow rate", Units = "m3/2")]
+        [DefaultValueAttribute(0.001)]
+        public double ZoneMixingFlowRate { get; set; } = 0.001;
 
         [SimulationSetting(DisplayName = "Virtual partition")]
         public bool IsVirtualPartition { get; set; }
 
-        [SimulationSetting]
-        public double AfnDischargeC { get; set; }
+        [SimulationSetting(DisplayName = "Airflow network discharge coefficient")]
+        [DefaultValue(0.65)]
+        public double AfnDischargeC { get; set; } = 0.65;
 
-        [SimulationSetting]
-        public double AfnTempSetpoint { get; set; }
+        [SimulationSetting(DisplayName = "Airflow network temperature setpoint", Units = "degC")]
+        [DefaultValue(20)]
+        public double AfnTempSetpoint { get; set; } = 20;
 
-        [SimulationSetting]
+        [SimulationSetting(DisplayName = "Airflow network window availability")]
         public YearSchedule AfnWindowAvailability { get; set; }
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents

@@ -13,43 +13,51 @@ namespace Basilisk.Controls.InterfaceModels
     public class ZoneVentilation : LibraryComponent
     {
         [SimulationSetting(DisplayName = "Infiltration")]
-        public bool IsInfiltrationOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsInfiltrationOn { get; set; } = true;
 
-        [SimulationSetting(DisplayName = "Infiltration rate")]
-        public double Infiltration { get; set; }
+        [SimulationSetting(DisplayName = "Infiltration rate", Units = "ACH")]
+        [DefaultValue(0.1)]
+        public double Infiltration { get; set; } = 0.1;
 
         [SimulationSetting(DisplayName = "Natural ventilation")]
         public bool IsNatVentOn { get; set; }
 
-        [SimulationSetting(DisplayName = "Nat vent min outdoor air temp")]
+        [SimulationSetting(DisplayName = "Nat vent min outdoor air temp", Units = "degC")]
         public double NatVentMinOutdoorAirTemp { get; set; }
 
-        [SimulationSetting(DisplayName = "Nat vent max outdoor air temp")]
-        public double NatVentMaxOutdoorAirTemp { get; set; }
+        [SimulationSetting(DisplayName = "Nat vent max outdoor air temp", Units = "degC")]
+        [DefaultValue(30)]
+        public double NatVentMaxOutdoorAirTemp { get; set; } = 30;
 
         [SimulationSetting(DisplayName = "Nat vent max rel humidity")]
-        public double NatVentMaxRelHumidity { get; set; }
+        [DefaultValue(90)]
+        public double NatVentMaxRelHumidity { get; set; } = 90;
 
         [SimulationSetting(DisplayName = "Nat vent schedule")]
         public YearSchedule NatVentSchedule { get; set; }
 
-        [SimulationSetting(DisplayName = "Nat vent zone temperature setpoint")]
-        public double NatVentZoneTempSetpoint { get; set; }
+        [SimulationSetting(DisplayName = "Nat vent zone temperature setpoint", Units = "degC")]
+        [DefaultValue(18)]
+        public double NatVentZoneTempSetpoint { get; set; } = 18;
 
         [SimulationSetting(DisplayName = "Scheduled ventilation")]
         public bool IsScheduledVentilationOn { get; set; }
 
-        [SimulationSetting(DisplayName = "Scheduled ventilation ACH")]
-        public double ScheduledVentilationAch { get; set; }
+        [SimulationSetting(DisplayName = "Scheduled ventilation ACH", Units = "ACH")]
+        [DefaultValue(0.6)]
+        public double ScheduledVentilationAch { get; set; } = 0.6;
 
         [SimulationSetting(DisplayName = "Scheduled ventilation schedule")]
         public YearSchedule ScheduledVentilationSchedule { get; set; }
 
-        [SimulationSetting(DisplayName = "Scheduled ventilation setpoint")]
-        public double ScheduledVentilationSetpoint { get; set; }
+        [SimulationSetting(DisplayName = "Scheduled ventilation setpoint", Units = "degC")]
+        [DefaultValue(18)]
+        public double ScheduledVentilationSetpoint { get; set; } = 18;
 
         [SimulationSetting(DisplayName = "Buoyancy")]
-        public bool IsBuoyancyOn { get; set; }
+        [DefaultValue(true)]
+        public bool IsBuoyancyOn { get; set; } = true;
 
         [SimulationSetting(DisplayName = "Wind")]
         public bool IsWindOn { get; set; }

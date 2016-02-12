@@ -29,7 +29,8 @@ namespace Basilisk.Controls.InterfaceModels
         public override bool IsCategoryNameMutable => false;
 
         [SimulationSetting]
-        public string Type { get; set; }
+        [DefaultValue("Fraction")]
+        public string Type { get; set; } = "Fraction";
 
         public IList<double> Values { get; set; }
 
