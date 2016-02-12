@@ -99,6 +99,7 @@ namespace Basilisk.Controls
                 }
                 else if (prop.PropertyType == typeof(double[]) && distinct.Count() == 1)
                 {
+                    if (distinct[0] == null) { return null; }
                     return String.Join(",", (double[])distinct.Single());
                 }
                 return distinct.Count() == 1 ? distinct.Single() : null;
