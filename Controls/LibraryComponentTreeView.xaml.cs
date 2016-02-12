@@ -74,11 +74,11 @@ namespace Basilisk.Controls
 
         private static void OnSelectedItemsChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            var selection = (ICollection<object>)e.NewValue;
+            var selection = ((ICollection<object>)e.NewValue).Where(obj => obj is LibraryComponent).ToArray();
             var treeView = (LibraryComponentTreeView)o;
             treeView.SelectedComponent =
-                selection.Count == 1 ? (LibraryComponent)selection.First() :
-                selection.Count > 1 ? new LibraryComponentSet(selection.Cast<LibraryComponent>()) :
+                selection.Length == 1 ? (LibraryComponent)selection.First() :
+                selection.Length > 1 ? new LibraryComponentSet(selection.Cast<LibraryComponent>()) :
                 null;
         }
 
@@ -104,7 +104,8 @@ namespace Basilisk.Controls
                     else { hitObj = LogicalTreeHelper.GetParent(hitObj); }
                 }
 
-                var selected = tree.SelectedItems.Cast<LibraryComponent>();
+                var selected = tree.SelectedItems.Where(o => o is LibraryComponent).Cast<LibraryComponent>();
+                if (!selected.Any()) { return; }
                 var all = selected.Concat(selected.SelectMany(c => c.AllReferencedComponents));
                 var json = Library.CreateSublibrary(all).ToJson();
                 var identifiedJson = new SourcedLibraryJson()
