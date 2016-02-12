@@ -12,7 +12,7 @@ namespace Basilisk.Controls.InterfaceModels
     [ComponentNamespace]
     public class OpaqueMaterial : MaterialBase
     {
-        [SimulationSetting]
+        [SimulationSetting(DisplayName = "Moisture Diffusion Resistance")]
         public double MoistureDiffusionResistance { get; set; }
 
         [SimulationSetting]
@@ -59,6 +59,7 @@ namespace Basilisk.Controls.InterfaceModels
             to.SpecificHeat = from.SpecificHeat;
             to.ThermalEmittance = from.ThermalEmittance;
             to.VisibleAbsorptance = from.VisibleAbsorptance;
+            to.MoistureDiffusionResistance = from.MoistureDiffusionResistance;
         }
     }
 }
