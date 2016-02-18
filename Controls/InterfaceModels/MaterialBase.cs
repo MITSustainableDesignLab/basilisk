@@ -18,10 +18,10 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(2400)]
         public double Density { get; set; } = 2400;
 
-        [SimulationSetting(DisplayName = "Embodied Carbon")]
+        [SimulationSetting(DisplayName = "Embodied Carbon", Units = "kgCO2/kg")]
         public double EmbodiedCarbon { get; set; }
 
-        [SimulationSetting(DisplayName = "Embodied Energy")]
+        [SimulationSetting(DisplayName = "Embodied Energy", Units = "MJ/kg")]
         public double EmbodiedEnergy { get; set; }
 
         [SimulationSetting(DisplayName = "Substitution Rate Pattern")]
@@ -31,13 +31,13 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Substitution Timestep")]
         public double SubstitutionTimestep { get; set; }
 
-        [SimulationSetting(DisplayName = "Transportation Carbon")]
+        [SimulationSetting(DisplayName = "Transportation Carbon", Units = "kgCO2/kg/km")]
         public double TransportCarbon { get; set; }
 
-        [SimulationSetting(DisplayName = "Transportation Distance")]
+        [SimulationSetting(DisplayName = "Transportation Distance", Units = "km")]
         public double TransportDistance { get; set; }
 
-        [SimulationSetting(DisplayName = "Transportation Energy")]
+        [SimulationSetting(DisplayName = "Transportation Energy", Units = "MJ/kg/km")]
         public double TransportEnergy { get; set; }
 
         protected void CopyBasePropertiesFrom(MaterialBase source)
