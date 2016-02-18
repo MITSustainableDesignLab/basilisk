@@ -13,7 +13,8 @@
     <Grid>
         <TreeView ItemsSource="{Binding ElementName=componentsTree, Path=Components}"
                   local:Multiselect.Allow="True"
-                  local:Multiselect.SelectedItems="{Binding ElementName=componentsTree, Path=SelectedItems, Mode=TwoWay}">
+                  local:Multiselect.SelectedItems="{Binding ElementName=componentsTree, Path=SelectedItems, Mode=TwoWay}"
+                  PreviewKeyDown="TreeView_PreviewKeyDown">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:ComponentCategory}"
                                           ItemsSource="{Binding}">

@@ -139,5 +139,10 @@ namespace Basilisk.Controls
         {
             isDraggingOnScrollbar = false;
         }
+
+        private void TreeView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }
