@@ -125,6 +125,9 @@
     <Compile Include="TypeMatchConverter.cs" />
     <Compile Include="Attributes\UseDefaultValuesOfAttribute.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="Visualizer.xaml.cs">
+      <DependentUpon>Visualizer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WeekScheduleEditor.xaml.cs">
       <DependentUpon>WeekScheduleEditor.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StructureEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visualizer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

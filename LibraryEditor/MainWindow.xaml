@@ -119,8 +119,9 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
-            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Center" />
             <basilisk:LibraryComponentTreeView Components="{Binding CurrentCategorizedComponents}"
                                                Width="Auto"
                                                HorizontalAlignment="Stretch"
@@ -128,6 +129,7 @@
                                                x:Name="componentsTree"
                                                AllowDrop="True"
                                                Drop="componentsTree_Drop" />
+            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Center" />
             <basilisk:ComponentEditorTabControl x:Name="editorTabs"
                                                 Grid.Column="2"
                                                 CurrentComponents="{Binding CurrentComponents, Mode=OneWayToSource}">
@@ -254,6 +256,9 @@
                     <basilisk:SettingsGrid Settings="{Binding SelectedComponentSettings}" />
                 </TabItem>
             </basilisk:ComponentEditorTabControl>
+            <GridSplitter Grid.Column="3" Width="3" HorizontalAlignment="Center" />
+            <basilisk:Visualizer Grid.Column="4"
+                                 VisualizedObject="{Binding SelectedComponent}" />
         </Grid>
     </Grid>
 </Window>
