@@ -6,4 +6,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Massachusetts Institute of Technology 2015-2016")]
 [assembly: AssemblyProduct("Basilisk")]
 
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.1")]
