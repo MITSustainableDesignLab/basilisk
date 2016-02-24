@@ -7,7 +7,7 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public abstract class LayeredConstruction : ConstructionBase
     {
-        private ObservableCollection<MaterialLayer> layers;
+        private ObservableCollection<MaterialLayer> layers = new ObservableCollection<MaterialLayer>();
 
         public ObservableCollection<MaterialLayer> Layers
         {
