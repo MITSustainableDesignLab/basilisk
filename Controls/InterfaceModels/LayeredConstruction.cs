@@ -36,6 +36,20 @@ namespace Basilisk.Controls.InterfaceModels
         public override bool DirectlyReferences(LibraryComponent component) =>
             Layers.Any(layer => layer.Material == component);
 
+        protected void CopyBasePropertiesFrom(LayeredConstruction source)
+        {
+            var layers =
+                source
+                .Layers
+                .Select(layer => new MaterialLayer()
+                {
+                    Material = layer.Material,
+                    Thickness = layer.Thickness
+                });
+            Layers = new ObservableCollection<MaterialLayer>(layers);
+            base.CopyBasePropertiesFrom(source);
+        }
+
         protected void CopyBasePropertiesFrom(LayeredConstruction source, ComponentCoordinator coord)
         {
             var layers =
@@ -47,7 +61,7 @@ namespace Basilisk.Controls.InterfaceModels
                     Thickness = layer.Thickness
                 });
             Layers = new ObservableCollection<MaterialLayer>(layers);
-            CopyBasePropertiesFrom(source);
+            base.CopyBasePropertiesFrom(source);
         }
 
         private void OnLayersChanged(object sender, EventArgs e)
