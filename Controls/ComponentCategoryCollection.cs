@@ -23,8 +23,26 @@ namespace Basilisk.Controls
                 .GroupBy(c => c.Category)
                 .Select(g => new ComponentCategory(g, g.Key))
                 .ToList();
+            CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (var cat in e.NewItems.Cast<ComponentCategory>())
+                    {
+                        cat.CollectionChanged += CategoryChanged;
+                    }
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (var cat in e.OldItems.Cast<ComponentCategory>())
+                    {
+                        cat.CollectionChanged -= CategoryChanged;
+                    }
+                }
+            };
         }
 
+        public event EventHandler<CategoryChangedEventArgs> ChildCategoryModified;
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public ICollection<LibraryComponent> BackingCollection { get; }
@@ -67,5 +85,10 @@ namespace Basilisk.Controls
 
         public IEnumerator<ComponentCategory> GetEnumerator() => categorized.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => categorized.GetEnumerator();
+
+        private void CategoryChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ChildCategoryModified?.Invoke(this, new CategoryChangedEventArgs(sender as ComponentCategory));
+        }
     }
 }

@@ -63,6 +63,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Attributes\ComponentNamespaceAttribute.cs" />
+    <Compile Include="CategoryChangedEventArgs.cs" />
     <Compile Include="ComponentCategory.cs" />
     <Compile Include="ComponentCategoryCollection.cs" />
     <Compile Include="ComponentCoordinator.cs" />

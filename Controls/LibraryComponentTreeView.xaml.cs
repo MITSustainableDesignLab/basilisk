@@ -70,6 +70,10 @@ namespace Basilisk.Controls
         {
             var tree = (LibraryComponentTreeView)o;
             tree.SelectedItems = new List<object>();
+            var oldColl = e.OldValue as ComponentCategoryCollection;
+            if (oldColl != null) { oldColl.ChildCategoryModified -= tree.OnChildCategoryModified; }
+            var newColl = e.NewValue as ComponentCategoryCollection;
+            if (newColl != null) { newColl.ChildCategoryModified += tree.OnChildCategoryModified; }
         }
 
         private static void OnSelectedItemsChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -80,6 +84,11 @@ namespace Basilisk.Controls
                 selection.Length == 1 ? (LibraryComponent)selection.First() :
                 selection.Length > 1 ? new LibraryComponentSet(selection.Cast<LibraryComponent>()) :
                 null;
+        }
+
+        private void OnChildCategoryModified(object sender, CategoryChangedEventArgs e)
+        {
+            SelectedItems = new List<object>();
         }
 
         private void componentsTree_MouseMove(object sender, MouseEventArgs e)
