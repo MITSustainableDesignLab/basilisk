@@ -162,25 +162,27 @@ namespace Basilisk.LibraryEditor.ViewModels
             var res = editWindow.ShowDialog();
             if (res.HasValue && res.Value)
             {
-                var oldCategoryName = parent.SelectedComponent.Category;
-                if (original.IsNameMutable) { parent.SelectedComponent.Name = vm.Name; }
-                if (original.IsCategoryNameMutable) { parent.SelectedComponent.Category = vm.Category; }
-                parent.SelectedComponent.Comments = vm.Comments;
-                parent.SelectedComponent.DataSource = vm.DataSource;
-                if (oldCategoryName != parent.SelectedComponent.Category)
+                var c = parent.SelectedComponent;
+                var oldCategoryName = c.Category;
+                if (original.IsNameMutable) { c.Name = vm.Name; }
+                if (original.IsCategoryNameMutable) { c.Category = vm.Category; }
+                c.Comments = vm.Comments;
+                c.DataSource = vm.DataSource;
+                if (oldCategoryName != c.Category)
                 {
                     var oldCategory = parent.CurrentCategorizedComponents.Single(cat => cat.CategoryName == oldCategoryName);
-                    var newCategory = parent.CurrentCategorizedComponents.SingleOrDefault(cat => cat.CategoryName == parent.SelectedComponent.Category);
-                    oldCategory.RemoveComponent(parent.SelectedComponent);
+                    var newCategory = parent.CurrentCategorizedComponents.SingleOrDefault(cat => cat.CategoryName == c.Category);
+                    oldCategory.RemoveComponent(c);
                     if (newCategory == null)
                     {
-                        parent.CurrentCategorizedComponents.AddComponent(parent.SelectedComponent);
+                        parent.CurrentCategorizedComponents.AddComponent(c);
                     }
                     else
                     {
-                        newCategory.AddComponent(parent.SelectedComponent);
+                        newCategory.AddComponent(c);
                     }
                 }
+                parent.CurrentCategorizedComponents.PurgeEmptyCategories();
             }
         }
 

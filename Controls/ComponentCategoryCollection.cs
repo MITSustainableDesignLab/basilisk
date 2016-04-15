@@ -13,33 +13,17 @@ namespace Basilisk.Controls
 {
     public class ComponentCategoryCollection : IEnumerable<ComponentCategory>, INotifyCollectionChanged
     {
-        private readonly List<ComponentCategory> categorized;
+        private readonly List<ComponentCategory> categorized = new List<ComponentCategory>();
 
         public ComponentCategoryCollection(ICollection<LibraryComponent> components)
         {
             BackingCollection = components;
-            categorized =
+            var cats =
                 components
                 .GroupBy(c => c.Category)
                 .Select(g => new ComponentCategory(g, g.Key))
-                .ToList();
-            CollectionChanged += (s, e) =>
-            {
-                if (e.Action == NotifyCollectionChangedAction.Add)
-                {
-                    foreach (var cat in e.NewItems.Cast<ComponentCategory>())
-                    {
-                        cat.CollectionChanged += CategoryChanged;
-                    }
-                }
-                else if (e.Action == NotifyCollectionChangedAction.Remove)
-                {
-                    foreach (var cat in e.OldItems.Cast<ComponentCategory>())
-                    {
-                        cat.CollectionChanged -= CategoryChanged;
-                    }
-                }
-            };
+                .OrderBy(c => c.CategoryName);
+            foreach (var c in cats) { AddCategory(c); }
         }
 
         public event EventHandler<CategoryChangedEventArgs> ChildCategoryModified;
@@ -54,8 +38,7 @@ namespace Basilisk.Controls
             if (category == null)
             {
                 category = new ComponentCategory(component.Category);
-                categorized.Add(category);
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, category));
+                AddCategory(category);
             }
             category.AddComponent(component);
             BackingCollection.Add(component);
@@ -66,6 +49,16 @@ namespace Basilisk.Controls
             foreach (var c in set.Components) { AddComponent(c); }
         }
 
+        public void PurgeEmptyCategories()
+        {
+            var empty = categorized.Where(cat => cat.ComponentCount == 0).FirstOrDefault();
+            while (empty != null)
+            {
+                RemoveCategory(empty);
+                empty = categorized.Where(cat => cat.ComponentCount == 0).FirstOrDefault();
+            }
+        }
+
         public void RemoveComponent(LibraryComponent component)
         {
             var category = categorized.Find(cat => cat.CategoryName == component.Category);
@@ -74,21 +67,30 @@ namespace Basilisk.Controls
                 throw new InvalidOperationException($"The component '{component.Name}' could not be found in the component collection");
             }
             category.RemoveComponent(component);
-            if (category.ComponentCount == 0)
-            {
-                var ix = categorized.IndexOf(category);
-                categorized.RemoveAt(ix);
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, category, ix));
-            }
             BackingCollection.Remove(component);
         }
 
         public IEnumerator<ComponentCategory> GetEnumerator() => categorized.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => categorized.GetEnumerator();
 
+        private void AddCategory(ComponentCategory c)
+        {
+            categorized.Add(c);
+            c.CollectionChanged += CategoryChanged;
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, c));
+        }
+
         private void CategoryChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             ChildCategoryModified?.Invoke(this, new CategoryChangedEventArgs(sender as ComponentCategory));
+        }
+
+        private void RemoveCategory(ComponentCategory c)
+        {
+            c.CollectionChanged -= CategoryChanged;
+            var ix = categorized.IndexOf(c);
+            categorized.RemoveAt(ix);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, c, ix));
         }
     }
 }
