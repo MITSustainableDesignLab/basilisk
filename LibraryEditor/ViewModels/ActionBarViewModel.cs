@@ -171,9 +171,15 @@ namespace Basilisk.LibraryEditor.ViewModels
                 {
                     var oldCategory = parent.CurrentCategorizedComponents.Single(cat => cat.CategoryName == oldCategoryName);
                     var newCategory = parent.CurrentCategorizedComponents.SingleOrDefault(cat => cat.CategoryName == parent.SelectedComponent.Category);
-                    // TODO: Figure out what to do if the category name change is going to create a new category
                     oldCategory.RemoveComponent(parent.SelectedComponent);
-                    newCategory.AddComponent(parent.SelectedComponent);
+                    if (newCategory == null)
+                    {
+                        parent.CurrentCategorizedComponents.AddComponent(parent.SelectedComponent);
+                    }
+                    else
+                    {
+                        newCategory.AddComponent(parent.SelectedComponent);
+                    }
                 }
             }
         }
