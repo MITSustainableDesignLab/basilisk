@@ -7,7 +7,7 @@ using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    [UseDefaultValuesOf(typeof(ArchsimLib.GlazingMaterial))]
+    [UseDefaultValuesOf(typeof(Core.GlazingMaterial))]
     [DisplayName("glazing material")]
     [ComponentNamespace]
     public class GlazingMaterial : WindowMaterialBase

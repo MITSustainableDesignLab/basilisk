@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-
-using ArchsimLib;
+﻿using System.ComponentModel;
 
 using Basilisk.Controls.Attributes;
 
@@ -14,10 +11,7 @@ namespace Basilisk.Controls.InterfaceModels
     {
         public override LibraryComponent Duplicate()
         {
-            var res = new WindowConstruction()
-            {
-                Type = Type
-            };
+            var res = new WindowConstruction();
             res.CopyBasePropertiesFrom(this);
             return res;
         }
@@ -25,11 +19,7 @@ namespace Basilisk.Controls.InterfaceModels
         public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
         {
             var c = (WindowConstruction)other;
-            Type = c.Type;
             CopyBasePropertiesFrom(c, coord);
         }
-
-        [SimulationSetting]
-        public GlazingConstructionTypes Type { get; set; }
     }
 }

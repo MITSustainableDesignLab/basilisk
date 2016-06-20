@@ -18,27 +18,20 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<Core.LibraryComponent, LibraryComponent>();
             Mapper
-                .CreateMap<ArchsimLib.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comment))
-                .ForMember(dest => dest.Category, opt => opt.Ignore());
+                .CreateMap<Core.MaterialBase, MaterialBase>()
+                .IncludeBase<Core.LibraryComponent, LibraryComponent>();
             Mapper
-                .CreateMap<ArchsimLib.BaseMaterial, MaterialBase>()
-                .IncludeBase<ArchsimLib.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Conductivity, opt => opt.Ignore())
-                .ForMember(dest => dest.Density, opt => opt.Ignore())
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
+                .CreateMap<Core.OpaqueMaterial, OpaqueMaterial>()
+                .IncludeBase<Core.MaterialBase, MaterialBase>();
             Mapper
-                .CreateMap<ArchsimLib.OpaqueMaterial, OpaqueMaterial>()
-                .IncludeBase<ArchsimLib.BaseMaterial, MaterialBase>();
+                .CreateMap<Core.WindowMaterialBase, WindowMaterialBase>()
+                .IncludeBase<Core.MaterialBase, MaterialBase>();
             Mapper
-                .CreateMap<ArchsimLib.WindowMaterialBase, WindowMaterialBase>()
-                .IncludeBase<ArchsimLib.BaseMaterial, MaterialBase>();
+                .CreateMap<Core.GlazingMaterial, GlazingMaterial>()
+                .IncludeBase<Core.WindowMaterialBase, WindowMaterialBase>();
             Mapper
-                .CreateMap<ArchsimLib.GlazingMaterial, GlazingMaterial>()
-                .IncludeBase<ArchsimLib.WindowMaterialBase, WindowMaterialBase>();
-            Mapper
-                .CreateMap<ArchsimLib.GasMaterial, GasMaterial>()
-                .IncludeBase<ArchsimLib.WindowMaterialBase, WindowMaterialBase>();
+                .CreateMap<Core.GasMaterial, GasMaterial>()
+                .IncludeBase<Core.WindowMaterialBase, WindowMaterialBase>();
             Mapper
                 .CreateMap<Core.ConstructionBase, ConstructionBase>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>();
@@ -119,36 +112,21 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<LibraryComponent, Core.LibraryComponent>();
             Mapper
-                .CreateMap<LibraryComponent, ArchsimLib.LibraryComponent>()
-                .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comments));
+                .CreateMap<MaterialBase, Core.MaterialBase>()
+                .IncludeBase<LibraryComponent, Core.LibraryComponent>();
             Mapper
-                .CreateMap<MaterialBase, ArchsimLib.BaseMaterial>()
-                .IncludeBase<LibraryComponent, ArchsimLib.LibraryComponent>()
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Category))
-                .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.Ignore())
-                .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.Ignore())
-                .ForMember(dest => dest.Life, opt => opt.Ignore());
+                .CreateMap<OpaqueMaterial, Core.OpaqueMaterial>()
+                .IncludeBase<MaterialBase, Core.MaterialBase>();
             Mapper
-                .CreateMap<OpaqueMaterial, ArchsimLib.OpaqueMaterial>()
-                .IncludeBase<MaterialBase, ArchsimLib.BaseMaterial>()
-                .ForMember(dest => dest.PhaseChange, opt => opt.Ignore())
-                .ForMember(dest => dest.PhaseChangeProperties, opt => opt.Ignore())
-                .ForMember(dest => dest.VariableConductivity, opt => opt.Ignore())
-                .ForMember(dest => dest.VariableConductivityProperties, opt => opt.Ignore());
+                .CreateMap<WindowMaterialBase, Core.WindowMaterialBase>()
+                .IncludeBase<MaterialBase, Core.MaterialBase>()
+                .ConstructUsing((WindowMaterialBase src) => src is GlazingMaterial ? (Core.WindowMaterialBase)new Core.GlazingMaterial() : new Core.GasMaterial());
             Mapper
-                .CreateMap<WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
-                .IncludeBase<MaterialBase, ArchsimLib.BaseMaterial>()
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Category))
-                .ConstructUsing((WindowMaterialBase src) => src is GlazingMaterial ? (ArchsimLib.WindowMaterialBase)new ArchsimLib.GlazingMaterial() : new ArchsimLib.GasMaterial());
+                .CreateMap<GlazingMaterial, Core.GlazingMaterial>()
+                .IncludeBase<WindowMaterialBase, Core.WindowMaterialBase>();
             Mapper
-                .CreateMap<GlazingMaterial, ArchsimLib.GlazingMaterial>()
-                .IncludeBase<WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
-                .ForMember(dest => dest.Optical, opt => opt.Ignore())
-                .ForMember(dest => dest.OpticalData, opt => opt.Ignore());
-            Mapper
-                .CreateMap<GasMaterial, ArchsimLib.GasMaterial>()
-                .IncludeBase<WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
-                .ForMember(dest => dest.GasType, opt => opt.MapFrom(src => src.Name));
+                .CreateMap<GasMaterial, Core.GasMaterial>()
+                .IncludeBase<WindowMaterialBase, Core.WindowMaterialBase>();
             Mapper
                 .CreateMap<DaySchedule, Core.DaySchedule>()
                 .IncludeBase<LibraryComponent, Core.LibraryComponent>()
@@ -168,13 +146,13 @@ namespace Basilisk.Controls.InterfaceModels
                 .ForMember(dest => dest.Parts, opt => opt.Ignore());
 
             Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<ArchsimLib.OpaqueMaterial>>();
+                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.OpaqueMaterial>>();
             Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<ArchsimLib.WindowMaterialBase>>();
+                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.WindowMaterialBase>>();
             Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<ArchsimLib.GlazingMaterial>>();
+                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GlazingMaterial>>();
             Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<ArchsimLib.GasMaterial>>();
+                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GasMaterial>>();
             Mapper
                 .CreateMap<MassRatios, Core.MassRatios>();
 
@@ -261,6 +239,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         public static Library Create(Core.Library sourceLib)
         {
+            System.Diagnostics.Debug.Assert(!sourceLib.OrphanedComponents().Any());
             var opaqueMats = Mapper.Map<ICollection<OpaqueMaterial>>(sourceLib.OpaqueMaterials).Cast<LibraryComponent>().ToList();
             var glazingMats = Mapper.Map<ICollection<GlazingMaterial>>(sourceLib.GlazingMaterials).Cast<LibraryComponent>().ToList();
             var gasMats = Mapper.Map<ICollection<GasMaterial>>(sourceLib.GasMaterials).Cast<LibraryComponent>().ToList();
@@ -271,12 +250,12 @@ namespace Basilisk.Controls.InterfaceModels
             var opaqueConstructions =
                 sourceLib
                 .OpaqueConstructions
-                .Select(src => BuildLayeredConstruction<Core.OpaqueConstruction, OpaqueConstruction, ArchsimLib.OpaqueMaterial>(src, opaqueMatDict))
+                .Select(src => BuildLayeredConstruction<Core.OpaqueConstruction, OpaqueConstruction, Core.OpaqueMaterial>(src, opaqueMatDict))
                 .ToDictionary(c => c.Name);
             var windowConstructions =
                 sourceLib
                 .WindowConstructions
-                .Select(src => BuildLayeredConstruction<Core.WindowConstruction, WindowConstruction, ArchsimLib.WindowMaterialBase>(src, windowMatDict))
+                .Select(src => BuildLayeredConstruction<Core.WindowConstruction, WindowConstruction, Core.WindowMaterialBase>(src, windowMatDict))
                 .ToDictionary(c => c.Name);
             var structureDefinitions =
                 sourceLib
@@ -441,9 +420,9 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var newLib = new Core.Library()
             {
-                OpaqueMaterials = Mapper.Map<IEnumerable<ArchsimLib.OpaqueMaterial>>(OpaqueMaterials.Cast<OpaqueMaterial>()).ToList(),
-                GlazingMaterials = Mapper.Map<IEnumerable<ArchsimLib.GlazingMaterial>>(GlazingMaterials.Cast<GlazingMaterial>()).ToList(),
-                GasMaterials = Mapper.Map<IEnumerable<ArchsimLib.GasMaterial>>(GasMaterials.Cast<GasMaterial>()).ToList(),
+                OpaqueMaterials = Mapper.Map<IEnumerable<Core.OpaqueMaterial>>(OpaqueMaterials.Cast<OpaqueMaterial>()).ToList(),
+                GlazingMaterials = Mapper.Map<IEnumerable<Core.GlazingMaterial>>(GlazingMaterials.Cast<GlazingMaterial>()).ToList(),
+                GasMaterials = Mapper.Map<IEnumerable<Core.GasMaterial>>(GasMaterials.Cast<GasMaterial>()).ToList(),
                 OpaqueConstructions = Mapper.Map<IEnumerable<Core.OpaqueConstruction>>(OpaqueConstructions.Cast<OpaqueConstruction>()).ToList(),
                 WindowConstructions = Mapper.Map<IEnumerable<Core.WindowConstruction>>(WindowConstructions.Cast<WindowConstruction>()).ToList(),
                 StructureDefinitions = Mapper.Map<IEnumerable<Core.StructureInformation>>(StructureDefinitions.Cast<StructureInformation>()).ToList(),
@@ -462,7 +441,7 @@ namespace Basilisk.Controls.InterfaceModels
                     c
                     .Layers
                     .Where(layer => layer.Material != null)
-                    .Select(layer => new Core.MaterialLayer<ArchsimLib.OpaqueMaterial>()
+                    .Select(layer => new Core.MaterialLayer<Core.OpaqueMaterial>()
                     {
                         Material = knownOpaqueMaterials[layer.Material.Name],
                         Thickness = layer.Thickness
@@ -475,7 +454,7 @@ namespace Basilisk.Controls.InterfaceModels
                     c
                     .Layers
                     .Where(layer => layer.Material != null)
-                    .Select(layer => new Core.MaterialLayer<ArchsimLib.WindowMaterialBase>()
+                    .Select(layer => new Core.MaterialLayer<Core.WindowMaterialBase>()
                     {
                         Material = knownWindowMaterials[layer.Material.Name],
                         Thickness = layer.Thickness
@@ -685,7 +664,7 @@ namespace Basilisk.Controls.InterfaceModels
         private static DestT BuildLayeredConstruction<SourceT, DestT, MaterialT>(SourceT src, Dictionary<string, LibraryComponent> matDict)
             where SourceT : Core.LayeredConstruction<MaterialT>
             where DestT : LayeredConstruction
-            where MaterialT : ArchsimLib.BaseMaterial
+            where MaterialT : Core.MaterialBase
         {
             var dest = Mapper.Map<DestT>(src);
             var layers =
@@ -741,6 +720,9 @@ namespace Basilisk.Controls.InterfaceModels
                 BuildingTemplates = retrieve(typeof(BuildingTemplate))
             };
             var core = sub.ToCoreLibrary();
+#if DEBUG
+            System.Diagnostics.Debug.Assert(!core.OrphanedComponents().Any());
+#endif
             return core;
         }
 

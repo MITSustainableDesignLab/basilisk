@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-
-using ArchsimLib;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Basilisk.Core
 {
@@ -12,9 +13,7 @@ namespace Basilisk.Core
         [DataMember]
         public ICollection<MassRatios> MassRatios { get; set; } = new List<MassRatios>();
 
-        internal override IEnumerable<LibraryComponent> ReferencedComponents
-        {
-            get { throw new System.NotImplementedException(); }
-        }
+        internal override IEnumerable<LibraryComponent> ReferencedComponents =>
+            MassRatios.Select(m => m.Material);
     }
 }

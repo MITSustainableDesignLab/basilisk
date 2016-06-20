@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Runtime.Serialization;
-
-using MaterialBase = ArchsimLib.BaseMaterial;
+using System.Threading.Tasks;
 
 namespace Basilisk.Core
 {

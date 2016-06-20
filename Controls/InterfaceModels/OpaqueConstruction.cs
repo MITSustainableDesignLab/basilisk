@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 
-using Basilisk.Controls.Attributes;
-
-using ArchsimLib;
 using System;
+
+using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -22,11 +21,7 @@ namespace Basilisk.Controls.InterfaceModels
         public override void OverwriteWith(LibraryComponent other, ComponentCoordinator coord)
         {
             var c = (OpaqueConstruction)other;
-            Type = c.Type;
             CopyBasePropertiesFrom(c, coord);
         }
-
-        [SimulationSetting]
-        public ConstructionTypes Type { get; set; }
     }
 }

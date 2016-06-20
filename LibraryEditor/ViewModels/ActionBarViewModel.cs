@@ -221,6 +221,10 @@ namespace Basilisk.LibraryEditor.ViewModels
                     catch { }
                     if (newLib != null)
                     {
+#if DEBUG
+                        var orphanCount = newLib.OrphanedComponents().Count();
+                        if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
+#endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
                         parent.CurrentLibraryPath = path;
                         parent.HasUnsavedChanges = false;
@@ -233,6 +237,10 @@ namespace Basilisk.LibraryEditor.ViewModels
                     catch { }
                     if (newLib != null)
                     {
+#if DEBUG
+                        var orphanCount = newLib.OrphanedComponents().Count();
+                        if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
+#endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
                         parent.CurrentLibraryPath = path;
                         parent.HasUnsavedChanges = false;
@@ -251,6 +259,10 @@ namespace Basilisk.LibraryEditor.ViewModels
                             "Legacy library loaded",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
+#if DEBUG
+                        var orphanCount = newLib.OrphanedComponents().Count();
+                        if (orphanCount > 0) { MessageBox.Show($"{orphanCount} orphaned object(s)"); }
+#endif
                         SetActiveLibrary(Library.Create(newLib), ignoreUnsavedChanges: true);
                         parent.CurrentLibraryPath = null;
                         parent.HasUnsavedChanges = false;
@@ -294,6 +306,13 @@ namespace Basilisk.LibraryEditor.ViewModels
             try
             {
                 var coreLib = parent.LoadedLibrary.ToCoreLibrary();
+#if DEBUG
+                var orphanCount = coreLib.OrphanedComponents().Count();
+                if (orphanCount > 0)
+                {
+                    MessageBox.Show($"{orphanCount} orphaned component(s)");
+                }
+#endif
                 var extension = Path.GetExtension(path);
                 if (extension == ".json")
                 {

@@ -7,7 +7,7 @@ using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    [UseDefaultValuesOf(typeof(ArchsimLib.OpaqueMaterial))]
+    [UseDefaultValuesOf(typeof(Core.OpaqueMaterial))]
     [DisplayName("opaque material")]
     [ComponentNamespace]
     public class OpaqueMaterial : MaterialBase

@@ -10,8 +10,6 @@ using System.Xml;
 
 using Newtonsoft.Json;
 
-using ArchsimLib;
-
 using JsonFormatting = Newtonsoft.Json.Formatting;
 
 namespace Basilisk.Core
@@ -98,11 +96,19 @@ namespace Basilisk.Core
 
         public string ToJson()
         {
+            if (OrphanedComponents().Any())
+            {
+                throw new InvalidOperationException("The component library has at least one orphaned component and cannot be serialized.");
+            }
             return JsonConvert.SerializeObject(this, JsonFormatting.Indented);
         }
-
+        
         public string ToXml()
         {
+            if (OrphanedComponents().Any())
+            {
+                throw new InvalidOperationException("The component library has at least one orphaned component and cannot be serialized.");
+            }
             using (var stringWriter = new StringWriter())
             using (var xml = XmlWriter.Create(stringWriter))
             {
@@ -110,6 +116,33 @@ namespace Basilisk.Core
                 serializer.WriteObject(xml, this);
                 return stringWriter.ToString();
             }
+        }
+
+        public IEnumerable<LibraryComponent> OrphanedComponents()
+        {
+            var known =
+                OpaqueMaterials
+                .Cast<LibraryComponent>()
+                .Concat(GlazingMaterials)
+                .Concat(GasMaterials)
+                .Concat(OpaqueConstructions)
+                .Concat(WindowConstructions)
+                .Concat(StructureDefinitions)
+                .Concat(DaySchedules)
+                .Concat(WeekSchedules)
+                .Concat(YearSchedules)
+                .Concat(DomesticHotWaterSettings)
+                .Concat(WindowSettings)
+                .Concat(ZoneConditionings)
+                .Concat(ZoneConstructionSets)
+                .Concat(ZoneLoads)
+                .Concat(VentilationSettings)
+                .Concat(Zones)
+                .Concat(BuildingTemplates);
+            return
+                known
+                .SelectMany(c => c.ReferencedComponents)
+                .Except(known);
         }
     }
 }
