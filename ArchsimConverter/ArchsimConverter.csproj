@@ -31,7 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ArchSimLib4Umi">
+    <Reference Include="ArchSimLib4Umi, Version=4.0.2.17, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dependencies\ArchSimLib4Umi.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">

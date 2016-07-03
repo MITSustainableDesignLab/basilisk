@@ -23,23 +23,30 @@ namespace Basilisk.Archsim
             Mapper
                 .CreateMap<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
                 .IncludeBase<Core.MaterialBase, ArchsimLib.BaseMaterial>();
-            Mapper
-                .CreateMap<Core.GasMaterial, ArchsimLib.GasMaterial>()
-                .IncludeBase<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase>()
-                .ForMember(dest => dest.GasType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.GasTypes), src.Type, ignoreCase: true)));
+            // GasMaterial mapping has some weird Automapper gremlin and has to be done by hand
+            // (This isn't the first Automapper gremlin I've found)
 
             Mapper
                 .CreateMap<Core.ConstructionBase, ArchsimLib.BaseConstruction>()
                 .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
+                .ForMember(dest => dest.EmbodiedEnergy, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedEnergyStdDev, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedCarbon, opt => opt.Ignore())
+                .ForMember(dest => dest.EmbodiedCarbonStdDev, opt => opt.Ignore())
+                .ForMember(dest => dest.Cost, opt => opt.Ignore())
                 .ForMember(dest => dest.Life, opt => opt.Ignore());
             Mapper
                 .CreateMap<Core.OpaqueConstruction, ArchsimLib.OpaqueConstruction>()
                 .IncludeBase<Core.ConstructionBase, ArchsimLib.BaseConstruction>()
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                .ForMember(dest => dest.Layers, opt => opt.Ignore())
+                .ForMember(dest => dest.Type, opt => opt.Ignore())
+                ;
             Mapper
                 .CreateMap<Core.WindowConstruction, ArchsimLib.GlazingConstruction>()
                 .IncludeBase<Core.ConstructionBase, ArchsimLib.BaseConstruction>()
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                .ForMember(dest => dest.Layers, opt => opt.Ignore())
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Category))
+                ;
 
             Mapper
                 .CreateMap<Core.ZoneConditioning, ArchsimLib.ZoneConditioning>()
@@ -55,7 +62,11 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.MechVentIsOn, opt => opt.MapFrom(src => src.IsMechVentOn))
                 .ForMember(dest => dest.MechVentSchedule, opt => opt.ResolveUsing(src => src.MechVentSchedule.Name))
                 .ForMember(dest => dest.MinFreshAirArea, opt => opt.MapFrom(src => src.MinFreshAirPerArea))
-                .ForMember(dest => dest.MinFreshAirPerson, opt => opt.MapFrom(src => src.MinFreshAirPerPerson));
+                .ForMember(dest => dest.MinFreshAirPerson, opt => opt.MapFrom(src => src.MinFreshAirPerPerson))
+                .ForMember(dest => dest.HumidistatOnOff, opt => opt.Ignore())
+                .ForMember(dest => dest.MinHumidity, opt => opt.Ignore())
+                .ForMember(dest => dest.MaxHumidity, opt => opt.Ignore())
+                ;
             Mapper
                 .CreateMap<Core.DomesticHotWaterSettings, ArchsimLib.DomHotWater>()
                 .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
@@ -69,20 +80,30 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.LightsAvailibilitySchedule, opt => opt.ResolveUsing(src => src.LightsAvailabilitySchedule.Name))
                 .ForMember(dest => dest.LightsIsOn, opt => opt.MapFrom(src => src.IsLightingOn))
                 .ForMember(dest => dest.OccupancySchedule, opt => opt.ResolveUsing(src => src.OccupancySchedule.Name))
-                .ForMember(dest => dest.PeopleIsOn, opt => opt.MapFrom(src => src.IsPeopleOn));
+                .ForMember(dest => dest.PeopleIsOn, opt => opt.MapFrom(src => src.IsPeopleOn))
+                .ForMember(dest => dest.MetabolicRate, opt => opt.Ignore())
+                ;
             Mapper
                 .CreateMap<Core.ZoneConstructions, ArchsimLib.ZoneConstruction>()
                 .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
                 .ForMember(dest => dest.FacadeConstruction, opt => opt.ResolveUsing(src => src.Facade.Name))
-                .ForMember(dest => dest.FacadeIsAdiabatic, opt => opt.MapFrom(src => src.IsFacadeAdiabatic))
+                .ForMember(dest => dest.FacadeIsAdiabatic, opt => opt.Ignore())
                 .ForMember(dest => dest.GroundConstruction, opt => opt.ResolveUsing(src => src.Ground.Name))
-                .ForMember(dest => dest.GroundIsAdiabatic, opt => opt.MapFrom(src => src.IsGroundAdiabatic))
+                .ForMember(dest => dest.GroundIsAdiabatic, opt => opt.Ignore())
                 .ForMember(dest => dest.PartitionConstruction, opt => opt.ResolveUsing(src => src.Partition.Name))
-                .ForMember(dest => dest.PartitionIsAdiabatic, opt => opt.MapFrom(src => src.IsPartitionAdiabatic))
+                .ForMember(dest => dest.PartitionIsAdiabatic, opt => opt.Ignore())
                 .ForMember(dest => dest.RoofConstruction, opt => opt.ResolveUsing(src => src.Roof.Name))
-                .ForMember(dest => dest.RoofIsAdiabatic, opt => opt.MapFrom(src => src.IsRoofAdiabatic))
+                .ForMember(dest => dest.RoofIsAdiabatic, opt => opt.Ignore())
                 .ForMember(dest => dest.SlabConstruction, opt => opt.ResolveUsing(src => src.Slab.Name))
-                .ForMember(dest => dest.SlabIsAdiabatic, opt => opt.MapFrom(src => src.IsSlabAdiabatic));
+                .ForMember(dest => dest.SlabIsAdiabatic, opt => opt.Ignore())
+                .ForMember(dest => dest.DaylightMeshResolution, opt => opt.Ignore())
+                .ForMember(dest => dest.DaylightWorkplaneHeight, opt => opt.Ignore())
+                .ForMember(dest => dest.SurfaceConvectionModelInside, opt => opt.Ignore())
+                .ForMember(dest => dest.SurfaceConvectionModelOutside, opt => opt.Ignore())
+                .ForMember(dest => dest.ZonePriority, opt => opt.Ignore())
+                .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore())
+                .ForMember(dest => dest.InternalMassExposedAreaPerArea, opt => opt.Ignore())
+                ;
             Mapper
                 .CreateMap<Core.ZoneVentilation, ArchsimLib.ZoneVentilation>()
                 .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
@@ -90,6 +111,7 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.BuoyancyDrivenIsOn, opt => opt.MapFrom(src => src.IsBuoyancyOn))
                 .ForMember(dest => dest.InfiltrationAch, opt => opt.MapFrom(src => src.Infiltration))
                 .ForMember(dest => dest.InfiltrationIsOn, opt => opt.MapFrom(src => src.IsInfiltrationOn))
+                .ForMember(dest => dest.InfiltrationModel, opt => opt.Ignore())
                 .ForMember(dest => dest.NatVentIsOn, opt => opt.MapFrom(src => src.IsNatVentOn))
                 .ForMember(dest => dest.NatVentMaxOutAirTemp, opt => opt.MapFrom(src => src.NatVentMaxOutdoorAirTemp))
                 .ForMember(dest => dest.NatVentMaxRelHum, opt => opt.MapFrom(src => src.NatVentMaxRelHumidity))
@@ -104,12 +126,7 @@ namespace Basilisk.Archsim
             Mapper
                 .CreateMap<Core.ZoneDefinition, ArchsimLib.ZoneDefinition>()
                 .IncludeBase<Core.LibraryComponent, ArchsimLib.LibraryComponent>()
-                .ForMember(dest => dest.SurfaceConvectionModelInside, opt => opt.Ignore())
-                .ForMember(dest => dest.SurfaceConvectionModelOutside, opt => opt.Ignore())
                 .ForMember(dest => dest.ZoneMultiplier, opt => opt.Ignore())
-                .ForMember(dest => dest.ZonePriority, opt => opt.Ignore())
-                .ForMember(dest => dest.InternalMassConstruction, opt => opt.ResolveUsing(zone => zone.InternalMassConstruction.Name))
-                .ForMember(dest => dest.InternalMassExposedAreaPerArea, opt => opt.MapFrom(src => src.InternalMassExposedPerFloorArea))
                 .ForMember(dest => dest.DomHotWater, opt => opt.MapFrom(src => src.DomesticHotWater))
                 .ForMember(dest => dest.Materials, opt => opt.MapFrom(src => src.Constructions));
 
@@ -125,7 +142,14 @@ namespace Basilisk.Archsim
                 .ForMember(dest => dest.ShadingSystemSetPoint, opt => opt.MapFrom(src => src.ShadingSystemSetpoint))
                 .ForMember(dest => dest.ShadingSystemType, opt => opt.ResolveUsing(src => Enum.Parse(typeof(ArchsimLib.ShadingType), src.ShadingSystemType.ToString(), ignoreCase: true)))
                 .ForMember(dest => dest.ZoneMixingAvailibilitySchedule, opt => opt.ResolveUsing(src => src.ZoneMixingAvailabilitySchedule.Name))
-                .ForMember(dest => dest.ZoneMixingIsOn, opt => opt.MapFrom(src => src.IsZoneMixingOn));
+                .ForMember(dest => dest.ZoneMixingIsOn, opt => opt.MapFrom(src => src.IsZoneMixingOn))
+                .ForMember(dest => dest.FrameWidth, opt => opt.Ignore())
+                .ForMember(dest => dest.FrameProjection, opt => opt.Ignore())
+                .ForMember(dest => dest.FrameConductance, opt => opt.Ignore())
+                .ForMember(dest => dest.DividerWidth, opt => opt.Ignore())
+                .ForMember(dest => dest.InsideSillRevealDepth, opt => opt.Ignore())
+                .ForMember(dest => dest.HasFrame, opt => opt.Ignore())
+                ;
 
             Mapper.AssertConfigurationIsValid();
         }
@@ -214,8 +238,12 @@ namespace Basilisk.Archsim
         public static ArchsimLib.DomHotWater Convert(Core.DomesticHotWaterSettings dhw) =>
             Mapper.Map<ArchsimLib.DomHotWater>(dhw);
 
-        public static ArchsimLib.GasMaterial Convert(Core.GasMaterial gas) =>
-            Mapper.Map<ArchsimLib.GasMaterial>(gas);
+        public static ArchsimLib.GasMaterial Convert(Core.GasMaterial gas)
+        {
+            var type = default(ArchsimLib.GasTypes);
+            Enum.TryParse<ArchsimLib.GasTypes>(gas.Name, ignoreCase: true, result: out type);
+            return new ArchsimLib.GasMaterial(type);
+        }
 
         public static ArchsimLib.GlazingConstruction Convert(Core.WindowConstruction window, Func<Core.WindowMaterialBase, ArchsimLib.WindowMaterialBase> getArchsimMat)
         {
@@ -250,6 +278,10 @@ namespace Basilisk.Archsim
         public static ArchsimLib.OpaqueConstruction Convert(Core.OpaqueConstruction c, Func<Core.OpaqueMaterial, ArchsimLib.OpaqueMaterial> getArchsimMat)
         {
             var res = Mapper.Map<ArchsimLib.OpaqueConstruction>(c);
+            var type = default(ArchsimLib.ConstructionTypes);
+            var typeString = c.Category.Replace(" ", String.Empty);
+            Enum.TryParse<ArchsimLib.ConstructionTypes>(typeString, ignoreCase: true, result: out type);
+            res.Type = type;
             res.Layers =
                 c
                 .Layers
@@ -306,8 +338,13 @@ namespace Basilisk.Archsim
             return res;
         }
 
-        public static ArchsimLib.ZoneDefinition Convert(Core.ZoneDefinition zone) =>
-            Mapper.Map<ArchsimLib.ZoneDefinition>(zone);
+        public static ArchsimLib.ZoneDefinition Convert(Core.ZoneDefinition zone)
+        {
+            var res = Mapper.Map<ArchsimLib.ZoneDefinition>(zone);
+            res.Materials.InternalMassExposedAreaPerArea = zone.InternalMassExposedPerFloorArea;
+            res.Materials.InternalMassConstruction = zone.InternalMassConstruction?.Name;
+            return res;
+        }
 
         public static void VerifyZoneConstructions(ArchsimLib.Library lib)
         {
