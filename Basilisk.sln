@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25029.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{42344A7E-CB0E-4205-8E55-337E19740E55}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Legacy", "Legacy\Legacy.csproj", "{D10397A3-DB71-45E4-AA58-C1C1E9158C2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryEditor", "LibraryEditor\LibraryEditor.csproj", "{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchsimConverter", "ArchsimConverter\ArchsimConverter.csproj", "{2B7D5A88-1FB8-490D-8437-FA32131F49AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52E5081F-7561-482D-AAAB-405CA79D81ED}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,10 +38,6 @@ Global
 		{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA5DEDA2-4480-4CCA-BCE4-381D86DDAD5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B7D5A88-1FB8-490D-8437-FA32131F49AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
