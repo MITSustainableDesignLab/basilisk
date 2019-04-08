@@ -115,7 +115,7 @@ namespace Basilisk.Controls
 
                 var selected = tree.SelectedItems.Where(o => o is LibraryComponent).Cast<LibraryComponent>();
                 if (!selected.Any()) { return; }
-                var all = selected.Concat(selected.SelectMany(c => c.AllReferencedComponents));
+                var all = selected.Concat(selected.SelectMany(c => c.AllReferencedComponents)).Distinct();
                 var json = Library.CreateSublibrary(all).ToJson();
                 var identifiedJson = new SourcedLibraryJson()
                 {
