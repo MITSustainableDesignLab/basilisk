@@ -17,7 +17,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-steps:
 - task: UseDotNet@2
   displayName: 'Use .NET Core SDK'
   inputs:
