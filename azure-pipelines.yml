@@ -32,7 +32,7 @@ steps:
 - powershell: .\version-tag-to-env-var.ps1
 
 - task: NuGetCommand@2
-  displyName: 'NuGet pack'
+  displayName: 'NuGet pack'
   inputs:
     command: pack
     versioningScheme: byEnvVar
