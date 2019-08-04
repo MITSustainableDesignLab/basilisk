@@ -4,7 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
-- master
+  tags:
+    include:
+    - v*
 
 pool:
   vmImage: 'windows-latest'
@@ -27,7 +29,18 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- powershell: .\version-tag-to-env-var.ps1
+
+- task: NuGetCommand@2
+  displyName: 'NuGet pack'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: pack
+    versioningScheme: byEnvVar
+    versionEnvVar: BasiliskVersion
+
+- task: NuGetCommand@2
+  displayName: 'NuGet push'
+  inputs:
+    command: push
+    publishVstsFeed: 'basilisk-public'
+    allowPackageConflicts: true
