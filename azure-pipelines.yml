@@ -38,14 +38,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- powershell: .\version-tag-to-env-var.ps1
-
-- task: NuGetCommand@2
-  displayName: 'NuGet pack'
-  inputs:
-    command: pack
-    versioningScheme: byEnvVar
-    versionEnvVar: BasiliskVersion
+- powershell: .\pack-basilisk.ps1
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
