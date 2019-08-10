@@ -1,220 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F2C68EBF-6409-47AB-9376-A13EB5358F6E}</ProjectGuid>
-    <OutputType>library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Basilisk.Controls</RootNamespace>
+    <TargetFrameworks>net45</TargetFrameworks>
     <AssemblyName>Basilisk.Controls</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
+    <RootNamespace>Basilisk.Controls</RootNamespace>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
+    <PackageReference Include="AutoMapper" Version="4.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\AssemblyInfoCommon.cs">
-      <Link>Properties\AssemblyInfoCommon.cs</Link>
-    </Compile>
-    <Compile Include="Attributes\ComponentNamespaceAttribute.cs" />
-    <Compile Include="CategoryChangedEventArgs.cs" />
-    <Compile Include="ComponentCategory.cs" />
-    <Compile Include="ComponentCategoryCollection.cs" />
-    <Compile Include="ComponentCoordinator.cs" />
-    <Compile Include="ComponentEditorTabControl.cs" />
-    <Compile Include="ComponentMetadataEditor.xaml.cs">
-      <DependentUpon>ComponentMetadataEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DayScheduleEditor.xaml.cs">
-      <DependentUpon>DayScheduleEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DayScheduleFractionEditor.xaml.cs">
-      <DependentUpon>DayScheduleFractionEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="InterfaceModels\BuildingTemplate.cs" />
-    <Compile Include="InterfaceModels\ConstructionBase.cs" />
-    <Compile Include="InterfaceModels\DaySchedule.cs" />
-    <Compile Include="InterfaceModels\GasMaterial.cs" />
-    <Compile Include="InterfaceModels\GlazingMaterial.cs" />
-    <Compile Include="InterfaceModels\IMaterialPickable.cs" />
-    <Compile Include="InterfaceModels\LayeredConstruction.cs" />
-    <Compile Include="InterfaceModels\Library.cs" />
-    <Compile Include="InterfaceModels\LibraryComponent.cs" />
-    <Compile Include="InterfaceModels\LibraryComponentSet.cs" />
-    <Compile Include="InterfaceModels\MaterialBase.cs" />
-    <Compile Include="InterfaceModels\OpaqueConstruction.cs" />
-    <Compile Include="InterfaceModels\OpaqueMaterial.cs" />
-    <Compile Include="InterfaceModels\MaterialLayer.cs" />
-    <Compile Include="InterfaceModels\StructureInformation.cs" />
-    <Compile Include="InterfaceModels\WeekSchedule.cs" />
-    <Compile Include="InterfaceModels\WindowConstruction.cs" />
-    <Compile Include="InterfaceModels\WindowMaterialBase.cs" />
-    <Compile Include="InterfaceModels\WindowSettings.cs" />
-    <Compile Include="InterfaceModels\YearSchedule.cs" />
-    <Compile Include="InterfaceModels\YearSchedulePart.cs" />
-    <Compile Include="InterfaceModels\ZoneConditioning.cs" />
-    <Compile Include="InterfaceModels\ZoneConstructions.cs" />
-    <Compile Include="InterfaceModels\ZoneDefinition.cs" />
-    <Compile Include="InterfaceModels\ZoneHotWater.cs" />
-    <Compile Include="InterfaceModels\ZoneLoads.cs" />
-    <Compile Include="InterfaceModels\ZoneVentilation.cs" />
-    <Compile Include="LibraryComponentTreeView.xaml.cs">
-      <DependentUpon>LibraryComponentTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ConstructionEditor.xaml.cs">
-      <DependentUpon>ConstructionEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="InterfaceModels\MassRatios.cs" />
-    <Compile Include="MergeCollision.cs" />
-    <Compile Include="Multiselect.cs" />
-    <Compile Include="SettingsCollection.cs" />
-    <Compile Include="SettingsGrid.xaml.cs">
-      <DependentUpon>SettingsGrid.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SettingType.cs" />
-    <Compile Include="SettingValueBinder.cs" />
-    <Compile Include="SimulationSetting.cs" />
-    <Compile Include="Attributes\SimulationSettingAttribute.cs" />
-    <Compile Include="SimulationSettingsCreator.cs" />
-    <Compile Include="SimulationSettingTemplateSelector.cs" />
-    <Compile Include="StructureEditor.xaml.cs">
-      <DependentUpon>StructureEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TypeMatchConverter.cs" />
-    <Compile Include="Attributes\UseDefaultValuesOfAttribute.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="WeekScheduleEditor.xaml.cs">
-      <DependentUpon>WeekScheduleEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WeekScheduleVisualizer.xaml.cs">
-      <DependentUpon>WeekScheduleVisualizer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="YearScheduleEditor.xaml.cs">
-      <DependentUpon>YearScheduleEditor.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="ComponentMetadataEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DayScheduleEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DayScheduleFractionEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LibraryComponentTreeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ConstructionEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SettingsGrid.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="StructureEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WeekScheduleEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WeekScheduleVisualizer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="YearScheduleEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{42344a7e-cb0e-4205-8e55-337e19740e55}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

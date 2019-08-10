@@ -1,96 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{42344A7E-CB0E-4205-8E55-337E19740E55}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>net45</TargetFrameworks>
+    <AssemblyName>Basilisk.Core</AssemblyName>
     <RootNamespace>Basilisk.Core</RootNamespace>
-    <AssemblyName>Basilisk</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Folder Include="Properties\" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\AssemblyInfoCommon.cs">
-      <Link>Properties\AssemblyInfoCommon.cs</Link>
-    </Compile>
-    <Compile Include="BlindType.cs" />
-    <Compile Include="BuildingTemplate.cs" />
-    <Compile Include="ConstructionBase.cs" />
-    <Compile Include="DaySchedule.cs" />
-    <Compile Include="DimmingType.cs" />
-    <Compile Include="DomesticHotWaterSettings.cs" />
-    <Compile Include="EconomizerType.cs" />
-    <Compile Include="GasMaterial.cs" />
-    <Compile Include="GlazingMaterial.cs" />
-    <Compile Include="HeatRecoveryType.cs" />
-    <Compile Include="IdealSystemLimit.cs" />
-    <Compile Include="LayeredConstruction.cs" />
-    <Compile Include="MassRatios.cs" />
-    <Compile Include="MaterialBase.cs" />
-    <Compile Include="LibraryComponent.cs" />
-    <Compile Include="OpaqueConstruction.cs" />
-    <Compile Include="MaterialLayer.cs" />
-    <Compile Include="OpaqueMaterial.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Library.cs" />
-    <Compile Include="ShadingType.cs" />
-    <Compile Include="StructureInformation.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="WeekSchedule.cs" />
-    <Compile Include="WindowConstruction.cs" />
-    <Compile Include="WindowMaterialBase.cs" />
-    <Compile Include="WindowSettings.cs" />
-    <Compile Include="WindowType.cs" />
-    <Compile Include="YearSchedule.cs" />
-    <Compile Include="YearSchedulePart.cs" />
-    <Compile Include="ZoneConditioning.cs" />
-    <Compile Include="ZoneConstructions.cs" />
-    <Compile Include="ZoneDefinition.cs" />
-    <Compile Include="ZoneLoads.cs" />
-    <Compile Include="ZoneVentilation.cs" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
