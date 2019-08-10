@@ -22,11 +22,12 @@ steps:
     packageType: 'sdk'
     version: '3.x'
     includePreviewVersions: true
+    installationPath: 'C:\Program Files\dotnet'
     
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: 'ls "C:\Program Files\dotnet\sdk"; $env:MSBuildSDKsPath'
+    script: 'ls "C:\Program Files\dotnet\sdk"'
 
 - task: NuGetToolInstaller@1
 
