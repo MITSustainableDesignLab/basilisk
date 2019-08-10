@@ -39,11 +39,6 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - powershell: .\version-tag-to-env-var.ps1
-    
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: '$env:BasiliskVersion'
 
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
