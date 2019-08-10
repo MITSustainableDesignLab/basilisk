@@ -41,8 +41,8 @@ steps:
 - powershell: .\pack-basilisk.ps1 -TargetsDir $(Build.ArtifactStagingDirectory)
 
 - task: NuGetCommand@2
-  displayName: 'NuGet push'
   inputs:
-    command: push
-    publishVstsFeed: 'basilisk-public'
-    allowPackageConflicts: true
+    command: 'push'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'bba043b4-7881-4113-893f-afa6407d0589/14249dea-5581-4b50-86bf-4d1642f136b4'
+    publishPackageMetadata: false
