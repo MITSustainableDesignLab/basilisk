@@ -26,7 +26,7 @@ steps:
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: 'dotnet --version'
+    script: 'ls "C:\Program Files\dotnet\sdk"; $env:MSBuildSDKsPath'
 
 - task: NuGetToolInstaller@1
 
