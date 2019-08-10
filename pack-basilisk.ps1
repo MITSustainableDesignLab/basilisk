@@ -22,4 +22,4 @@ if (!$Version) {
     exit 1
 }
 
-dotnet pack --no-build -p:PackageVersion=$Version -p:FileVersion=$Version -o targets
+dotnet pack --no-build -p:PackageVersion=$Version -p:FileVersion=$Version -o targets -c Release
