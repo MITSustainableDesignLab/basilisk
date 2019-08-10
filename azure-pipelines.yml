@@ -15,7 +15,6 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  MSBuildSDKsPath: 'C:\Program Files\dotnet\sdk\3.0.100-preview7-012821\Sdks'
 
 steps:
 - task: UseDotNet@2
@@ -23,7 +22,6 @@ steps:
   inputs:
     packageType: sdk
     version: 3.0.100-preview7-012821
-    installationPath: $(MSBuildSDKsPath)
 
 - task: NuGetToolInstaller@1
 
