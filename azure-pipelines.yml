@@ -38,7 +38,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- powershell: .\pack-basilisk.ps1
+- powershell: .\pack-basilisk.ps1 -TargetsDir $(Build.ArtifactStagingDirectory)
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
@@ -46,4 +46,3 @@ steps:
     command: push
     publishVstsFeed: 'basilisk-public'
     allowPackageConflicts: true
-    basePath: 'targets'

@@ -1,5 +1,6 @@
 param (
-    [string]$Version
+    [string]$Version,
+    [string]$TargetsDir = 'targets'
 )
 
 if (!$Version) {
@@ -22,4 +23,4 @@ if (!$Version) {
     exit 1
 }
 
-dotnet pack --no-build -p:PackageVersion=$Version -p:FileVersion=$Version -o targets -c Release
+dotnet pack --no-build -p:PackageVersion=$Version -p:FileVersion=$Version -o $TargetsDir -c Release
