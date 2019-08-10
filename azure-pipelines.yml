@@ -46,3 +46,4 @@ steps:
     command: push
     publishVstsFeed: 'basilisk-public'
     allowPackageConflicts: true
+    basePath: 'targets'
