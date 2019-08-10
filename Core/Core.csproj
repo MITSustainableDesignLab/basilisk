@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45</TargetFrameworks>
-    <AssemblyName>Basilisk.Core</AssemblyName>
+    <AssemblyName>Basilisk</AssemblyName>
     <RootNamespace>Basilisk.Core</RootNamespace>
   </PropertyGroup>
 
