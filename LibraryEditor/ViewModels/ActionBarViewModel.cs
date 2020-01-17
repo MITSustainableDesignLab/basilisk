@@ -218,7 +218,14 @@ namespace Basilisk.LibraryEditor.ViewModels
                     {
                         newLib = Core.Library.FromJson(File.ReadAllText(path));
                     }
-                    catch { }
+                    catch (JsonSerializationException e)
+                    {
+                        MessageBox.Show(
+                            $"Error loading library: {e.Message}",
+                            "Error loading library",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
                     if (newLib != null)
                     {
 #if DEBUG
