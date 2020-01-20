@@ -20,8 +20,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '3.0.100-preview7-012821'
-    includePreviewVersions: true
+    version: '3.0.x'
     installationPath: 'C:\Program Files\dotnet'
 
 - task: NuGetToolInstaller@1
