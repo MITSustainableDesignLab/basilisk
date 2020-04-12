@@ -29,6 +29,9 @@ namespace Basilisk.Core
         [DataMember]
         public WindowSettings Windows { get; set; }
 
+        [DataMember]
+        public double DefaultWindowToWallRatio { get; set; } = 0.4;
+
         internal override IEnumerable<LibraryComponent> ReferencedComponents
         {
             get

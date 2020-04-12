@@ -30,6 +30,9 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting]
         public WindowSettings Windows { get; set; }
 
+        [SimulationSetting(DisplayName = "Default WWR")]
+        public double DefaultWindowToWallRatio { get; set; }
+
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {
             get
