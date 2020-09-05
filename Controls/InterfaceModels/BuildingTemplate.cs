@@ -33,6 +33,28 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Default WWR")]
         public double DefaultWindowToWallRatio { get; set; }
 
+        [SimulationSetting(Description = "Start year for range")]
+        public double FromYear { get; set; }
+
+        [SimulationSetting(Description = "End year for range")]
+        public double ToYear { get; set; }
+
+        [SimulationSetting(Description = "alpha-3 Country Code")]
+        public string Country { get; set; }
+
+        [SimulationSetting(Description = "ANSI/ASHRAE/IESNA Standard 90.1 International Climatic Zone")]
+        public string ClimateZone { get; set; }
+
+        [SimulationSetting(Description = "Author of this template")]
+        public string Author { get; set; }
+
+        [SimulationSetting(Description = "Contact information")]
+        public string AuthorEmail { get; set; }
+
+        [SimulationSetting(Description = "Version number")]
+        public string Version { get; set; }
+
+
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {
             get

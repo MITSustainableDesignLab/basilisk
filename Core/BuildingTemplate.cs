@@ -32,6 +32,28 @@ namespace Basilisk.Core
         [DataMember]
         public double DefaultWindowToWallRatio { get; set; } = 0.4;
 
+        [DataMember]
+        public int FromYear { get; set; }
+
+        [DataMember]
+        public int ToYear { get; set; }
+
+        [DataMember]
+        public string Country { get; set; }
+
+        [DataMember]
+        public string ClimateZone { get; set; }
+
+        [DataMember]
+        public string Author { get; set; }
+
+        [DataMember]
+        public string AuthorEmail { get; set; }
+
+        [DataMember] 
+        public string Version { get; set; } = "v1.0";
+
+
         internal override IEnumerable<LibraryComponent> ReferencedComponents
         {
             get
