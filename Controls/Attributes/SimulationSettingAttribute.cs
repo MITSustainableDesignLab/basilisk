@@ -18,6 +18,7 @@ namespace Basilisk.Controls.Attributes
         public Type EnumType { get; set; }
         public SettingType SettingType { get; set; }
         public string Units { get; set; }
+        public string Description { get; set; }
 
         public string[] EnumChoices
         {

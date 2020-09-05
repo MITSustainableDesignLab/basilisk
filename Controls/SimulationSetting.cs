@@ -24,11 +24,12 @@ namespace Basilisk.Controls
             PropertyInfo prop,
             string displayName,
             string units,
+            string description,
             ComponentCoordinator coordinator,
             SettingType type = SettingType.Unspecified)
         {
             var multiple = component as LibraryComponentSet;
-            components = multiple == null ? new List<LibraryComponent>() { component } : multiple.Components.ToList();
+            components = multiple == null ? new List<LibraryComponent>() {component} : multiple.Components.ToList();
             this.prop = prop;
             this.coordinator = coordinator;
 
@@ -69,6 +70,7 @@ namespace Basilisk.Controls
                     throw new ArgumentException("Unknown setting type", nameof(type));
                 }
             }
+
             SettingType = type;
             if (SettingType == SettingType.Enum)
             {
@@ -76,6 +78,7 @@ namespace Basilisk.Controls
             }
 
             Units = units;
+            Description = description;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -87,6 +90,7 @@ namespace Basilisk.Controls
         public bool ShowMultivalueDescription => MultipleValueDescriptionText != null;
         public Type TargetType => prop.PropertyType;
         public string Units { get; }
+        public string Description { get; }
 
         public object SingleValue
         {
