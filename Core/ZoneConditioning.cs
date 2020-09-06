@@ -20,6 +20,9 @@ namespace Basilisk.Core
         [DataMember, DefaultValue(IdealSystemLimit.NoLimit)]
         public IdealSystemLimit CoolingLimitType { get; set; } = IdealSystemLimit.NoLimit;
 
+        [DataMember, DefaultValue(FuelType.Electricity)]
+        public FuelType CoolingFuelType { get; set; } = FuelType.Electricity;
+
         [DataMember, DefaultValue(EconomizerType.NoEconomizer)]
         public EconomizerType EconomizerType { get; set; } = EconomizerType.NoEconomizer;
 
@@ -28,6 +31,9 @@ namespace Basilisk.Core
 
         [DataMember, DefaultValue(IdealSystemLimit.NoLimit)]
         public IdealSystemLimit HeatingLimitType { get; set; } = IdealSystemLimit.NoLimit;
+
+        [DataMember, DefaultValue(FuelType.NaturalGas)]
+        public FuelType HeatingFuelType { get; set; } = FuelType.NaturalGas;
 
         [DataMember]
         public YearSchedule HeatingSchedule { get; set; }
