@@ -89,7 +89,14 @@ namespace Basilisk.Controls.InterfaceModels
                 Structure = Structure,
                 PartitionRatio = PartitionRatio,
                 Lifespan = Lifespan,
-                Windows = Windows
+                Windows = Windows,
+                DefaultWindowToWallRatio = DefaultWindowToWallRatio,
+                FromYear = FromYear,
+                ToYear = ToYear,
+                ClimateZone = ClimateZone,
+                Author = Author,
+                AuthorEmail = AuthorEmail,
+                Version = Version
             };
             res.CopyBasePropertiesFrom(this);
             return res;
@@ -104,6 +111,13 @@ namespace Basilisk.Controls.InterfaceModels
             Windows = coord.GetWithSameName(c.Windows);
             PartitionRatio = c.PartitionRatio;
             Lifespan = c.Lifespan;
+            DefaultWindowToWallRatio = c.DefaultWindowToWallRatio;
+            FromYear = c.FromYear;
+            ToYear = c.ToYear;
+            ClimateZone = c.ClimateZone;
+            Author = c.Author;
+            AuthorEmail = c.AuthorEmail;
+            Version = c.Version;
             CopyBasePropertiesFrom(c);
         }
     }
