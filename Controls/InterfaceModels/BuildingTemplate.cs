@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -39,17 +39,17 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(Description = "End year for range")]
         public int YearTo { get; set; }
 
-        [SimulationSetting(Description = "alpha-3 Country Code")]
-        public string Country { get; set; }
+        [SimulationSetting(Description = "alpha-3 Country Code; comma separated for multiple values")]
+        public string[] Country { get; set; }
 
-        [SimulationSetting(Description = "ANSI/ASHRAE/IESNA Standard 90.1 International Climatic Zone")]
-        public string ClimateZone { get; set; }
+        [SimulationSetting(Description = "ANSI/ASHRAE/IESNA Standard 90.1 International Climatic Zone; comma separated for multiple values")]
+        public string[] ClimateZone { get; set; }
 
-        [SimulationSetting(Description = "Author of this template")]
-        public string Author { get; set; }
+        [SimulationSetting(Description = "Authors of this template; comma separated for multiple values")]
+        public string[] Authors { get; set; }
 
-        [SimulationSetting(Description = "Contact information")]
-        public string AuthorEmail { get; set; }
+        [SimulationSetting(Description = "Contact information; comma separated for multiple values")]
+        public string[] AuthorEmails { get; set; }
 
         [SimulationSetting(Description = "Version number")]
         public string Version { get; set; }
@@ -93,9 +93,10 @@ namespace Basilisk.Controls.InterfaceModels
                 DefaultWindowToWallRatio = DefaultWindowToWallRatio,
                 YearFrom = YearFrom,
                 YearTo = YearTo,
+                Country = Country,
                 ClimateZone = ClimateZone,
-                Author = Author,
-                AuthorEmail = AuthorEmail,
+                Authors = Authors,
+                AuthorEmails = AuthorEmails,
                 Version = Version
             };
             res.CopyBasePropertiesFrom(this);
@@ -114,9 +115,10 @@ namespace Basilisk.Controls.InterfaceModels
             DefaultWindowToWallRatio = c.DefaultWindowToWallRatio;
             YearFrom = c.YearFrom;
             YearTo = c.YearTo;
+            Country = c.Country;
             ClimateZone = c.ClimateZone;
-            Author = c.Author;
-            AuthorEmail = c.AuthorEmail;
+            Authors = c.Authors;
+            AuthorEmails = c.AuthorEmails;
             Version = c.Version;
             CopyBasePropertiesFrom(c);
         }

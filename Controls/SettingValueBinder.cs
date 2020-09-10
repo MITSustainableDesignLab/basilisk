@@ -42,6 +42,10 @@ namespace Basilisk.Controls
                 {
                     return entry.Split(',').Select(Double.Parse).ToArray();
                 }
+                else if (type == typeof(string[]))
+                {
+                    return entry.Split(',').Select(a=>a.Trim()).ToArray();
+                }
                 else
                 {
                     throw new NotSupportedException($"Unsupported simulation setting type '{type}'");

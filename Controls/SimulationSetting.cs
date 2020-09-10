@@ -65,6 +65,10 @@ namespace Basilisk.Controls
                 {
                     type = SettingType.RealArray;
                 }
+                else if (prop.PropertyType == typeof(string[]))
+                {
+                    type = SettingType.StringArray;
+                }
                 else
                 {
                     throw new ArgumentException("Unknown setting type", nameof(type));
@@ -109,6 +113,11 @@ namespace Basilisk.Controls
                 {
                     if (distinct[0] == null) { return null; }
                     return String.Join(",", (double[])distinct.Single());
+                }
+                else if (prop.PropertyType == typeof(string[]) && distinct.Count() == 1)
+                {
+                    if (distinct[0] == null) { return null; }
+                    return String.Join(", ", (string[])distinct.Single());
                 }
                 return distinct.Count() == 1 ? distinct.Single() : null;
             }
@@ -164,6 +173,20 @@ namespace Basilisk.Controls
                     if (vals.Count() == 1)
                     {
                         var val = (double[])vals.Single();
+                        return String.Join(",", val);
+                    }
+                    else
+                    {
+                        return "<multiple values>";
+                    }
+                }
+                else if (prop.PropertyType == typeof(string[]))
+                {
+                    var cmp = new EqualityComparerGenericWrapper(StructuralComparisons.StructuralEqualityComparer);
+                    var vals = components.Select(prop.GetValue).Distinct(cmp);
+                    if (vals.Count() == 1)
+                    {
+                        var val = (string[])vals.Single();
                         return String.Join(",", val);
                     }
                     else

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -39,16 +39,16 @@ namespace Basilisk.Core
         public int? YearTo { get; set; }
 
         [DataMember]
-        public string Country { get; set; }
+        public string[] Country { get; set; }
 
         [DataMember]
-        public string ClimateZone { get; set; }
+        public string[] ClimateZone { get; set; }
 
         [DataMember]
-        public string Author { get; set; }
+        public string[] Authors { get; set; }
 
         [DataMember]
-        public string AuthorEmail { get; set; }
+        public string[] AuthorEmails { get; set; }
 
         [DataMember] 
         public string Version { get; set; } = "v1.0";
