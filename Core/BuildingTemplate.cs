@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -33,10 +33,10 @@ namespace Basilisk.Core
         public double DefaultWindowToWallRatio { get; set; } = 0.4;
 
         [DataMember]
-        public int FromYear { get; set; }
+        public int? YearFrom { get; set; }
 
         [DataMember]
-        public int ToYear { get; set; }
+        public int? YearTo { get; set; }
 
         [DataMember]
         public string Country { get; set; }

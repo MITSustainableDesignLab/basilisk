@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -34,10 +34,10 @@ namespace Basilisk.Controls.InterfaceModels
         public double DefaultWindowToWallRatio { get; set; }
 
         [SimulationSetting(Description = "Start year for range")]
-        public double FromYear { get; set; }
+        public int YearFrom { get; set; }
 
         [SimulationSetting(Description = "End year for range")]
-        public double ToYear { get; set; }
+        public int YearTo { get; set; }
 
         [SimulationSetting(Description = "alpha-3 Country Code")]
         public string Country { get; set; }
@@ -91,8 +91,8 @@ namespace Basilisk.Controls.InterfaceModels
                 Lifespan = Lifespan,
                 Windows = Windows,
                 DefaultWindowToWallRatio = DefaultWindowToWallRatio,
-                FromYear = FromYear,
-                ToYear = ToYear,
+                YearFrom = YearFrom,
+                YearTo = YearTo,
                 ClimateZone = ClimateZone,
                 Author = Author,
                 AuthorEmail = AuthorEmail,
@@ -112,8 +112,8 @@ namespace Basilisk.Controls.InterfaceModels
             PartitionRatio = c.PartitionRatio;
             Lifespan = c.Lifespan;
             DefaultWindowToWallRatio = c.DefaultWindowToWallRatio;
-            FromYear = c.FromYear;
-            ToYear = c.ToYear;
+            YearFrom = c.YearFrom;
+            YearTo = c.YearTo;
             ClimateZone = c.ClimateZone;
             Author = c.Author;
             AuthorEmail = c.AuthorEmail;
