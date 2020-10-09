@@ -15,7 +15,7 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Enabled")]
         public bool IsOn { get; set; }
 
-        [SimulationSetting(DisplayName = "Schedule")]
+        [SimulationSetting(DisplayName = "Flow Rate Fraction Schedule")]
         public YearSchedule WaterSchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Supply temperature", Units = "degC")]
@@ -26,7 +26,7 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(10)]
         public double WaterTemperatureInlet { get; set; } = 10;
 
-        [SimulationSetting(DisplayName = "Flow rate", Units = "m3/h/m2")]
+        [SimulationSetting(DisplayName = "Peak Flow Rate", Units = "m3/h/m2")]
         [DefaultValue(0.03)]
         public double FlowRatePerFloorArea { get; set; } = 0.03;
 
