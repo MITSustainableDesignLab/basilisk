@@ -33,6 +33,28 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Default WWR")]
         public double DefaultWindowToWallRatio { get; set; }
 
+        [SimulationSetting(Description = "Start year for range")]
+        public int YearFrom { get; set; }
+
+        [SimulationSetting(Description = "End year for range")]
+        public int YearTo { get; set; }
+
+        [SimulationSetting(Description = "alpha-3 Country Code; comma separated for multiple values")]
+        public string[] Country { get; set; }
+
+        [SimulationSetting(Description = "ANSI/ASHRAE/IESNA Standard 90.1 International Climatic Zone; comma separated for multiple values")]
+        public string[] ClimateZone { get; set; }
+
+        [SimulationSetting(Description = "Authors of this template; comma separated for multiple values")]
+        public string[] Authors { get; set; }
+
+        [SimulationSetting(Description = "Contact information; comma separated for multiple values")]
+        public string[] AuthorEmails { get; set; }
+
+        [SimulationSetting(Description = "Version number")]
+        public string Version { get; set; }
+
+
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {
             get
@@ -67,7 +89,15 @@ namespace Basilisk.Controls.InterfaceModels
                 Structure = Structure,
                 PartitionRatio = PartitionRatio,
                 Lifespan = Lifespan,
-                Windows = Windows
+                Windows = Windows,
+                DefaultWindowToWallRatio = DefaultWindowToWallRatio,
+                YearFrom = YearFrom,
+                YearTo = YearTo,
+                Country = Country,
+                ClimateZone = ClimateZone,
+                Authors = Authors,
+                AuthorEmails = AuthorEmails,
+                Version = Version
             };
             res.CopyBasePropertiesFrom(this);
             return res;
@@ -82,6 +112,14 @@ namespace Basilisk.Controls.InterfaceModels
             Windows = coord.GetWithSameName(c.Windows);
             PartitionRatio = c.PartitionRatio;
             Lifespan = c.Lifespan;
+            DefaultWindowToWallRatio = c.DefaultWindowToWallRatio;
+            YearFrom = c.YearFrom;
+            YearTo = c.YearTo;
+            Country = c.Country;
+            ClimateZone = c.ClimateZone;
+            Authors = c.Authors;
+            AuthorEmails = c.AuthorEmails;
+            Version = c.Version;
             CopyBasePropertiesFrom(c);
         }
     }

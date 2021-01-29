@@ -24,11 +24,12 @@ namespace Basilisk.Controls
             PropertyInfo prop,
             string displayName,
             string units,
+            string description,
             ComponentCoordinator coordinator,
             SettingType type = SettingType.Unspecified)
         {
             var multiple = component as LibraryComponentSet;
-            components = multiple == null ? new List<LibraryComponent>() { component } : multiple.Components.ToList();
+            components = multiple == null ? new List<LibraryComponent>() {component} : multiple.Components.ToList();
             this.prop = prop;
             this.coordinator = coordinator;
 
@@ -64,11 +65,16 @@ namespace Basilisk.Controls
                 {
                     type = SettingType.RealArray;
                 }
+                else if (prop.PropertyType == typeof(string[]))
+                {
+                    type = SettingType.StringArray;
+                }
                 else
                 {
                     throw new ArgumentException("Unknown setting type", nameof(type));
                 }
             }
+
             SettingType = type;
             if (SettingType == SettingType.Enum)
             {
@@ -76,6 +82,7 @@ namespace Basilisk.Controls
             }
 
             Units = units;
+            Description = description;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -87,6 +94,7 @@ namespace Basilisk.Controls
         public bool ShowMultivalueDescription => MultipleValueDescriptionText != null;
         public Type TargetType => prop.PropertyType;
         public string Units { get; }
+        public string Description { get; }
 
         public object SingleValue
         {
@@ -105,6 +113,11 @@ namespace Basilisk.Controls
                 {
                     if (distinct[0] == null) { return null; }
                     return String.Join(",", (double[])distinct.Single());
+                }
+                else if (prop.PropertyType == typeof(string[]) && distinct.Count() == 1)
+                {
+                    if (distinct[0] == null) { return null; }
+                    return String.Join(", ", (string[])distinct.Single());
                 }
                 return distinct.Count() == 1 ? distinct.Single() : null;
             }
@@ -160,6 +173,20 @@ namespace Basilisk.Controls
                     if (vals.Count() == 1)
                     {
                         var val = (double[])vals.Single();
+                        return String.Join(",", val);
+                    }
+                    else
+                    {
+                        return "<multiple values>";
+                    }
+                }
+                else if (prop.PropertyType == typeof(string[]))
+                {
+                    var cmp = new EqualityComparerGenericWrapper(StructuralComparisons.StructuralEqualityComparer);
+                    var vals = components.Select(prop.GetValue).Distinct(cmp);
+                    if (vals.Count() == 1)
+                    {
+                        var val = (string[])vals.Single();
                         return String.Join(",", val);
                     }
                     else

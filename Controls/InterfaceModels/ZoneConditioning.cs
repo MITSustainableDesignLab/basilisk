@@ -36,6 +36,10 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(100)]
         public double MaxHeatFlow { get; set; } = 100;
 
+        [SimulationSetting(DisplayName = "Heating fuel type", Description = "The fuel type triggers the application of consumption amounts to the appropriate energy meters. NaturalGas is the default.")]
+        [DefaultValue(FuelType.NaturalGas)]
+        public FuelType HeatingFuelType { get; set; } = FuelType.NaturalGas;
+
         [SimulationSetting(DisplayName = "Heating CoP")]
         [DefaultValue(1.0)]
         public double HeatingCoeffOfPerf { get; set; } = 1.0;
@@ -54,6 +58,10 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Cooling limit type")]
         [DefaultValue(IdealSystemLimit.NoLimit)]
         public IdealSystemLimit CoolingLimitType { get; set; } = IdealSystemLimit.NoLimit;
+
+        [SimulationSetting(DisplayName = "Cooling fuel type", Description = "The fuel type triggers the application of consumption amounts to the appropriate energy meters. Electricity is the default.")]
+        [DefaultValue(FuelType.Electricity)]
+        public FuelType CoolingFuelType { get; set; } = FuelType.Electricity;
 
         [SimulationSetting(DisplayName = "Max cooling capacity", Units = "W/m2")]
         [DefaultValue(100)]
@@ -149,6 +157,8 @@ namespace Basilisk.Controls.InterfaceModels
             to.MaxHeatingCapacity = from.MaxHeatingCapacity;
             to.MaxHeatFlow = from.MaxHeatFlow;
             to.IsCoolingOn = from.IsCoolingOn;
+            to.CoolingFuelType = from.CoolingFuelType;
+            to.HeatingFuelType = from.HeatingFuelType;
             to.CoolingCoeffOfPerf = from.CoolingCoeffOfPerf;
             to.CoolingSetpoint = from.CoolingSetpoint;
             to.CoolingLimitType = from.CoolingLimitType;

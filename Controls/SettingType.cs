@@ -15,6 +15,7 @@ namespace Basilisk.Controls
         String,
         Enum,
         RealArray,
+        StringArray,
         Reference
     }
 }
