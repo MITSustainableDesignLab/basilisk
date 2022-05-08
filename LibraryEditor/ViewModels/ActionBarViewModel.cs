@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 using Basilisk.Controls.Attributes;
 using Basilisk.Controls.InterfaceModels;
+using Basilisk.Controls.Extensions;
 
 namespace Basilisk.LibraryEditor.ViewModels
 {
@@ -95,7 +96,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 throw new ArgumentNullException(nameof(componentType));
             }
             var cType = (Type)componentType;
-            var newComponent = CreateComponentWithDefaults(cType);
+            var newComponent = (LibraryComponent)cType.CreateComponentWithDefaults();
             var vm = new MetadataEditorViewModel(newComponent)
             {
                 Category = newComponent.Category,

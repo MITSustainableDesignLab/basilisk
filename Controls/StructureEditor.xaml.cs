@@ -52,6 +52,30 @@ namespace Basilisk.Controls
             }
         }
 
+        public AdvancedStructuralModel AdvancedModel
+        {
+            get { return (AdvancedStructuralModel)GetValue(AdvancedModelProperty); }
+            set { SetValue(AdvancedModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty AdvancedModelProperty =
+            DependencyProperty.Register(
+                nameof(AdvancedModel),
+                typeof(AdvancedStructuralModel),
+                typeof(StructureEditor));
+
+        public ICollection<SimulationSetting> AssemblyProperties
+        {
+            get { return (ICollection<SimulationSetting>)GetValue(AssemblyPropertiesProperty); }
+            set { SetValue(AssemblyPropertiesProperty, value); }
+        }
+
+        public static readonly DependencyProperty AssemblyPropertiesProperty =
+            DependencyProperty.Register(
+                nameof(AssemblyProperties),
+                typeof(ICollection<SimulationSetting>),
+                typeof(StructureEditor));
+
         public ICollection<LibraryComponent> MaterialChoices
         {
             get { return (ICollection<LibraryComponent>)GetValue(MaterialChoicesProperty); }
@@ -86,18 +110,6 @@ namespace Basilisk.Controls
             DependencyProperty.Register(
                 nameof(PickMaterial),
                 typeof(PickMaterialFunc),
-                typeof(StructureEditor));
-
-        public ICollection<SimulationSetting> Settings
-        {
-            get { return (ICollection<SimulationSetting>)GetValue(SettingsProperty); }
-            set { SetValue(SettingsProperty, value); }
-        }
-
-        public static readonly DependencyProperty SettingsProperty =
-            DependencyProperty.Register(
-                nameof(Settings),
-                typeof(ICollection<SimulationSetting>),
                 typeof(StructureEditor));
 
         public bool UseAdvancedModel

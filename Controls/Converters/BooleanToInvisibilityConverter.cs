@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Basilisk.Controls;
+namespace Basilisk.Controls.Converters;
 
 public class BooleanToInvisibilityConverter : IValueConverter
 {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Basilisk.Controls;
+namespace Basilisk.Controls.Converters;
 
 internal class BooleanToComboBoxConverter : IValueConverter
 {

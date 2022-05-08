@@ -57,7 +57,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override string ToString() => Name;
 
-        public virtual IReadOnlyCollection<SimulationSetting> SimulationSettings(ComponentCoordinator coordinator)
+        public virtual IReadOnlyCollection<SimulationSetting> SimulationSettings(IComponentCoordinator coordinator)
         {
             var sourceType = GetType();
             var typeOrderer = SimulationSettingsCreator.HierarchyComparer.Build(sourceType);

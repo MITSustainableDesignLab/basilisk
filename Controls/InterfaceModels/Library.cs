@@ -46,7 +46,8 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<Core.StructureInformation, StructureInformation>()
                 .IncludeBase<Core.ConstructionBase, ConstructionBase>()
-                .ForMember(dest => dest.MassRatios, opt => opt.Ignore());
+                .ForMember(dest => dest.MassRatios, opt => opt.Ignore())
+                .ForMember(dest => dest.AdvancedModel, opt => opt.Ignore());
             Mapper
                 .CreateMap<Core.DaySchedule, DaySchedule>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
@@ -165,6 +166,10 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<WindowConstruction, Core.WindowConstruction>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
+            Mapper
+                .CreateMap<AdvancedStructuralModel.ColumnWallSpacingSettings, Core.AdvancedStructuralModel.ColumnWallSpacingSettings>();
+            Mapper
+                .CreateMap<AdvancedStructuralModel, Core.AdvancedStructuralModel>();
             Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
@@ -748,6 +753,16 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .Where(layer => layer != null);
             dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
+
+            src.AdvancedModel.ColumnWallSpacing ??= new Core.AdvancedStructuralModel.ColumnWallSpacingSettings();
+            dest.AdvancedModel = new AdvancedStructuralModel
+            {
+                ColumnWallSpacing = new AdvancedStructuralModel.ColumnWallSpacingSettings
+                {
+                    PrimarySpan = src.AdvancedModel.ColumnWallSpacing.PrimarySpan,
+                    SecondarySpan = src.AdvancedModel.ColumnWallSpacing.SecondarySpan
+                }
+            };
             return dest;
         }
 

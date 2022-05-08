@@ -73,7 +73,7 @@ namespace Basilisk.Controls.InterfaceModels
         public override LibraryComponent Duplicate() =>
             new LibraryComponentSet(Components.Select(c => c.Duplicate()));
 
-        public override IReadOnlyCollection<SimulationSetting> SimulationSettings(ComponentCoordinator coordinator)
+        public override IReadOnlyCollection<SimulationSetting> SimulationSettings(IComponentCoordinator coordinator)
         {
             System.Diagnostics.Debug.Assert(Components.Any());
             var sourceTypes = Components.Select(c => c.GetType()).Distinct().ToArray();

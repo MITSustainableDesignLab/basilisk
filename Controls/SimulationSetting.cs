@@ -13,7 +13,7 @@ namespace Basilisk.Controls
     {
         private readonly IReadOnlyList<LibraryComponent> components;
         private readonly PropertyInfo prop;
-        private readonly ComponentCoordinator coordinator;
+        private readonly IComponentCoordinator coordinator;
 
         private IReadOnlyList<object> backupVals;
         private bool inTxn = false;
@@ -25,7 +25,7 @@ namespace Basilisk.Controls
             string displayName,
             string units,
             string description,
-            ComponentCoordinator coordinator,
+            IComponentCoordinator coordinator,
             SettingType type = SettingType.Unspecified)
         {
             var multiple = component as LibraryComponentSet;

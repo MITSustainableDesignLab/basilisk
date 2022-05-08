@@ -1,4 +1,5 @@
 ﻿using Basilisk.Controls.Attributes;
+using Basilisk.Controls.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,6 +12,13 @@ namespace Basilisk.Controls.InterfaceModels
     [ComponentNamespace]
     public class StructureInformation : ConstructionBase
     {
+        public StructureInformation()
+        {
+            AdvancedModel = (AdvancedStructuralModel)typeof(AdvancedStructuralModel).CreateComponentWithDefaults();
+        }
+
+        public AdvancedStructuralModel AdvancedModel { get; set; }
+
         public ObservableCollection<MassRatios> MassRatios { get; set; } = new ObservableCollection<MassRatios>();
 
         public bool UseAdvancedModel { get; set; }
@@ -35,6 +43,15 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var res = new StructureInformation()
             {
+                AdvancedModel = new AdvancedStructuralModel
+                {
+                    ColumnWallSpacing = new AdvancedStructuralModel.ColumnWallSpacingSettings
+                    {
+                        PrimarySpan = AdvancedModel.ColumnWallSpacing.PrimarySpan,
+                        SecondarySpan = AdvancedModel.ColumnWallSpacing.SecondarySpan
+                    }
+                },
+
                 MassRatios = new ObservableCollection<MassRatios>(MassRatios.Select(mr => mr.Duplicate())),
                 UseAdvancedModel = UseAdvancedModel
             };

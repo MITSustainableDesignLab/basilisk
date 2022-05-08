@@ -6,7 +6,7 @@ using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.Controls
 {
-    public class ComponentCoordinator
+    public class ComponentCoordinator : IComponentCoordinator
     {
         private readonly Library lib;
 

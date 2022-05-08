@@ -8,6 +8,9 @@ namespace Basilisk.Core
     public class StructureInformation : ConstructionBase
     {
         [DataMember]
+        public AdvancedStructuralModel AdvancedModel { get; set; } = new AdvancedStructuralModel();
+
+        [DataMember]
         public ICollection<MassRatios> MassRatios { get; set; } = new List<MassRatios>();
 
         [DataMember]

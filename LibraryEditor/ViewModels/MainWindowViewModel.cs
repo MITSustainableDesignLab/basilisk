@@ -180,6 +180,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 selectedComponent = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponent)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentAdvancedStructuralModel)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentSettings)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentUseAdvancedStructuralModel)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
@@ -190,6 +191,18 @@ namespace Basilisk.LibraryEditor.ViewModels
                 ActionBarViewModel.DuplicateComponentCommand.RaiseCanExecuteChanged();
                 SelectedComponentLayers = (selectedComponent as LayeredConstruction)?.Layers;
                 SelectedComponentMassRatios = (selectedComponent as StructureInformation)?.MassRatios;
+            }
+        }
+
+        public AdvancedStructuralModel SelectedComponentAdvancedStructuralModel
+        {
+            get { return (selectedComponent as StructureInformation)?.AdvancedModel; }
+            set
+            {
+                if (selectedComponent is StructureInformation structure)
+                {
+                    structure.AdvancedModel = value;
+                }
             }
         }
 
@@ -221,6 +234,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 if (selectedComponent is StructureInformation structure)
                 {
                     structure.UseAdvancedModel = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentAdvancedStructuralModel)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentUseAdvancedStructuralModel)));
                 }
             }
