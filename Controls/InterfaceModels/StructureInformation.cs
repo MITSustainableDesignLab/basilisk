@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Basilisk.Controls.Attributes;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Collections.ObjectModel;
-
-using Basilisk.Controls.Attributes;
-using System;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -14,6 +12,8 @@ namespace Basilisk.Controls.InterfaceModels
     public class StructureInformation : ConstructionBase
     {
         public ObservableCollection<MassRatios> MassRatios { get; set; } = new ObservableCollection<MassRatios>();
+
+        public bool UseAdvancedModel { get; set; }
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents
         {
@@ -35,7 +35,8 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var res = new StructureInformation()
             {
-                MassRatios = new ObservableCollection<MassRatios>(MassRatios.Select(mr => mr.Duplicate()))
+                MassRatios = new ObservableCollection<MassRatios>(MassRatios.Select(mr => mr.Duplicate())),
+                UseAdvancedModel = UseAdvancedModel
             };
             res.CopyBasePropertiesFrom(this);
             return res;
@@ -54,6 +55,7 @@ namespace Basilisk.Controls.InterfaceModels
                     Material = coord.GetWithSameName(mr.Material)
                 });
             MassRatios = new ObservableCollection<MassRatios>(mrs);
+            UseAdvancedModel = c.UseAdvancedModel;
             CopyBasePropertiesFrom(c);
         }
     }

@@ -11,12 +11,27 @@
              x:Name="top">
     <!-- HOW TO USE BINDING DIAGNOSTICS:
          Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
+    <UserControl.Resources>
+        <local:BooleanToComboBoxConverter x:Key="ModelSelectionConverter"
+                                          FalseText="Standard Structural Model (default)"
+                                          TrueText="Advanced Structural Model" />
+        <local:BooleanToInvisibilityConverter x:Key="BoolToInvisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <GroupBox Header="Materials">
+        <GroupBox Header="Model selection"
+                  Grid.Row="0">
+            <ComboBox ItemsSource="{Binding ElementName=top, Path=UseAdvancedModel, Mode=OneTime, Converter={StaticResource ModelSelectionConverter}}"
+                      SelectedItem="{Binding ElementName=top, Path=UseAdvancedModel, Converter={StaticResource ModelSelectionConverter}}" />
+        </GroupBox>
+        <GroupBox Header="Standard structural model"
+                  Grid.Row="1"
+                  Visibility="{Binding ElementName=top, Path=UseAdvancedModel, Converter={StaticResource BoolToInvisibilityConverter}}">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Delete" Click="DeleteSelectedRatios" />
@@ -43,6 +58,10 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Row="1"
+                  Header="Advanced Structural Model"
+                  Visibility="{Binding ElementName=top, Path=UseAdvancedModel, Converter={StaticResource BoolToVisibilityConverter}}">
+        </GroupBox>
+        <GroupBox Grid.Row="2"
                   Header="Assembly Properties">
             <local:SettingsGrid Settings="{Binding ElementName=top, Path=Settings}" />
         </GroupBox>

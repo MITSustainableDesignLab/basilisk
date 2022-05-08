@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Basilisk.Core
 {
@@ -12,6 +9,9 @@ namespace Basilisk.Core
     {
         [DataMember]
         public ICollection<MassRatios> MassRatios { get; set; } = new List<MassRatios>();
+
+        [DataMember]
+        public bool UseAdvancedModel { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
             MassRatios.Select(m => m.Material);

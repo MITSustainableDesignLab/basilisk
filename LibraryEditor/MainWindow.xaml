@@ -20,7 +20,7 @@
     </Window.DataContext>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <local:BooleanToInvisibilityConverter x:Key="BooleanToInvisibilityConverter" />
+        <basilisk:BooleanToInvisibilityConverter x:Key="BooleanToInvisibilityConverter" />
         <basilisk:SimulationSettingsCreator x:Key="SimulationSettingsCreator" />
         <local:WindowTitleCreator x:Key="WindowTitleCreator" />
         <basilisk:TypeMatchConverter x:Key="TypeMatchConverter" />

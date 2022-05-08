@@ -99,5 +99,17 @@ namespace Basilisk.Controls
                 nameof(Settings),
                 typeof(ICollection<SimulationSetting>),
                 typeof(StructureEditor));
+
+        public bool UseAdvancedModel
+        {
+            get { return (bool)GetValue(UseAdvancedModelProperty); }
+            set { SetValue(UseAdvancedModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty UseAdvancedModelProperty =
+            DependencyProperty.Register(
+                nameof(UseAdvancedModel),
+                typeof(bool),
+                typeof(StructureEditor));
     }
 }
