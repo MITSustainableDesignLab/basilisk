@@ -110,6 +110,7 @@ namespace Basilisk.Controls
             DependencyProperty.Register(
                 nameof(UseAdvancedModel),
                 typeof(bool),
-                typeof(StructureEditor));
+                typeof(StructureEditor),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     }
 }

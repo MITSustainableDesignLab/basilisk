@@ -16,8 +16,8 @@ internal class BooleanToComboBoxConverter : IValueConverter
         return (targetType, value) switch
         {
             (Type t, _) when t == typeof(IEnumerable) => new[] { FalseText, TrueText },
-            (Type t, bool v) when t == typeof(string) && !v => FalseText,
-            (Type t, bool v) when t == typeof(string) && v => TrueText,
+            (Type t, false) when t == typeof(string) || t == typeof(object) => FalseText,
+            (Type t, true) when t == typeof(string) || t == typeof(object) => TrueText,
             _ => value
         };
     }

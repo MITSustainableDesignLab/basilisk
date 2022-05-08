@@ -175,7 +175,8 @@
                             <basilisk:StructureEditor Settings="{Binding SelectedComponentSettings}"
                                                       Ratios="{Binding SelectedComponentMassRatios}"
                                                       PickMaterial="{Binding PickMaterial}"
-                                                      MaterialChoices="{Binding LoadedOpaqueMaterials}" />
+                                                      MaterialChoices="{Binding LoadedOpaqueMaterials}"
+                                                      UseAdvancedModel="{Binding SelectedComponentUseAdvancedStructuralModel}" />
                                                       
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>

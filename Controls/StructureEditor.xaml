@@ -27,7 +27,7 @@
         <GroupBox Header="Model selection"
                   Grid.Row="0">
             <ComboBox ItemsSource="{Binding ElementName=top, Path=UseAdvancedModel, Mode=OneTime, Converter={StaticResource ModelSelectionConverter}}"
-                      SelectedItem="{Binding ElementName=top, Path=UseAdvancedModel, Converter={StaticResource ModelSelectionConverter}}" />
+                      SelectedItem="{Binding ElementName=top, Path=UseAdvancedModel, Mode=TwoWay, Converter={StaticResource ModelSelectionConverter}}" />
         </GroupBox>
         <GroupBox Header="Standard structural model"
                   Grid.Row="1"
