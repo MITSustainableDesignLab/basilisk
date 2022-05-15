@@ -1,16 +1,30 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
-public class ConstructionSystem<TConstructionSystemType> : IConstructionSystem
+public class ConstructionSystem<TConstructionSystemType> : IConstructionSystem, INotifyPropertyChanged
     where TConstructionSystemType : Enum
 {
+    private LibraryComponent material;
+
     public ConstructionSystem(string name)
     {
         Name = name;
     }
 
-    public LibraryComponent Material { get; set; }
+    public LibraryComponent Material
+    {
+        get => material;
+        set
+        {
+            if (material != value)
+            {
+                material = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Material)));
+            }
+        }
+    }
 
     public string Name { get; }
 
@@ -27,4 +41,6 @@ public class ConstructionSystem<TConstructionSystemType> : IConstructionSystem
             }
         }
     }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }
