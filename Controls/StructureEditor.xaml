@@ -16,7 +16,7 @@
                                          FalseText="Standard Structural Model (default)"
                                          TrueText="Advanced Structural Model" />
         <conv:BooleanToInvisibilityConverter x:Key="BoolToInvisibilityConverter" />
-        <conv:EnumChoicesConverter x:Key="EnumChoicesConverter" />
+        <conv:EnumConverter x:Key="EnumConverter" />
         <conv:IndependentSettingsConverter x:Key="SimulationSettingsConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
@@ -95,9 +95,15 @@
                         <DataGridTemplateColumn Header="Types">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumChoicesConverter}, Mode=OneTime}"
-                                              SelectedItem="{Binding Path=ConstructionSystemType}"
-                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                    <ComboBox ItemsSource="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumConverter}, Mode=OneTime, diag:PresentationTraceSources.TraceLevel=High}"
+                                              SelectedItem="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumConverter}, Mode=TwoWay, diag:PresentationTraceSources.TraceLevel=High}"
+                                              SelectionChanged="ComboBox_SelectionChanged">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource EnumConverter}, diag:PresentationTraceSources.TraceLevel=High}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
