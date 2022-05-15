@@ -770,7 +770,7 @@ namespace Basilisk.Controls.InterfaceModels
 
                 ConstructionSystems = new AdvancedStructuralModeling.ConstructionSystemSettings
                 {
-                    Floors = new AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>
+                    Floors = new AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>("Floors")
                     {
                         Material =
                             src.AdvancedModel.ConstructionSystems.Floors.Material is Core.OpaqueMaterial srcM &&

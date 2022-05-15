@@ -76,7 +76,8 @@
                           SelectionUnit="Cell"
                           BeginningEdit="BeginEdit">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Construction System" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Construction System" IsReadOnly="True"
+                                            Binding="{Binding Name}" />
                         <DataGridTextColumn Header="Material"
                                             Binding="{Binding Material.Name}" />
                         <DataGridTemplateColumn Header="Types">
