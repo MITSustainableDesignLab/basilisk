@@ -1,5 +1,6 @@
 ﻿using Basilisk.Controls.Attributes;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
@@ -8,7 +9,7 @@ public class ConstructionSystemSettings
 {
     public ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor> Floors { get; set; }
 
-    public IEnumerable<IConstructionSystem> All
+    public IEnumerable<INotifyPropertyChanged> All
     {
         get
         {

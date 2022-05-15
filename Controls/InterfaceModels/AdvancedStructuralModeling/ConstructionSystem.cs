@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
-public class ConstructionSystem<TConstructionSystemType> : IConstructionSystem, INotifyPropertyChanged
+public class ConstructionSystem<TConstructionSystemType> : IMaterialPickable, INotifyPropertyChanged
     where TConstructionSystemType : Enum
 {
     private LibraryComponent material;
@@ -12,6 +12,8 @@ public class ConstructionSystem<TConstructionSystemType> : IConstructionSystem, 
     {
         Name = name;
     }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 
     public LibraryComponent Material
     {
@@ -29,18 +31,4 @@ public class ConstructionSystem<TConstructionSystemType> : IConstructionSystem, 
     public string Name { get; }
 
     public TConstructionSystemType ConstructionSystemType { get; set; }
-
-    Enum IConstructionSystem.ConstructionSystemType
-    {
-        get => ConstructionSystemType;
-        set
-        {
-            if (value is TConstructionSystemType t)
-            {
-                ConstructionSystemType = t;
-            }
-        }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
 }
