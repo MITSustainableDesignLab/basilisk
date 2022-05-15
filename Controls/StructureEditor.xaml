@@ -77,9 +77,21 @@
                           BeginningEdit="BeginEdit">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Construction System" IsReadOnly="True"
-                                            Binding="{Binding Name}" />
+                                            Binding="{Binding Name}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="Material"
-                                            Binding="{Binding Material.Name}" />
+                                            Binding="{Binding Material.Name}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTemplateColumn Header="Types">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -89,8 +101,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <!--<DataGridComboBoxColumn Header="Types"
-                                                ItemsSource="{Binding ConstructionSystemType, Converter={StaticResource EnumChoicesConverter}}" />-->
                     </DataGrid.Columns>
                     
                 </DataGrid>
