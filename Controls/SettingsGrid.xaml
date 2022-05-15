@@ -99,7 +99,8 @@
                 </Style>
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>
-        <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=OneTime}" IsReadOnly="True">
+        <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=OneTime}" IsReadOnly="True"
+                            x:Name="dgcolDescription">
             <DataGridTextColumn.ElementStyle>
                 <Style TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center" />

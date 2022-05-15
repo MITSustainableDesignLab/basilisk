@@ -27,10 +27,30 @@ namespace Basilisk.Controls
             InitializeComponent();
         }
 
+        public bool IsDescriptionColumnVisible
+        {
+            get => (bool)GetValue(IsDescriptionColumnVisibleProperty);
+            set => SetValue(IsDescriptionColumnVisibleProperty, value);
+        }
+
+        public static readonly DependencyProperty IsDescriptionColumnVisibleProperty = DependencyProperty.Register(
+            nameof(IsDescriptionColumnVisible),
+            typeof(bool),
+            typeof(SettingsGrid),
+            new PropertyMetadata(
+                true,
+                (d, a) =>
+                {
+                    if (d is SettingsGrid grid && a.NewValue is bool value)
+                    {
+                        grid.dgcolDescription.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                }));
+
         public IEnumerable<SimulationSetting> Settings
         {
-            get { return (IEnumerable<SimulationSetting>)GetValue(SettingsProperty); }
-            set { SetValue(SettingsProperty, value); }
+            get => (IEnumerable<SimulationSetting>)GetValue(SettingsProperty);
+            set => SetValue(SettingsProperty, value);
         }
 
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
