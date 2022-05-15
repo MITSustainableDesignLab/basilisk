@@ -38,6 +38,42 @@ namespace Basilisk.Controls
             typeof(IEnumerable<SimulationSetting>),
             typeof(SettingsGrid));
 
+        public string SettingNameColumnHeader
+        {
+            get => (string)GetValue(SettingNameColumnHeaderProperty);
+            set => SetValue(SettingNameColumnHeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty SettingNameColumnHeaderProperty = DependencyProperty.Register(
+            nameof(SettingNameColumnHeader),
+            typeof(string),
+            typeof(SettingsGrid),
+            new PropertyMetadata("Setting"));
+
+        public string SettingUnitsColumnHeader
+        {
+            get => (string)GetValue(SettingUnitsColumnHeaderProperty);
+            set => SetValue(SettingUnitsColumnHeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty SettingUnitsColumnHeaderProperty = DependencyProperty.Register(
+            nameof(SettingUnitsColumnHeader),
+            typeof(string),
+            typeof(SettingsGrid),
+            new PropertyMetadata("Units"));
+
+        public string SettingValueColumnHeader
+        {
+            get => (string)GetValue(SettingValueColumnHeaderProperty);
+            set => SetValue(SettingValueColumnHeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty SettingValueColumnHeaderProperty = DependencyProperty.Register(
+            nameof(SettingValueColumnHeader),
+            typeof(string),
+            typeof(SettingsGrid),
+            new PropertyMetadata("Value"));
+
         private void CheckBoxChanged(object sender, RoutedEventArgs e)
         {
             var cb = (CheckBox)sender;

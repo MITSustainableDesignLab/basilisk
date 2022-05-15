@@ -115,7 +115,10 @@
                 </DataGrid>
                 <local:SettingsGrid Grid.Row="2"
                                     Margin="0,6"
-                                    Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}" />
+                                    Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}"
+                                    SettingNameColumnHeader="Column/Wall Spacing"
+                                    SettingUnitsColumnHeader="Design Parameters"
+                                    SettingValueColumnHeader="Material" />
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="2"
