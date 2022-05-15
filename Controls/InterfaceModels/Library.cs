@@ -166,15 +166,16 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<WindowConstruction, Core.WindowConstruction>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
-            //Mapper
-            //    .CreateMap<AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>, AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
-            //Mapper
-            //    .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>, 
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
+            Mapper
+                .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
             Mapper
                 .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
             Mapper
-                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>()
-                .ForMember(dest => dest.ConstructionSystems, opt => opt.Ignore());
+                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
             Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
@@ -484,6 +485,11 @@ namespace Basilisk.Controls.InterfaceModels
                         HighLoadRatio = ratios.HighLoadRatio
                     })
                     .ToList();
+
+                if (c.AdvancedModel.ConstructionSystems.Floors.Material?.Name is string materialName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Floors.Material = knownOpaqueMaterials[materialName];
+                }
             }
 
             newLib.DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(DaySchedules.Cast<DaySchedule>()).ToList();
