@@ -1,5 +1,6 @@
 ﻿using Basilisk.Controls.Attributes;
 using Basilisk.Controls.Extensions;
+using Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -45,7 +46,7 @@ namespace Basilisk.Controls.InterfaceModels
             {
                 AdvancedModel = new AdvancedStructuralModel
                 {
-                    ColumnWallSpacing = new AdvancedStructuralModel.ColumnWallSpacingSettings
+                    ColumnWallSpacing = new ColumnWallSpacingSettings
                     {
                         PrimarySpan = AdvancedModel.ColumnWallSpacing.PrimarySpan,
                         SecondarySpan = AdvancedModel.ColumnWallSpacing.SecondarySpan

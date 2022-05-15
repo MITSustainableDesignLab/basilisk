@@ -167,9 +167,9 @@ namespace Basilisk.Controls.InterfaceModels
                 .CreateMap<WindowConstruction, Core.WindowConstruction>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
             Mapper
-                .CreateMap<AdvancedStructuralModel.ColumnWallSpacingSettings, Core.AdvancedStructuralModel.ColumnWallSpacingSettings>();
+                .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
             Mapper
-                .CreateMap<AdvancedStructuralModel, Core.AdvancedStructuralModel>();
+                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
             Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
@@ -754,10 +754,10 @@ namespace Basilisk.Controls.InterfaceModels
                 .Where(layer => layer != null);
             dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
 
-            src.AdvancedModel.ColumnWallSpacing ??= new Core.AdvancedStructuralModel.ColumnWallSpacingSettings();
-            dest.AdvancedModel = new AdvancedStructuralModel
+            src.AdvancedModel.ColumnWallSpacing ??= new Core.AdvancedStructuralModeling.ColumnWallSpacingSettings();
+            dest.AdvancedModel = new AdvancedStructuralModeling.AdvancedStructuralModel
             {
-                ColumnWallSpacing = new AdvancedStructuralModel.ColumnWallSpacingSettings
+                ColumnWallSpacing = new AdvancedStructuralModeling.ColumnWallSpacingSettings
                 {
                     PrimarySpan = src.AdvancedModel.ColumnWallSpacing.PrimarySpan,
                     SecondarySpan = src.AdvancedModel.ColumnWallSpacing.SecondarySpan

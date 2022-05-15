@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Basilisk.Controls;
+using Basilisk.Controls.InterfaceModels;
+using Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-
-using Basilisk.Controls;
-using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.LibraryEditor.ViewModels
 {
