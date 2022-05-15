@@ -69,6 +69,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <DataGrid Grid.Row="1"
+                          Margin="0,6"
                           ItemsSource="{Binding ElementName=top, Path=AdvancedModel.ConstructionSystems.All}"
                           AutoGenerateColumns="False"
                           CanUserReorderColumns="False"
@@ -81,6 +82,7 @@
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Padding" Value="3,2,3,0" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -89,6 +91,7 @@
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Padding" Value="3,2,3,0" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -111,6 +114,7 @@
                     
                 </DataGrid>
                 <local:SettingsGrid Grid.Row="2"
+                                    Margin="0,6"
                                     Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}" />
             </Grid>
         </GroupBox>
