@@ -168,8 +168,24 @@ namespace Basilisk.Controls.InterfaceModels
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
             Mapper
                 .CreateMap<
-                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>, 
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>,
                     Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>, 
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>>();
             Mapper
                 .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
             Mapper
@@ -776,18 +792,26 @@ namespace Basilisk.Controls.InterfaceModels
 
                 ConstructionSystems = new AdvancedStructuralModeling.ConstructionSystemSettings
                 {
-                    Floors = new AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>("Floors")
-                    {
-                        Material =
-                            src.AdvancedModel.ConstructionSystems.Floors.Material is Core.OpaqueMaterial srcM &&
-                            matDict.TryGetValue(src.AdvancedModel.ConstructionSystems.Floors.Material.Name, out var destM)
-                                ? destM
-                                : null,
-                        ConstructionSystemType = src.AdvancedModel.ConstructionSystems.Floors.ConstructionSystemType
-                    }
+                    Beams = CreateSystem("Beams", src.AdvancedModel.ConstructionSystems.Beams),
+                    Columns = CreateSystem("Columns", src.AdvancedModel.ConstructionSystems.Columns),
+                    Floors = CreateSystem("Floors", src.AdvancedModel.ConstructionSystems.Floors),
+                    Foundations = CreateSystem("Foundations", src.AdvancedModel.ConstructionSystems.Foundations),
+                    LateralSystem = CreateSystem("Lateral system", src.AdvancedModel.ConstructionSystems.LateralSystem)
                 }
             };
             return dest;
+
+            AdvancedStructuralModeling.ConstructionSystem<T> CreateSystem<T>(string name, Core.AdvancedStructuralModeling.ConstructionSystem<T> source)
+                where T : Enum =>
+                new(name)
+                {
+                    Material =
+                        source.Material is Core.OpaqueMaterial srcM &&
+                        matDict.TryGetValue(srcM.Name, out var dstM)
+                            ? dstM
+                            : null,
+                    ConstructionSystemType = source.ConstructionSystemType
+                };
         }
 
         private static WindowSettings BuildWindowSettings(Core.WindowSettings src, Dictionary<string, WindowConstruction> windowsConstructions, Dictionary<string, YearSchedule> years)
