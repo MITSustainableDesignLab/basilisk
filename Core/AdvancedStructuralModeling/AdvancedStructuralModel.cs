@@ -6,8 +6,8 @@ namespace Basilisk.Core.AdvancedStructuralModeling;
 public class AdvancedStructuralModel
 {
     [DataMember]
-    public ColumnWallSpacingSettings ColumnWallSpacing { get; set; }
+    public ColumnWallSpacingSettings ColumnWallSpacing { get; set; } = new ColumnWallSpacingSettings();
 
-    //[DataMember]
-    //public ConstructionSystemSettings ConstructionSystems { get; set; }
+    [DataMember]
+    public ConstructionSystemSettings ConstructionSystems { get; set; } = new ConstructionSystemSettings();
 }

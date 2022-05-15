@@ -166,10 +166,15 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<WindowConstruction, Core.WindowConstruction>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
+            //Mapper
+            //    .CreateMap<AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>, AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
+            //Mapper
+            //    .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
             Mapper
                 .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
             Mapper
-                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
+                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>()
+                .ForMember(dest => dest.ConstructionSystems, opt => opt.Ignore());
             Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
@@ -761,6 +766,19 @@ namespace Basilisk.Controls.InterfaceModels
                 {
                     PrimarySpan = src.AdvancedModel.ColumnWallSpacing.PrimarySpan,
                     SecondarySpan = src.AdvancedModel.ColumnWallSpacing.SecondarySpan
+                },
+
+                ConstructionSystems = new AdvancedStructuralModeling.ConstructionSystemSettings
+                {
+                    Floors = new AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>
+                    {
+                        Material =
+                            src.AdvancedModel.ConstructionSystems.Floors.Material is Core.OpaqueMaterial srcM &&
+                            matDict.TryGetValue(src.AdvancedModel.ConstructionSystems.Floors.Material.Name, out var destM)
+                                ? destM
+                                : null,
+                        ConstructionSystemType = src.AdvancedModel.ConstructionSystems.Floors.ConstructionSystemType
+                    }
                 }
             };
             return dest;

@@ -3,9 +3,7 @@
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
 [UseDefaultValuesOf(typeof(Core.AdvancedStructuralModeling.AdvancedStructuralModel))]
-public class AdvancedStructuralModel
+public class ConstructionSystemSettings
 {
-    public ColumnWallSpacingSettings ColumnWallSpacing { get; set; }
-
-    public ConstructionSystemSettings ConstructionSystems { get; set; }
+    public ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor> Floors { get; set; }
 }

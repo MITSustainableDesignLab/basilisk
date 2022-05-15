@@ -5,5 +5,5 @@ namespace Basilisk.Core.AdvancedStructuralModeling;
 [DataContract]
 public class ConstructionSystemSettings
 {
-    public ConstructionSystem<ConstructionSystemTypeFloor> Floors { get; set; }
+    public ConstructionSystem<ConstructionSystemTypeFloor> Floors { get; set; } = new ConstructionSystem<ConstructionSystemTypeFloor>();
 }
