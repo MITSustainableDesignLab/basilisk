@@ -21,6 +21,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         private LibraryComponent selectedComponent;
         private ObservableCollection<MaterialLayer> selectedComponentLayers;
         private ObservableCollection<MassRatios> selectedComponentMassRatios;
+        private bool selectedComponentUseAdvancedStructuralModel;
 
         public ActionBarViewModel ActionBarViewModel { get; }
 
@@ -179,13 +180,19 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 selectedComponent = value;
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponent)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentAdvancedStructuralModel)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentSettings)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentUseAdvancedStructuralModel)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
+
+                if (selectedComponent is StructureInformation structure)
+                {
+                    SelectedComponentAdvancedStructuralModel = structure.AdvancedModel;
+                    SelectedComponentUseAdvancedStructuralModel = structure.UseAdvancedModel;
+                }
+
                 ActionBarViewModel.EditSelectedItemMetadataCommand.RaiseCanExecuteChanged();
                 ActionBarViewModel.DeleteComponentCommand.RaiseCanExecuteChanged();
                 ActionBarViewModel.DuplicateComponentCommand.RaiseCanExecuteChanged();
@@ -228,9 +235,11 @@ namespace Basilisk.LibraryEditor.ViewModels
 
         public bool SelectedComponentUseAdvancedStructuralModel
         {
-            get { return (selectedComponent as StructureInformation)?.UseAdvancedModel ?? false; }
+            get => selectedComponentUseAdvancedStructuralModel;
             set
             {
+                selectedComponentUseAdvancedStructuralModel = value;
+
                 if (selectedComponent is StructureInformation structure)
                 {
                     structure.UseAdvancedModel = value;
