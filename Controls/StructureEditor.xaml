@@ -16,6 +16,7 @@
                                          FalseText="Standard Structural Model (default)"
                                          TrueText="Advanced Structural Model" />
         <conv:BooleanToInvisibilityConverter x:Key="BoolToInvisibilityConverter" />
+        <conv:EnumChoicesConverter x:Key="EnumChoicesConverter" />
         <conv:IndependentSettingsConverter x:Key="SimulationSettingsConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
@@ -61,12 +62,37 @@
         <GroupBox Grid.Row="1"
                   Header="Advanced Structural Model"
                   Visibility="{Binding ElementName=top, Path=UseAdvancedModel, Converter={StaticResource BoolToVisibilityConverter}}">
-            <Grid DataContext="{Binding ElementName=top, Path=AdvancedModel, diag:PresentationTraceSources.TraceLevel=High}">
+            <Grid DataContext="{Binding ElementName=top, Path=AdvancedModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding ElementName=top, Path=AdvancedModel.ConstructionSystems.All}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeRows="False"
+                          SelectionUnit="Cell"
+                          BeginningEdit="BeginEdit">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Construction System" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Material"
+                                            Binding="{Binding Material.Name}" />
+                        <DataGridTemplateColumn Header="Types">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumChoicesConverter}, Mode=OneTime}"
+                                              SelectedItem="{Binding Path=ConstructionSystemType}"
+                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--<DataGridComboBoxColumn Header="Types"
+                                                ItemsSource="{Binding ConstructionSystemType, Converter={StaticResource EnumChoicesConverter}}" />-->
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
                 <local:SettingsGrid Grid.Row="2"
                                     Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}" />
             </Grid>

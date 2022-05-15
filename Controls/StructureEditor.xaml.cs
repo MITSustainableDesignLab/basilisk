@@ -21,13 +21,19 @@ namespace Basilisk.Controls
         private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             if ((string)e.Column.Header != "Material") { return; }
-            var ratios = (MassRatios)e.Row.DataContext;
+            var ratios = (IMaterialPickable)e.Row.DataContext;
             var success = PickMaterial?.Invoke(ratios, MaterialChoices);
             if (success.HasValue && success.Value)
             {
                 ((DataGrid)sender).CommitEdit();
             }
             e.Cancel = true;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = (ComboBox)sender;
+            comboBox.GetBindingExpression(ComboBox.SelectedItemProperty)?.UpdateSource();
         }
 
         private void DeleteSelectedRatios(object sender, RoutedEventArgs e)
