@@ -25,8 +25,7 @@ namespace Basilisk.Controls
             string displayName,
             string units,
             string description,
-            IComponentCoordinator coordinator,
-            SettingType type = SettingType.Unspecified)
+            IComponentCoordinator coordinator)
         {
             var multiple = component as LibraryComponentSet;
             components = multiple == null ? new List<LibraryComponent>() {component} : multiple.Components.ToList();
@@ -35,47 +34,43 @@ namespace Basilisk.Controls
 
             DisplayName = displayName;
 
-            if (type == SettingType.Unspecified)
+            if (prop.PropertyType == typeof(double) || prop.PropertyType == typeof(double?))
             {
-                if (prop.PropertyType == typeof(double) || prop.PropertyType == typeof(double?))
-                {
-                    type = SettingType.Real;
-                }
-                else if (prop.PropertyType == typeof(int) || prop.PropertyType == typeof(int?))
-                {
-                    type = SettingType.Integer;
-                }
-                else if (prop.PropertyType == typeof(bool) || prop.PropertyType == typeof(bool?))
-                {
-                    type = SettingType.Bool;
-                }
-                else if (prop.PropertyType == typeof(string))
-                {
-                    type = SettingType.String;
-                }
-                else if (prop.PropertyType.IsEnum)
-                {
-                    type = SettingType.Enum;
-                }
-                else if (typeof(LibraryComponent).IsAssignableFrom(prop.PropertyType))
-                {
-                    type = SettingType.Reference;
-                }
-                else if (prop.PropertyType == typeof(double[]))
-                {
-                    type = SettingType.RealArray;
-                }
-                else if (prop.PropertyType == typeof(string[]))
-                {
-                    type = SettingType.StringArray;
-                }
-                else
-                {
-                    throw new ArgumentException("Unknown setting type", nameof(type));
-                }
+                SettingType = SettingType.Real;
+            }
+            else if (prop.PropertyType == typeof(int) || prop.PropertyType == typeof(int?))
+            {
+                SettingType = SettingType.Integer;
+            }
+            else if (prop.PropertyType == typeof(bool) || prop.PropertyType == typeof(bool?))
+            {
+                SettingType = SettingType.Bool;
+            }
+            else if (prop.PropertyType == typeof(string))
+            {
+                SettingType = SettingType.String;
+            }
+            else if (prop.PropertyType.IsEnum)
+            {
+                SettingType = SettingType.Enum;
+            }
+            else if (typeof(LibraryComponent).IsAssignableFrom(prop.PropertyType))
+            {
+                SettingType = SettingType.Reference;
+            }
+            else if (prop.PropertyType == typeof(double[]))
+            {
+                SettingType = SettingType.RealArray;
+            }
+            else if (prop.PropertyType == typeof(string[]))
+            {
+                SettingType = SettingType.StringArray;
+            }
+            else
+            {
+                throw new Exception("Unknown setting type");
             }
 
-            SettingType = type;
             if (SettingType == SettingType.Enum)
             {
                 EnumChoices = Enum.GetValues(prop.PropertyType);
