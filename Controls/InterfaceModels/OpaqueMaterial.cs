@@ -35,6 +35,12 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(0.7)]
         public double VisibleAbsorptance { get; set; } = 0.7;
 
+        [SimulationSetting(DisplayName = "Design Strength", Units = "MPa")]
+        public double? DesignStrength { get; set; }
+
+        [SimulationSetting(DisplayName = "Modulus of Elasticity", Units = "MPa")]
+        public double? ModulusOfElasticity { get; set; }
+
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
             Enumerable.Empty<LibraryComponent>();
 
@@ -64,6 +70,8 @@ namespace Basilisk.Controls.InterfaceModels
             to.ThermalEmittance = from.ThermalEmittance;
             to.VisibleAbsorptance = from.VisibleAbsorptance;
             to.MoistureDiffusionResistance = from.MoistureDiffusionResistance;
+            to.DesignStrength = from.DesignStrength;
+            to.ModulusOfElasticity = from.ModulusOfElasticity;
         }
     }
 }
