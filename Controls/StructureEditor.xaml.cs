@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialPickable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
+using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialSettable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
 
 namespace Basilisk.Controls
 {
@@ -21,8 +21,8 @@ namespace Basilisk.Controls
         private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             if ((string)e.Column.Header != "Material") { return; }
-            var componentWithPickableMaterial = (IMaterialPickable)e.Row.DataContext;
-            var success = PickMaterial?.Invoke(componentWithPickableMaterial, MaterialChoices);
+            var componentWithSettableMaterial = (IMaterialSettable)e.Row.DataContext;
+            var success = PickMaterial?.Invoke(componentWithSettableMaterial, MaterialChoices);
             if (success.HasValue && success.Value)
             {
                 ((DataGrid)sender).CommitEdit();

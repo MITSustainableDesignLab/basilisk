@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 using Basilisk.Controls.InterfaceModels;
 
-using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialPickable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
+using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialSettable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
 
 namespace Basilisk.Controls
 {

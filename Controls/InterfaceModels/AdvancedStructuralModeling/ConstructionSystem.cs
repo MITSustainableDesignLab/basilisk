@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
-public class ConstructionSystem<TConstructionSystemType> : IMaterialPickable, INotifyPropertyChanged
+public class ConstructionSystem<TConstructionSystemType> : IMaterialSettable, INotifyPropertyChanged
     where TConstructionSystemType : Enum
 {
     private TConstructionSystemType constructionSystemType;
@@ -43,5 +43,12 @@ public class ConstructionSystem<TConstructionSystemType> : IMaterialPickable, IN
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ConstructionSystemType)));
             }
         }
+    }
+
+    public bool TrySetMaterial(LibraryComponent material)
+    {
+        Material = material;
+
+        return true;
     }
 }

@@ -136,8 +136,8 @@ namespace Basilisk.LibraryEditor.ViewModels
         public ICollection<LibraryComponent> LoadedWindowSettings => loadedLibrary?.WindowSettings;
         public ICollection<LibraryComponent> LoadedTemplates => loadedLibrary?.BuildingTemplates;
 
-        public Func<IMaterialPickable, ICollection<LibraryComponent>, bool> PickMaterial =>
-            (pickable, components) =>
+        public Func<IMaterialSettable, ICollection<LibraryComponent>, bool> PickMaterial =>
+            (materialSettable, components) =>
             {
                 var categorized = new ComponentCategoryCollection(components);
                 var pickerVM = new ComponentPickerViewModel()
@@ -148,7 +148,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 var res = picker.ShowDialog();
                 if (res.HasValue && res.Value)
                 {
-                    pickable.Material = pickerVM.SelectedComponent;
+                    materialSettable.TrySetMaterial(pickerVM.SelectedComponent);
                     HasUnsavedChanges = true;
                     return true;
                 }
