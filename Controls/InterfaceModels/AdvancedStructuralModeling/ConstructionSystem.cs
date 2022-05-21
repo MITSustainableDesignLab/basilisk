@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
@@ -47,6 +48,22 @@ public class ConstructionSystem<TConstructionSystemType> : IMaterialSettable, IN
 
     public bool TrySetMaterial(LibraryComponent material)
     {
+        if (material is not OpaqueMaterial m)
+        {
+            return false;
+        }
+
+        if (!m.DesignStrength.HasValue || !m.ModulusOfElasticity.HasValue)
+        {
+            MessageBox.Show(
+                "Error: You selected a material with no design strength and elastic modulus assigned",
+                "Invalid structural material",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            return false;
+        }
+
         Material = material;
 
         return true;
