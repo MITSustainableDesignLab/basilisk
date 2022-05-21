@@ -12,6 +12,7 @@ namespace Basilisk.Controls
     public class SimulationSetting : INotifyPropertyChanged, IEditableObject, IDataErrorInfo
     {
         private readonly IReadOnlyList<LibraryComponent> components;
+        private readonly bool mustBePositive;
         private readonly PropertyInfo prop;
         private readonly IComponentCoordinator coordinator;
 
@@ -25,8 +26,11 @@ namespace Basilisk.Controls
             string displayName,
             string units,
             string description,
+            bool mustBePositive,
             IComponentCoordinator coordinator)
         {
+            this.mustBePositive = mustBePositive;
+
             var multiple = component as LibraryComponentSet;
             components = multiple == null ? new List<LibraryComponent>() {component} : multiple.Components.ToList();
             this.prop = prop;
@@ -120,6 +124,15 @@ namespace Basilisk.Controls
             {
                 try
                 {
+                    if (mustBePositive &&
+                        value is string s &&
+                        double.TryParse(s, out var n) &&
+                        n <= 0.0)
+                    {
+                        error = "Value must be positive";
+                        return;
+                    }
+
                     foreach (var c in components)
                     {
                         prop.SetValue(c, value, BindingFlags.SetProperty, SettingValueBinder.Instance, null, null);

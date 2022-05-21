@@ -7,10 +7,10 @@ namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 [UseDefaultValuesOf(typeof(Core.AdvancedStructuralModeling.ColumnWallSpacingSettings))]
 public class ColumnWallSpacingSettings : LibraryComponent
 {
-    [SimulationSetting(DisplayName = "Primary span (x-direction)", Units = "m")]
+    [SimulationSetting(DisplayName = "Primary span (x-direction)", Units = "m", MustBePositive = true)]
     public double PrimarySpan { get; set; }
 
-    [SimulationSetting(DisplayName = "Secondary span (y-direction)", Units = "m")]
+    [SimulationSetting(DisplayName = "Secondary span (y-direction)", Units = "m", MustBePositive = true)]
     public double SecondarySpan { get; set; }
 
     public override IEnumerable<LibraryComponent> AllReferencedComponents =>

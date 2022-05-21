@@ -16,6 +16,7 @@ namespace Basilisk.Controls.Attributes
 
         public string DisplayName { get; set; }
         public Type EnumType { get; set; }
+        public bool MustBePositive { get; set; }
         public SettingType SettingType { get; set; }
         public string Units { get; set; }
         public string Description { get; set; }
