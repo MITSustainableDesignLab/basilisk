@@ -21,8 +21,8 @@ namespace Basilisk.Controls
         private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             if ((string)e.Column.Header != "Material") { return; }
-            var ratios = (IMaterialPickable)e.Row.DataContext;
-            var success = PickMaterial?.Invoke(ratios, MaterialChoices);
+            var componentWithPickableMaterial = (IMaterialPickable)e.Row.DataContext;
+            var success = PickMaterial?.Invoke(componentWithPickableMaterial, MaterialChoices);
             if (success.HasValue && success.Value)
             {
                 ((DataGrid)sender).CommitEdit();
