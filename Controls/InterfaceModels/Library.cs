@@ -530,9 +530,29 @@ namespace Basilisk.Controls.InterfaceModels
                     })
                     .ToList();
 
-                if (c.AdvancedModel.ConstructionSystems.Floors.Material?.Name is string materialName)
+                if (c.AdvancedModel.ConstructionSystems.Beams.Material?.Name is string beamsName)
                 {
-                    c.AdvancedModel.ConstructionSystems.Floors.Material = knownOpaqueMaterials[materialName];
+                    c.AdvancedModel.ConstructionSystems.Beams.Material = knownOpaqueMaterials[beamsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.Columns.Material?.Name is string columnsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Columns.Material = knownOpaqueMaterials[columnsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.Floors.Material?.Name is string floorsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Floors.Material = knownOpaqueMaterials[floorsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.Foundations.Material?.Name is string foundationsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Foundations.Material = knownOpaqueMaterials[foundationsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.LateralSystem.Material?.Name is string lateralSystemsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.LateralSystem.Material = knownOpaqueMaterials[lateralSystemsName];
                 }
             }
 
