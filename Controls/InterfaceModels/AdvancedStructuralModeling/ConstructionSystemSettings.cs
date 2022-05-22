@@ -31,12 +31,12 @@ public class ConstructionSystemSettings
         {
             if (Beams.Material is not null)
             {
-                yield return Floors.Material;
+                yield return Beams.Material;
             }
 
             if (Columns.Material is not null)
             {
-                yield return Floors.Material;
+                yield return Columns.Material;
             }
 
             if (Floors.Material is not null)
@@ -46,12 +46,12 @@ public class ConstructionSystemSettings
 
             if (Foundations.Material is not null)
             {
-                yield return Floors.Material;
+                yield return Foundations.Material;
             }
 
             if (LateralSystem.Material is not null)
             {
-                yield return Floors.Material;
+                yield return LateralSystem.Material;
             }
 
         }
