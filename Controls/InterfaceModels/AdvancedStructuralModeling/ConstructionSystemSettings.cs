@@ -24,4 +24,36 @@ public class ConstructionSystemSettings
             yield return Foundations;
         }
     }
+
+    public IEnumerable<LibraryComponent> AllReferencedComponents
+    {
+        get
+        {
+            if (Beams.Material is not null)
+            {
+                yield return Floors.Material;
+            }
+
+            if (Columns.Material is not null)
+            {
+                yield return Floors.Material;
+            }
+
+            if (Floors.Material is not null)
+            {
+                yield return Floors.Material;
+            }
+
+            if (Foundations.Material is not null)
+            {
+                yield return Floors.Material;
+            }
+
+            if (LateralSystem.Material is not null)
+            {
+                yield return Floors.Material;
+            }
+
+        }
+    }
 }

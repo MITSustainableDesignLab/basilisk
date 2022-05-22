@@ -28,10 +28,17 @@ namespace Basilisk.Controls.InterfaceModels
         {
             get
             {
-                var direct =
+                var massRatioMaterials =
                     MassRatios
                     .Select(mr => mr.Material)
                     .Where(m => m != null);
+
+                var advancedModelMaterials = UseAdvancedModel
+                    ? AdvancedModel.ConstructionSystems.AllReferencedComponents
+                    : Enumerable.Empty<LibraryComponent>();
+
+                var direct = massRatioMaterials.Concat(advancedModelMaterials).ToList();
+
                 var indirect = direct.SelectMany(m => m.AllReferencedComponents);
                 return direct.Concat(indirect);
             }
