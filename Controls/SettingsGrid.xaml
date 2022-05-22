@@ -78,8 +78,7 @@
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
                     <TextBox Text="{Binding Path=SingleValue, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}"
-                             HorizontalContentAlignment="Right"
-                             Visibility="{Binding Path=ExposeAsTextBox, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}">
+                             HorizontalContentAlignment="Right">
                     </TextBox>
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
