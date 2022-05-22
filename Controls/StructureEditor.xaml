@@ -111,7 +111,17 @@
                                                  VerticalContentAlignment="Center"
                                                  Text="{Binding LoadingValue, ValidatesOnDataErrors=True}"
                                                  IsReadOnly="{Binding IsLoadingValueControlledByPreset}"
-                                                 LostKeyboardFocus="TextBox_LostKeyboardFocus" />
+                                                 LostKeyboardFocus="TextBox_LostKeyboardFocus">
+                                            <TextBox.Style>
+                                                <Style TargetType="{x:Type TextBox}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsLoadingValueControlledByPreset}" Value="True">
+                                                            <Setter Property="Foreground" Value="DarkGray" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
