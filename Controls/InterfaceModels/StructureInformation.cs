@@ -45,7 +45,7 @@ namespace Basilisk.Controls.InterfaceModels
         }
 
         public override bool DirectlyReferences(LibraryComponent component) =>
-            false;
+            AllReferencedComponents.Contains(component);
 
         public override LibraryComponent Duplicate()
         {

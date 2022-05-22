@@ -360,14 +360,14 @@ namespace Basilisk.LibraryEditor.ViewModels
                 {
                     return;
                 }
-                foreach (var component in parent.LoadedLibrary.AllComponents)
+                foreach (var component in parent.LoadedLibrary.AllModifiableComponents)
                 {
                     component.PropertyChanged -= parent.SetUnsavedChangesOnPropertyChange;
                 }
             }
 
             parent.LoadedLibrary = library;
-            foreach (var component in parent.LoadedLibrary.AllComponents)
+            foreach (var component in parent.LoadedLibrary.AllModifiableComponents)
             {
                 component.PropertyChanged += parent.SetUnsavedChangesOnPropertyChange;
             }

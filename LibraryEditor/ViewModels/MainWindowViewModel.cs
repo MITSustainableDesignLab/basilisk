@@ -115,7 +115,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             }
         }
 
-        public IEnumerable<LibraryComponent> AllLoadedComponents => loadedLibrary?.AllComponents;
+        public IEnumerable<LibraryComponent> AllLoadedComponents => loadedLibrary?.AllLogicalComponents;
         
         public ICollection<LibraryComponent> LoadedGasMaterials => loadedLibrary?.GasMaterials;
         public ICollection<LibraryComponent> LoadedGlazingMaterials => loadedLibrary?.GlazingMaterials;

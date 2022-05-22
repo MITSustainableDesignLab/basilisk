@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 using AutoMapper;
@@ -244,7 +245,34 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper.AssertConfigurationIsValid();
         }
 
-        public IEnumerable<LibraryComponent> AllComponents => new ComponentCoordinator(this).AllComponents;
+        public IEnumerable<LibraryComponent> AllLogicalComponents =>
+                OpaqueMaterials
+                .Concat(GlazingMaterials)
+                .Concat(GasMaterials)
+                .Concat(OpaqueConstructions)
+                .Concat(WindowConstructions)
+                .Concat(StructureDefinitions)
+                .Concat(DaySchedules)
+                .Concat(WeekSchedules)
+                .Concat(YearSchedules)
+                .Concat(ZoneConditionings)
+                .Concat(ZoneConstructions)
+                .Concat(ZoneHotWaters)
+                .Concat(ZoneLoads)
+                .Concat(ZoneVentilations)
+                .Concat(Zones)
+                .Concat(BuildingTemplates)
+                .Concat(WindowSettings);
+
+        public IEnumerable<INotifyPropertyChanged> AllModifiableComponents =>
+            AllLogicalComponents
+            .Cast<INotifyPropertyChanged>()
+            .Concat(
+                StructureDefinitions
+                .OfType<StructureInformation>()
+                .Where(s => s.UseAdvancedModel)
+                .SelectMany(s =>
+                    s.AdvancedModel.ConstructionSystems.All.Append(s.AdvancedModel.ColumnWallSpacing)));
 
         public ICollection<LibraryComponent> OpaqueMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
@@ -263,12 +291,6 @@ namespace Basilisk.Controls.InterfaceModels
         public ICollection<LibraryComponent> Zones { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> WindowSettings { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> BuildingTemplates { get; set; } = new List<LibraryComponent>();
-
-        internal IEnumerable<LibraryComponent> ColumnWallSpacingSettings =>
-            StructureDefinitions
-            .OfType<StructureInformation>()
-            .Where(s => s.UseAdvancedModel)
-            .Select(s => s.AdvancedModel.ColumnWallSpacing);
 
         public static Library Create(Core.Library sourceLib)
         {
@@ -680,7 +702,7 @@ namespace Basilisk.Controls.InterfaceModels
         public IEnumerable<MergeCollision> WouldCollide(IEnumerable<LibraryComponent> newComponents) =>
             newComponents
             .Join(
-                AllComponents,
+                AllLogicalComponents,
                 newC => newC.Name,
                 oldC => oldC.Name,
                 (newC, oldC) => new MergeCollision(oldC, newC))
@@ -691,7 +713,7 @@ namespace Basilisk.Controls.InterfaceModels
                     .Any(n => n.IsAssignableFrom(x.NewComponent.GetType())));
 
         public bool WouldCollide(string name, Type type) =>
-            AllComponents
+            AllLogicalComponents
             .Any(c =>
                 c.Name == name &&
                 (c.GetType() == type ||
