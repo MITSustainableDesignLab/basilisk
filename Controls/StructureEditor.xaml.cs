@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialSettable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
 
 namespace Basilisk.Controls
@@ -44,6 +45,11 @@ namespace Basilisk.Controls
             {
                 ratios.RemoveAt(selectedIx);
             }
+        }
+
+        private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            (sender as TextBox)?.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
         }
 
         public AdvancedStructuralModel AdvancedModel

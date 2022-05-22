@@ -1,21 +1,52 @@
-﻿using System.ComponentModel;
+﻿using Basilisk.Core.AdvancedStructuralModeling;
+using System.ComponentModel;
 
 namespace Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 
 public class LoadingSettings : INotifyPropertyChanged
 {
-    private bool isLoadingValueEditable;
+    private bool isLoadingValueControlledByPreset;
+    private LiveLoadingPreset loadingPreset;
     private double loadingValue;
 
-    public bool IsLoadingValueEditable
+    public LoadingSettings()
     {
-        get => isLoadingValueEditable;
+        isLoadingValueControlledByPreset = true;
+        loadingValue = LiveLoadingPresetMap.TryGetValue(default) ?? 0.0;
+    }
+
+    public bool IsLoadingValueControlledByPreset
+    {
+        get => isLoadingValueControlledByPreset;
         set
         {
-            if (isLoadingValueEditable != value)
+            if (isLoadingValueControlledByPreset != value)
             {
-                isLoadingValueEditable = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoadingValueEditable)));
+                isLoadingValueControlledByPreset = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoadingValueControlledByPreset)));
+            }
+        }
+    }
+
+    public LiveLoadingPreset LoadingPreset
+    {
+        get => loadingPreset;
+        set
+        {
+            if (loadingPreset != value)
+            {
+                loadingPreset = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LoadingPreset)));
+
+                if (LiveLoadingPresetMap.TryGetValue(loadingPreset) is double newValue)
+                {
+                    LoadingValue = newValue;
+                    IsLoadingValueControlledByPreset = true;
+                }
+                else
+                {
+                    IsLoadingValueControlledByPreset = false;
+                }
             }
         }
     }

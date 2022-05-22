@@ -77,7 +77,8 @@
                           SelectionUnit="Cell">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Loading"
-                                            IsReadOnly="True">
+                                            IsReadOnly="True"
+                                            Width="163">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Text" Value="Live Loading" />
@@ -94,11 +95,23 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <ComboBox Grid.Column="0" />
+                                        <ComboBox Grid.Column="0"
+                                                  Width="230"
+                                                  ItemsSource="{Binding Path=LoadingPreset, Mode=OneTime, Converter={StaticResource EnumConverter}}"
+                                                  SelectedItem="{Binding Path=LoadingPreset, Mode=TwoWay, Converter={StaticResource EnumConverter}}"
+                                                  SelectionChanged="ComboBox_SelectionChanged">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
                                         <TextBox Grid.Column="1"
-                                                 Width="30"
-                                                 Text="{Binding LoadingValue}"
-                                                 IsEnabled="{Binding IsLoadingValueEditable}" />
+                                                 Width="40"
+                                                 VerticalContentAlignment="Center"
+                                                 Text="{Binding LoadingValue, ValidatesOnDataErrors=True}"
+                                                 IsReadOnly="{Binding IsLoadingValueControlledByPreset}"
+                                                 LostKeyboardFocus="TextBox_LostKeyboardFocus" />
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -125,7 +138,8 @@
                           BeginningEdit="BeginEdit">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Construction System" IsReadOnly="True"
-                                            Binding="{Binding Name}">
+                                            Binding="{Binding Name}"
+                                            Width="163">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -134,6 +148,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Material"
+                                            Width="273"
                                             Binding="{Binding Material.Name}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
