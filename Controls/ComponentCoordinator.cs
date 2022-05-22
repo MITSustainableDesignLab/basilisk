@@ -19,6 +19,7 @@ namespace Basilisk.Controls
             .Concat(lib.OpaqueConstructions)
             .Concat(lib.WindowConstructions)
             .Concat(lib.StructureDefinitions)
+            .Concat(lib.ColumnWallSpacingSettings)
             .Concat(lib.DaySchedules)
             .Concat(lib.WeekSchedules)
             .Concat(lib.YearSchedules)

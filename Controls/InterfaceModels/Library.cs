@@ -264,6 +264,12 @@ namespace Basilisk.Controls.InterfaceModels
         public ICollection<LibraryComponent> WindowSettings { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> BuildingTemplates { get; set; } = new List<LibraryComponent>();
 
+        internal IEnumerable<LibraryComponent> ColumnWallSpacingSettings =>
+            StructureDefinitions
+            .OfType<StructureInformation>()
+            .Where(s => s.UseAdvancedModel)
+            .Select(s => s.AdvancedModel.ColumnWallSpacing);
+
         public static Library Create(Core.Library sourceLib)
         {
             System.Diagnostics.Debug.Assert(!sourceLib.OrphanedComponents().Any());
