@@ -97,8 +97,8 @@
                                         </Grid.ColumnDefinitions>
                                         <ComboBox Grid.Column="0"
                                                   Width="230"
-                                                  ItemsSource="{Binding Path=LoadingPreset, Mode=OneTime, Converter={StaticResource EnumConverter}}"
-                                                  SelectedItem="{Binding Path=LoadingPreset, Mode=TwoWay, Converter={StaticResource EnumConverter}}"
+                                                  ItemsSource="{Binding Path=LiveLoadingPreset, Mode=OneTime, Converter={StaticResource EnumConverter}}"
+                                                  SelectedItem="{Binding Path=LiveLoadingPreset, Mode=TwoWay, Converter={StaticResource EnumConverter}}"
                                                   SelectionChanged="ComboBox_SelectionChanged">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
@@ -109,7 +109,7 @@
                                         <TextBox Grid.Column="1"
                                                  Width="40"
                                                  VerticalContentAlignment="Center"
-                                                 Text="{Binding LoadingValue, ValidatesOnDataErrors=True}"
+                                                 Text="{Binding LiveLoadingValue, ValidatesOnDataErrors=True}"
                                                  IsReadOnly="{Binding IsLoadingValueControlledByPreset}"
                                                  LostKeyboardFocus="TextBox_LostKeyboardFocus">
                                             <TextBox.Style>

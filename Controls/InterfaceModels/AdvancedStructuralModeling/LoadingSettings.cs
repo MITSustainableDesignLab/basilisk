@@ -28,7 +28,7 @@ public class LoadingSettings : INotifyPropertyChanged
         }
     }
 
-    public LiveLoadingPreset LoadingPreset
+    public LiveLoadingPreset LiveLoadingPreset
     {
         get => loadingPreset;
         set
@@ -36,11 +36,11 @@ public class LoadingSettings : INotifyPropertyChanged
             if (loadingPreset != value)
             {
                 loadingPreset = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LoadingPreset)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LiveLoadingPreset)));
 
                 if (LiveLoadingPresetMap.TryGetValue(loadingPreset) is double newValue)
                 {
-                    LoadingValue = newValue;
+                    LiveLoadingValue = newValue;
                     IsLoadingValueControlledByPreset = true;
                 }
                 else
@@ -51,7 +51,7 @@ public class LoadingSettings : INotifyPropertyChanged
         }
     }
 
-    public double LoadingValue
+    public double LiveLoadingValue
     {
         get => loadingValue;
         set
@@ -59,7 +59,7 @@ public class LoadingSettings : INotifyPropertyChanged
             if (loadingValue != value)
             {
                 loadingValue = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LoadingValue)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LiveLoadingValue)));
             }   
         }
     }

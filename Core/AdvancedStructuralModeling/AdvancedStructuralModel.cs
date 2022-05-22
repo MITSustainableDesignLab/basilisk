@@ -10,4 +10,7 @@ public class AdvancedStructuralModel
 
     [DataMember]
     public ConstructionSystemSettings ConstructionSystems { get; set; } = new ConstructionSystemSettings();
+
+    [DataMember]
+    public LoadingSettings LoadingSettings { get; set; } = new LoadingSettings();
 }

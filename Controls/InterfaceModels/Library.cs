@@ -192,6 +192,8 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
             Mapper
+                .CreateMap<AdvancedStructuralModeling.LoadingSettings, Core.AdvancedStructuralModeling.LoadingSettings>();
+            Mapper
                 .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
             Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
@@ -272,7 +274,12 @@ namespace Basilisk.Controls.InterfaceModels
                 .OfType<StructureInformation>()
                 .Where(s => s.UseAdvancedModel)
                 .SelectMany(s =>
-                    s.AdvancedModel.ConstructionSystems.All.Append(s.AdvancedModel.ColumnWallSpacing)));
+                    s
+                    .AdvancedModel
+                    .ConstructionSystems
+                    .All
+                    .Append(s.AdvancedModel.ColumnWallSpacing)
+                    .Append(s.AdvancedModel.LoadingSettings)));
 
         public ICollection<LibraryComponent> OpaqueMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
@@ -830,6 +837,7 @@ namespace Basilisk.Controls.InterfaceModels
             dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
 
             src.AdvancedModel.ColumnWallSpacing ??= new Core.AdvancedStructuralModeling.ColumnWallSpacingSettings();
+            src.AdvancedModel.LoadingSettings ??= new Core.AdvancedStructuralModeling.LoadingSettings();
             dest.AdvancedModel = new AdvancedStructuralModeling.AdvancedStructuralModel
             {
                 ColumnWallSpacing = new AdvancedStructuralModeling.ColumnWallSpacingSettings
@@ -845,6 +853,14 @@ namespace Basilisk.Controls.InterfaceModels
                     Floors = CreateSystem("Floors", src.AdvancedModel.ConstructionSystems.Floors),
                     Foundations = CreateSystem("Foundations", src.AdvancedModel.ConstructionSystems.Foundations),
                     LateralSystem = CreateSystem("Lateral system", src.AdvancedModel.ConstructionSystems.LateralSystem)
+                },
+
+                LoadingSettings = new AdvancedStructuralModeling.LoadingSettings
+                {
+                    LiveLoadingPreset = Core.AdvancedStructuralModeling.LiveLoadingPresetMap.TryGetValue(src.AdvancedModel.LoadingSettings.LiveLoadingPreset) is double _
+                        ? src.AdvancedModel.LoadingSettings.LiveLoadingPreset
+                        : Core.AdvancedStructuralModeling.LiveLoadingPreset.Other,
+                    LiveLoadingValue = src.AdvancedModel.LoadingSettings.LiveLoadingValue
                 }
             };
             return dest;
