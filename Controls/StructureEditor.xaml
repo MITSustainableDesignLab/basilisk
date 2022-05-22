@@ -70,7 +70,7 @@
                 </Grid.RowDefinitions>
                 <DataGrid Grid.Row="1"
                           Margin="0,6"
-                          ItemsSource="{Binding ElementName=top, Path=AdvancedModel.ConstructionSystems.All}"
+                          ItemsSource="{Binding ConstructionSystems.All}"
                           AutoGenerateColumns="False"
                           CanUserReorderColumns="False"
                           CanUserResizeRows="False"
