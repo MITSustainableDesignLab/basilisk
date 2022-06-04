@@ -3,13 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Basilisk.LibraryEditor"
         xmlns:basilisk="clr-namespace:Basilisk.Controls;assembly=Basilisk.Controls"
+        xmlns:conv="clr-namespace:Basilisk.Controls.Converters;assembly=Basilisk.Controls"
         xmlns:models="clr-namespace:Basilisk.Controls.InterfaceModels;assembly=Basilisk.Controls"
         xmlns:vm="clr-namespace:Basilisk.LibraryEditor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
-        Height="500" Width="800"
+        Height="850" Width="1000"
         Closing="Window_Closing"
         x:Name="top"
         WindowStartupLocation="CenterScreen">
@@ -20,7 +21,7 @@
     </Window.DataContext>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <local:BooleanToInvisibilityConverter x:Key="BooleanToInvisibilityConverter" />
+        <conv:BooleanToInvisibilityConverter x:Key="BooleanToInvisibilityConverter" />
         <basilisk:SimulationSettingsCreator x:Key="SimulationSettingsCreator" />
         <local:WindowTitleCreator x:Key="WindowTitleCreator" />
         <basilisk:TypeMatchConverter x:Key="TypeMatchConverter" />
@@ -172,10 +173,12 @@
                         <TabItem Header="Structure"
                                  basilisk:ComponentEditorTabControl.ComponentsToPropagateUpward="{Binding LoadedStructureDefinitions}"
                                  basilisk:ComponentEditorTabControl.ComponentTypeToPropagateUpward="{x:Type models:StructureInformation}">
-                            <basilisk:StructureEditor Settings="{Binding SelectedComponentSettings}"
+                            <basilisk:StructureEditor AdvancedModel="{Binding SelectedComponentAdvancedStructuralModel}"
+                                                      AssemblyProperties="{Binding SelectedComponentSettings}"
                                                       Ratios="{Binding SelectedComponentMassRatios}"
                                                       PickMaterial="{Binding PickMaterial}"
-                                                      MaterialChoices="{Binding LoadedOpaqueMaterials}" />
+                                                      MaterialChoices="{Binding LoadedOpaqueMaterials}"
+                                                      UseAdvancedModel="{Binding SelectedComponentUseAdvancedStructuralModel}" />
                                                       
                         </TabItem>
                     </basilisk:ComponentEditorTabControl>

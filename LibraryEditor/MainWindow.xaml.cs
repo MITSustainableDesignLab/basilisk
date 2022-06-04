@@ -65,12 +65,12 @@ namespace Basilisk.LibraryEditor
             var collisions =
                 vm
                 .LoadedLibrary
-                .WouldCollide(lib.AllComponents)
+                .WouldCollide(lib.AllLogicalComponents)
                 .Select(c => new MergeCollisionViewModel(c))
                 .ToArray();
             var add =
                 lib
-                .AllComponents
+                .AllLogicalComponents
                 .Except(collisions.Select(c => c.NewComponent));
             var mergeVM = new MergeWindowViewModel() { Collisions = collisions };
 

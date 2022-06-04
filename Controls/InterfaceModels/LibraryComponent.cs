@@ -57,7 +57,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         public override string ToString() => Name;
 
-        public virtual IReadOnlyCollection<SimulationSetting> SimulationSettings(ComponentCoordinator coordinator)
+        public virtual IReadOnlyCollection<SimulationSetting> SimulationSettings(IComponentCoordinator coordinator)
         {
             var sourceType = GetType();
             var typeOrderer = SimulationSettingsCreator.HierarchyComparer.Build(sourceType);
@@ -70,7 +70,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(x =>
                 {
                     var displayName = x.Att.DisplayName == null ? x.Prop.Name : x.Att.DisplayName;
-                    var setting = new SimulationSetting(this, x.Prop, displayName, x.Att.Units, x.Att.Description, coordinator);
+                    var setting = new SimulationSetting(this, x.Prop, displayName, x.Att.Units, x.Att.Description, x.Att.MustBePositive, coordinator);
                     setting.PropertyChanged += (s, e) => RaisePropertyChanged(setting.PropertyName);
                     return setting;
                 })

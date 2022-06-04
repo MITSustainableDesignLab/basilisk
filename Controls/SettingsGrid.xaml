@@ -3,6 +3,7 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:my="clr-namespace:Basilisk.Controls"
           xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+          x:Name="top"
           ItemsSource="{Binding RelativeSource={RelativeSource Self}, Path=Settings}"
           AutoGenerateColumns="False"
           CanUserReorderColumns="False"
@@ -55,7 +56,12 @@
         </DataTemplate>
     </DataGrid.Resources>
     <DataGrid.Columns>
-        <DataGridTextColumn Header="Setting" Binding="{Binding DisplayName, Mode=OneTime}" IsReadOnly="True">
+        <DataGridTextColumn Binding="{Binding DisplayName, Mode=OneTime}" IsReadOnly="True">
+            <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ElementName=top, Path=SettingNameColumnHeader}" />
+                </DataTemplate>
+            </DataGridTextColumn.HeaderTemplate>
             <DataGridTextColumn.ElementStyle>
                 <Style TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -63,18 +69,26 @@
                 </Style>
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>
-        <DataGridTemplateColumn Header="Value"
-                                CellTemplateSelector="{StaticResource CellTemplateSelector}">
+        <DataGridTemplateColumn CellTemplateSelector="{StaticResource CellTemplateSelector}">
+            <DataGridTemplateColumn.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ElementName=top, Path=SettingValueColumnHeader}" />
+                </DataTemplate>
+            </DataGridTemplateColumn.HeaderTemplate>
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
                     <TextBox Text="{Binding Path=SingleValue, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}"
-                             HorizontalContentAlignment="Right"
-                             Visibility="{Binding Path=ExposeAsTextBox, Mode=OneTime, Converter={StaticResource BooleanToVisibilityConverter}}">
+                             HorizontalContentAlignment="Right">
                     </TextBox>
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header="Units" Binding="{Binding Units, Mode=OneTime}" IsReadOnly="True">
+        <DataGridTextColumn Binding="{Binding Units, Mode=OneTime}" IsReadOnly="True">
+            <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ElementName=top, Path=SettingUnitsColumnHeader}" />
+                </DataTemplate>
+            </DataGridTextColumn.HeaderTemplate>
             <DataGridTextColumn.ElementStyle>
                 <Style TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -84,7 +98,8 @@
                 </Style>
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>
-        <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=OneTime}" IsReadOnly="True">
+        <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=OneTime}" IsReadOnly="True"
+                            x:Name="dgcolDescription">
             <DataGridTextColumn.ElementStyle>
                 <Style TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center" />

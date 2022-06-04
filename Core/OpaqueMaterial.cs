@@ -14,6 +14,12 @@ namespace Basilisk.Core
     public class OpaqueMaterial : MaterialBase, IEquatable<OpaqueMaterial>
     {
         [DataMember]
+        public double? DesignStrength { get; set; }
+
+        [DataMember]
+        public double? ModulusOfElasticity { get; set; }
+
+        [DataMember]
         public double MoistureDiffusionResistance { get; set; }
 
         [DataMember]
@@ -41,6 +47,8 @@ namespace Basilisk.Core
             else if (Object.ReferenceEquals(other, this)) { return true; }
             return
                 MaterialBase.ShareProperties(this, other) &&
+                this.DesignStrength == other.DesignStrength &&
+                this.ModulusOfElasticity == other.ModulusOfElasticity &&
                 this.MoistureDiffusionResistance == other.MoistureDiffusionResistance &&
                 this.SolarAbsorptance == other.SolarAbsorptance &&
                 this.SpecificHeat == other.SpecificHeat &&

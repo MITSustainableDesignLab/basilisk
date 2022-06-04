@@ -4,6 +4,7 @@
     <TargetFrameworks>net48</TargetFrameworks>
     <AssemblyName>Basilisk</AssemblyName>
     <RootNamespace>Basilisk.Core</RootNamespace>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    public class MaterialLayer : INotifyPropertyChanged, IMaterialPickable
+    public class MaterialLayer : INotifyPropertyChanged, IMaterialSettable
     {
         private LibraryComponent material;
         private double thickness;
@@ -33,5 +33,12 @@ namespace Basilisk.Controls.InterfaceModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool TrySetMaterial(LibraryComponent material)
+        {
+            Material = material;
+
+            return true;
+        }
     }
 }

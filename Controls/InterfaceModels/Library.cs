@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 using AutoMapper;
@@ -46,7 +47,8 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<Core.StructureInformation, StructureInformation>()
                 .IncludeBase<Core.ConstructionBase, ConstructionBase>()
-                .ForMember(dest => dest.MassRatios, opt => opt.Ignore());
+                .ForMember(dest => dest.MassRatios, opt => opt.Ignore())
+                .ForMember(dest => dest.AdvancedModel, opt => opt.Ignore());
             Mapper
                 .CreateMap<Core.DaySchedule, DaySchedule>()
                 .IncludeBase<Core.LibraryComponent, LibraryComponent>()
@@ -166,6 +168,34 @@ namespace Basilisk.Controls.InterfaceModels
                 .CreateMap<WindowConstruction, Core.WindowConstruction>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
             Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>,
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>>();
+            Mapper
+                .CreateMap<
+                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>, 
+                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>>();
+            Mapper
+                .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
+            Mapper
+                .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
+            Mapper
+                .CreateMap<AdvancedStructuralModeling.LoadingSettings, Core.AdvancedStructuralModeling.LoadingSettings>();
+            Mapper
+                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
+            Mapper
                 .CreateMap<StructureInformation, Core.StructureInformation>()
                 .IncludeBase<ConstructionBase, Core.ConstructionBase>();
 
@@ -217,7 +247,39 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper.AssertConfigurationIsValid();
         }
 
-        public IEnumerable<LibraryComponent> AllComponents => new ComponentCoordinator(this).AllComponents;
+        public IEnumerable<LibraryComponent> AllLogicalComponents =>
+                OpaqueMaterials
+                .Concat(GlazingMaterials)
+                .Concat(GasMaterials)
+                .Concat(OpaqueConstructions)
+                .Concat(WindowConstructions)
+                .Concat(StructureDefinitions)
+                .Concat(DaySchedules)
+                .Concat(WeekSchedules)
+                .Concat(YearSchedules)
+                .Concat(ZoneConditionings)
+                .Concat(ZoneConstructions)
+                .Concat(ZoneHotWaters)
+                .Concat(ZoneLoads)
+                .Concat(ZoneVentilations)
+                .Concat(Zones)
+                .Concat(BuildingTemplates)
+                .Concat(WindowSettings);
+
+        public IEnumerable<INotifyPropertyChanged> AllModifiableComponents =>
+            AllLogicalComponents
+            .Cast<INotifyPropertyChanged>()
+            .Concat(
+                StructureDefinitions
+                .OfType<StructureInformation>()
+                .Where(s => s.UseAdvancedModel)
+                .SelectMany(s =>
+                    s
+                    .AdvancedModel
+                    .ConstructionSystems
+                    .All
+                    .Append(s.AdvancedModel.ColumnWallSpacing)
+                    .Append(s.AdvancedModel.LoadingSettings)));
 
         public ICollection<LibraryComponent> OpaqueMaterials { get; set; } = new List<LibraryComponent>();
         public ICollection<LibraryComponent> GlazingMaterials { get; set; } = new List<LibraryComponent>();
@@ -474,6 +536,31 @@ namespace Basilisk.Controls.InterfaceModels
                         HighLoadRatio = ratios.HighLoadRatio
                     })
                     .ToList();
+
+                if (c.AdvancedModel.ConstructionSystems.Beams.Material?.Name is string beamsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Beams.Material = knownOpaqueMaterials[beamsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.Columns.Material?.Name is string columnsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Columns.Material = knownOpaqueMaterials[columnsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.Floors.Material?.Name is string floorsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Floors.Material = knownOpaqueMaterials[floorsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.Foundations.Material?.Name is string foundationsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.Foundations.Material = knownOpaqueMaterials[foundationsName];
+                }
+
+                if (c.AdvancedModel.ConstructionSystems.LateralSystem.Material?.Name is string lateralSystemsName)
+                {
+                    c.AdvancedModel.ConstructionSystems.LateralSystem.Material = knownOpaqueMaterials[lateralSystemsName];
+                }
             }
 
             newLib.DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(DaySchedules.Cast<DaySchedule>()).ToList();
@@ -642,7 +729,7 @@ namespace Basilisk.Controls.InterfaceModels
         public IEnumerable<MergeCollision> WouldCollide(IEnumerable<LibraryComponent> newComponents) =>
             newComponents
             .Join(
-                AllComponents,
+                AllLogicalComponents,
                 newC => newC.Name,
                 oldC => oldC.Name,
                 (newC, oldC) => new MergeCollision(oldC, newC))
@@ -653,7 +740,7 @@ namespace Basilisk.Controls.InterfaceModels
                     .Any(n => n.IsAssignableFrom(x.NewComponent.GetType())));
 
         public bool WouldCollide(string name, Type type) =>
-            AllComponents
+            AllLogicalComponents
             .Any(c =>
                 c.Name == name &&
                 (c.GetType() == type ||
@@ -748,7 +835,47 @@ namespace Basilisk.Controls.InterfaceModels
                 })
                 .Where(layer => layer != null);
             dest.MassRatios = new ObservableCollection<MassRatios>(massRatios);
+
+            src.AdvancedModel.ColumnWallSpacing ??= new Core.AdvancedStructuralModeling.ColumnWallSpacingSettings();
+            src.AdvancedModel.LoadingSettings ??= new Core.AdvancedStructuralModeling.LoadingSettings();
+            dest.AdvancedModel = new AdvancedStructuralModeling.AdvancedStructuralModel
+            {
+                ColumnWallSpacing = new AdvancedStructuralModeling.ColumnWallSpacingSettings
+                {
+                    PrimarySpan = src.AdvancedModel.ColumnWallSpacing.PrimarySpan,
+                    SecondarySpan = src.AdvancedModel.ColumnWallSpacing.SecondarySpan
+                },
+
+                ConstructionSystems = new AdvancedStructuralModeling.ConstructionSystemSettings
+                {
+                    Beams = CreateSystem("Beams", src.AdvancedModel.ConstructionSystems.Beams),
+                    Columns = CreateSystem("Columns", src.AdvancedModel.ConstructionSystems.Columns),
+                    Floors = CreateSystem("Floors", src.AdvancedModel.ConstructionSystems.Floors),
+                    Foundations = CreateSystem("Foundations", src.AdvancedModel.ConstructionSystems.Foundations),
+                    LateralSystem = CreateSystem("Lateral system", src.AdvancedModel.ConstructionSystems.LateralSystem)
+                },
+
+                LoadingSettings = new AdvancedStructuralModeling.LoadingSettings
+                {
+                    LiveLoadingPreset = Core.AdvancedStructuralModeling.LiveLoadingPresetMap.TryGetValue(src.AdvancedModel.LoadingSettings.LiveLoadingPreset) is double _
+                        ? src.AdvancedModel.LoadingSettings.LiveLoadingPreset
+                        : Core.AdvancedStructuralModeling.LiveLoadingPreset.Other,
+                    LiveLoadingValue = src.AdvancedModel.LoadingSettings.LiveLoadingValue
+                }
+            };
             return dest;
+
+            AdvancedStructuralModeling.ConstructionSystem<T> CreateSystem<T>(string name, Core.AdvancedStructuralModeling.ConstructionSystem<T> source)
+                where T : Enum =>
+                new(name)
+                {
+                    Material =
+                        source.Material is Core.OpaqueMaterial srcM &&
+                        matDict.TryGetValue(srcM.Name, out var dstM)
+                            ? dstM
+                            : null,
+                    ConstructionSystemType = source.ConstructionSystemType
+                };
         }
 
         private static WindowSettings BuildWindowSettings(Core.WindowSettings src, Dictionary<string, WindowConstruction> windowsConstructions, Dictionary<string, YearSchedule> years)

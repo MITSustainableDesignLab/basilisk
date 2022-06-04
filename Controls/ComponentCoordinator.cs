@@ -6,30 +6,11 @@ using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.Controls
 {
-    public class ComponentCoordinator
+    public class ComponentCoordinator : IComponentCoordinator
     {
         private readonly Library lib;
 
         public ComponentCoordinator(Library lib) { this.lib = lib; }
-
-        public IEnumerable<LibraryComponent> AllComponents =>
-            lib.OpaqueMaterials
-            .Concat(lib.GlazingMaterials)
-            .Concat(lib.GasMaterials)
-            .Concat(lib.OpaqueConstructions)
-            .Concat(lib.WindowConstructions)
-            .Concat(lib.StructureDefinitions)
-            .Concat(lib.DaySchedules)
-            .Concat(lib.WeekSchedules)
-            .Concat(lib.YearSchedules)
-            .Concat(lib.ZoneConditionings)
-            .Concat(lib.ZoneConstructions)
-            .Concat(lib.ZoneHotWaters)
-            .Concat(lib.ZoneLoads)
-            .Concat(lib.ZoneVentilations)
-            .Concat(lib.Zones)
-            .Concat(lib.BuildingTemplates)
-            .Concat(lib.WindowSettings);
 
         public IEnumerable<LibraryComponent> ComponentsOfType(Type type) => ComponentsOfTypeMutable(type);
 

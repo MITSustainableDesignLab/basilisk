@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Basilisk.Controls.InterfaceModels
 {
-    public class MassRatios : INotifyPropertyChanged, IMaterialPickable
+    public class MassRatios : INotifyPropertyChanged, IMaterialSettable
     {
         private double highLoadRatio;
         private LibraryComponent material;
@@ -52,5 +52,12 @@ namespace Basilisk.Controls.InterfaceModels
                 Material = Material,
                 NormalRatio = NormalRatio
             };
+
+        public bool TrySetMaterial(LibraryComponent material)
+        {
+            Material = material;
+
+            return true;
+        }
     }
 }

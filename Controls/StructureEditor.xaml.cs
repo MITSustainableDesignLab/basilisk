@@ -1,22 +1,11 @@
-﻿using System;
+﻿using Basilisk.Controls.InterfaceModels;
+using Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using Basilisk.Controls.InterfaceModels;
-
-using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialPickable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
+using PickMaterialFunc = System.Func<Basilisk.Controls.InterfaceModels.IMaterialSettable, System.Collections.Generic.ICollection<Basilisk.Controls.InterfaceModels.LibraryComponent>, bool>;
 
 namespace Basilisk.Controls
 {
@@ -33,13 +22,19 @@ namespace Basilisk.Controls
         private void BeginEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             if ((string)e.Column.Header != "Material") { return; }
-            var ratios = (MassRatios)e.Row.DataContext;
-            var success = PickMaterial?.Invoke(ratios, MaterialChoices);
+            var componentWithSettableMaterial = (IMaterialSettable)e.Row.DataContext;
+            var success = PickMaterial?.Invoke(componentWithSettableMaterial, MaterialChoices);
             if (success.HasValue && success.Value)
             {
                 ((DataGrid)sender).CommitEdit();
             }
             e.Cancel = true;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = (ComboBox)sender;
+            comboBox.GetBindingExpression(ComboBox.SelectedItemProperty)?.UpdateSource();
         }
 
         private void DeleteSelectedRatios(object sender, RoutedEventArgs e)
@@ -51,6 +46,35 @@ namespace Basilisk.Controls
                 ratios.RemoveAt(selectedIx);
             }
         }
+
+        private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            (sender as TextBox)?.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+        }
+
+        public AdvancedStructuralModel AdvancedModel
+        {
+            get { return (AdvancedStructuralModel)GetValue(AdvancedModelProperty); }
+            set { SetValue(AdvancedModelProperty, value); }
+        }
+
+        public static readonly DependencyProperty AdvancedModelProperty =
+            DependencyProperty.Register(
+                nameof(AdvancedModel),
+                typeof(AdvancedStructuralModel),
+                typeof(StructureEditor));
+
+        public ICollection<SimulationSetting> AssemblyProperties
+        {
+            get { return (ICollection<SimulationSetting>)GetValue(AssemblyPropertiesProperty); }
+            set { SetValue(AssemblyPropertiesProperty, value); }
+        }
+
+        public static readonly DependencyProperty AssemblyPropertiesProperty =
+            DependencyProperty.Register(
+                nameof(AssemblyProperties),
+                typeof(ICollection<SimulationSetting>),
+                typeof(StructureEditor));
 
         public ICollection<LibraryComponent> MaterialChoices
         {
@@ -88,16 +112,17 @@ namespace Basilisk.Controls
                 typeof(PickMaterialFunc),
                 typeof(StructureEditor));
 
-        public ICollection<SimulationSetting> Settings
+        public bool UseAdvancedModel
         {
-            get { return (ICollection<SimulationSetting>)GetValue(SettingsProperty); }
-            set { SetValue(SettingsProperty, value); }
+            get { return (bool)GetValue(UseAdvancedModelProperty); }
+            set { SetValue(UseAdvancedModelProperty, value); }
         }
 
-        public static readonly DependencyProperty SettingsProperty =
+        public static readonly DependencyProperty UseAdvancedModelProperty =
             DependencyProperty.Register(
-                nameof(Settings),
-                typeof(ICollection<SimulationSetting>),
-                typeof(StructureEditor));
+                nameof(UseAdvancedModel),
+                typeof(bool),
+                typeof(StructureEditor),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     }
 }

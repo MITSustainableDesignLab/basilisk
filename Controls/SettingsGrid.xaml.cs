@@ -27,16 +27,72 @@ namespace Basilisk.Controls
             InitializeComponent();
         }
 
+        public bool IsDescriptionColumnVisible
+        {
+            get => (bool)GetValue(IsDescriptionColumnVisibleProperty);
+            set => SetValue(IsDescriptionColumnVisibleProperty, value);
+        }
+
+        public static readonly DependencyProperty IsDescriptionColumnVisibleProperty = DependencyProperty.Register(
+            nameof(IsDescriptionColumnVisible),
+            typeof(bool),
+            typeof(SettingsGrid),
+            new PropertyMetadata(
+                true,
+                (d, a) =>
+                {
+                    if (d is SettingsGrid grid && a.NewValue is bool value)
+                    {
+                        grid.dgcolDescription.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                }));
+
         public IEnumerable<SimulationSetting> Settings
         {
-            get { return (IEnumerable<SimulationSetting>)GetValue(SettingsProperty); }
-            set { SetValue(SettingsProperty, value); }
+            get => (IEnumerable<SimulationSetting>)GetValue(SettingsProperty);
+            set => SetValue(SettingsProperty, value);
         }
 
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
             nameof(Settings),
             typeof(IEnumerable<SimulationSetting>),
             typeof(SettingsGrid));
+
+        public string SettingNameColumnHeader
+        {
+            get => (string)GetValue(SettingNameColumnHeaderProperty);
+            set => SetValue(SettingNameColumnHeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty SettingNameColumnHeaderProperty = DependencyProperty.Register(
+            nameof(SettingNameColumnHeader),
+            typeof(string),
+            typeof(SettingsGrid),
+            new PropertyMetadata("Setting"));
+
+        public string SettingUnitsColumnHeader
+        {
+            get => (string)GetValue(SettingUnitsColumnHeaderProperty);
+            set => SetValue(SettingUnitsColumnHeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty SettingUnitsColumnHeaderProperty = DependencyProperty.Register(
+            nameof(SettingUnitsColumnHeader),
+            typeof(string),
+            typeof(SettingsGrid),
+            new PropertyMetadata("Units"));
+
+        public string SettingValueColumnHeader
+        {
+            get => (string)GetValue(SettingValueColumnHeaderProperty);
+            set => SetValue(SettingValueColumnHeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty SettingValueColumnHeaderProperty = DependencyProperty.Register(
+            nameof(SettingValueColumnHeader),
+            typeof(string),
+            typeof(SettingsGrid),
+            new PropertyMetadata("Value"));
 
         private void CheckBoxChanged(object sender, RoutedEventArgs e)
         {

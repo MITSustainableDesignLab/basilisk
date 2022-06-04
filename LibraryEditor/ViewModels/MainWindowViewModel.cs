@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Basilisk.Controls;
+using Basilisk.Controls.InterfaceModels;
+using Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-
-using Basilisk.Controls;
-using Basilisk.Controls.InterfaceModels;
 
 namespace Basilisk.LibraryEditor.ViewModels
 {
@@ -21,6 +21,7 @@ namespace Basilisk.LibraryEditor.ViewModels
         private LibraryComponent selectedComponent;
         private ObservableCollection<MaterialLayer> selectedComponentLayers;
         private ObservableCollection<MassRatios> selectedComponentMassRatios;
+        private bool selectedComponentUseAdvancedStructuralModel;
 
         public ActionBarViewModel ActionBarViewModel { get; }
 
@@ -114,7 +115,7 @@ namespace Basilisk.LibraryEditor.ViewModels
             }
         }
 
-        public IEnumerable<LibraryComponent> AllLoadedComponents => loadedLibrary?.AllComponents;
+        public IEnumerable<LibraryComponent> AllLoadedComponents => loadedLibrary?.AllLogicalComponents;
         
         public ICollection<LibraryComponent> LoadedGasMaterials => loadedLibrary?.GasMaterials;
         public ICollection<LibraryComponent> LoadedGlazingMaterials => loadedLibrary?.GlazingMaterials;
@@ -135,8 +136,8 @@ namespace Basilisk.LibraryEditor.ViewModels
         public ICollection<LibraryComponent> LoadedWindowSettings => loadedLibrary?.WindowSettings;
         public ICollection<LibraryComponent> LoadedTemplates => loadedLibrary?.BuildingTemplates;
 
-        public Func<IMaterialPickable, ICollection<LibraryComponent>, bool> PickMaterial =>
-            (pickable, components) =>
+        public Func<IMaterialSettable, ICollection<LibraryComponent>, bool> PickMaterial =>
+            (materialSettable, components) =>
             {
                 var categorized = new ComponentCategoryCollection(components);
                 var pickerVM = new ComponentPickerViewModel()
@@ -147,7 +148,7 @@ namespace Basilisk.LibraryEditor.ViewModels
                 var res = picker.ShowDialog();
                 if (res.HasValue && res.Value)
                 {
-                    pickable.Material = pickerVM.SelectedComponent;
+                    materialSettable.TrySetMaterial(pickerVM.SelectedComponent);
                     HasUnsavedChanges = true;
                     return true;
                 }
@@ -179,16 +180,36 @@ namespace Basilisk.LibraryEditor.ViewModels
             set
             {
                 selectedComponent = value;
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponent)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentSettings)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedDayScheduleValues)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedWeekScheduleDays)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedYearScheduleParts)));
+
+                if (selectedComponent is StructureInformation structure)
+                {
+                    SelectedComponentAdvancedStructuralModel = structure.AdvancedModel;
+                    SelectedComponentUseAdvancedStructuralModel = structure.UseAdvancedModel;
+                }
+
                 ActionBarViewModel.EditSelectedItemMetadataCommand.RaiseCanExecuteChanged();
                 ActionBarViewModel.DeleteComponentCommand.RaiseCanExecuteChanged();
                 ActionBarViewModel.DuplicateComponentCommand.RaiseCanExecuteChanged();
                 SelectedComponentLayers = (selectedComponent as LayeredConstruction)?.Layers;
                 SelectedComponentMassRatios = (selectedComponent as StructureInformation)?.MassRatios;
+            }
+        }
+
+        public AdvancedStructuralModel SelectedComponentAdvancedStructuralModel
+        {
+            get { return (selectedComponent as StructureInformation)?.AdvancedModel; }
+            set
+            {
+                if (selectedComponent is StructureInformation structure)
+                {
+                    structure.AdvancedModel = value;
+                }
             }
         }
 
@@ -209,6 +230,22 @@ namespace Basilisk.LibraryEditor.ViewModels
             {
                 selectedComponentMassRatios = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentMassRatios)));
+            }
+        }
+
+        public bool SelectedComponentUseAdvancedStructuralModel
+        {
+            get => selectedComponentUseAdvancedStructuralModel;
+            set
+            {
+                selectedComponentUseAdvancedStructuralModel = value;
+
+                if (selectedComponent is StructureInformation structure)
+                {
+                    structure.UseAdvancedModel = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentAdvancedStructuralModel)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedComponentUseAdvancedStructuralModel)));
+                }
             }
         }
 

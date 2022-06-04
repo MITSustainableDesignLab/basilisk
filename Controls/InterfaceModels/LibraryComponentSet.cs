@@ -73,7 +73,7 @@ namespace Basilisk.Controls.InterfaceModels
         public override LibraryComponent Duplicate() =>
             new LibraryComponentSet(Components.Select(c => c.Duplicate()));
 
-        public override IReadOnlyCollection<SimulationSetting> SimulationSettings(ComponentCoordinator coordinator)
+        public override IReadOnlyCollection<SimulationSetting> SimulationSettings(IComponentCoordinator coordinator)
         {
             System.Diagnostics.Debug.Assert(Components.Any());
             var sourceTypes = Components.Select(c => c.GetType()).Distinct().ToArray();
@@ -91,7 +91,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Select(x =>
                 {
                     var displayName = x.Att.DisplayName == null ? x.Prop.Name : x.Att.DisplayName;
-                    var setting = new SimulationSetting(this, x.Prop, displayName, x.Att.Units, x.Att.Description, coordinator);
+                    var setting = new SimulationSetting(this, x.Prop, displayName, x.Att.Units, x.Att.Description, x.Att.MustBePositive, coordinator);
                     setting.PropertyChanged += (s, e) => RaisePropertyChanged(setting.PropertyName);
                     return setting;
                 })
