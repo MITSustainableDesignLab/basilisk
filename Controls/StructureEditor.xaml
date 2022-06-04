@@ -189,8 +189,6 @@
                                     Margin="0,6"
                                     Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}"
                                     SettingNameColumnHeader="Column/Wall Spacing"
-                                    SettingUnitsColumnHeader="Design Parameters"
-                                    SettingValueColumnHeader="Material"
                                     IsDescriptionColumnVisible="False" />
             </Grid>
         </GroupBox>
