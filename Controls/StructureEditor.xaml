@@ -62,43 +62,117 @@
         <GroupBox Grid.Row="1"
                   Header="Advanced Structural Model"
                   Visibility="{Binding ElementName=top, Path=UseAdvancedModel, Converter={StaticResource BoolToVisibilityConverter}}">
-            <Grid DataContext="{Binding ElementName=top, Path=AdvancedModel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0"
-                          Margin="0,6"
-                          ItemsSource="{Binding LoadingSettingsList, Mode=OneTime}"
-                          AutoGenerateColumns="False"
-                          CanUserReorderColumns="False"
-                          CanUserResizeRows="False"
-                          SelectionUnit="Cell">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Loading"
-                                            IsReadOnly="True"
-                                            Width="163">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Text" Value="Live Loading" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="3,2,3,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Value">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <ComboBox Grid.Column="0"
-                                                  Width="230"
-                                                  ItemsSource="{Binding Path=LiveLoadingPreset, Mode=OneTime, Converter={StaticResource EnumConverter}}"
-                                                  SelectedItem="{Binding Path=LiveLoadingPreset, Mode=TwoWay, Converter={StaticResource EnumConverter}}"
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid DataContext="{Binding ElementName=top, Path=AdvancedModel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0"
+                              Margin="0,6"
+                              ItemsSource="{Binding LoadingSettingsList, Mode=OneTime}"
+                              AutoGenerateColumns="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeRows="False"
+                              SelectionUnit="Cell">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Loading"
+                                                IsReadOnly="True"
+                                                Width="163">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Text" Value="Live Loading" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Padding" Value="3,2,3,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Value">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <ComboBox Grid.Column="0"
+                                                      Width="230"
+                                                      ItemsSource="{Binding Path=LiveLoadingPreset, Mode=OneTime, Converter={StaticResource EnumConverter}}"
+                                                      SelectedItem="{Binding Path=LiveLoadingPreset, Mode=TwoWay, Converter={StaticResource EnumConverter}}"
+                                                      SelectionChanged="ComboBox_SelectionChanged">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <TextBox Grid.Column="1"
+                                                     Width="40"
+                                                     VerticalContentAlignment="Center"
+                                                     Text="{Binding LiveLoadingValue, ValidatesOnDataErrors=True}"
+                                                     IsReadOnly="{Binding IsLoadingValueControlledByPreset}"
+                                                     LostKeyboardFocus="TextBox_LostKeyboardFocus">
+                                                <TextBox.Style>
+                                                    <Style TargetType="{x:Type TextBox}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsLoadingValueControlledByPreset}" Value="True">
+                                                                <Setter Property="Foreground" Value="DarkGray" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBox.Style>
+                                            </TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Units"
+                                                IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Text" Value="kPa" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Padding" Value="3,2,3,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Grid.Row="1"
+                              Margin="0,6"
+                              ItemsSource="{Binding ConstructionSystems.All}"
+                              AutoGenerateColumns="False"
+                              CanUserReorderColumns="False"
+                              CanUserResizeRows="False"
+                              SelectionUnit="Cell"
+                              BeginningEdit="BeginEdit">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Construction System" IsReadOnly="True"
+                                                Binding="{Binding Name}"
+                                                Width="163">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Padding" Value="3,2,3,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Material"
+                                                Width="273"
+                                                Binding="{Binding Material.Name}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Padding" Value="3,2,3,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Types">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumConverter}, Mode=OneTime}"
+                                                  SelectedItem="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumConverter}, Mode=TwoWay}"
                                                   SelectionChanged="ComboBox_SelectionChanged">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
@@ -106,91 +180,19 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                        <TextBox Grid.Column="1"
-                                                 Width="40"
-                                                 VerticalContentAlignment="Center"
-                                                 Text="{Binding LiveLoadingValue, ValidatesOnDataErrors=True}"
-                                                 IsReadOnly="{Binding IsLoadingValueControlledByPreset}"
-                                                 LostKeyboardFocus="TextBox_LostKeyboardFocus">
-                                            <TextBox.Style>
-                                                <Style TargetType="{x:Type TextBox}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsLoadingValueControlledByPreset}" Value="True">
-                                                            <Setter Property="Foreground" Value="DarkGray" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBox.Style>
-                                        </TextBox>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Units"
-                                            IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Text" Value="kPa" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="3,2,3,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <DataGrid Grid.Row="1"
-                          Margin="0,6"
-                          ItemsSource="{Binding ConstructionSystems.All}"
-                          AutoGenerateColumns="False"
-                          CanUserReorderColumns="False"
-                          CanUserResizeRows="False"
-                          SelectionUnit="Cell"
-                          BeginningEdit="BeginEdit">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Construction System" IsReadOnly="True"
-                                            Binding="{Binding Name}"
-                                            Width="163">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="3,2,3,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Material"
-                                            Width="273"
-                                            Binding="{Binding Material.Name}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="3,2,3,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Types">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumConverter}, Mode=OneTime}"
-                                              SelectedItem="{Binding Path=ConstructionSystemType, Converter={StaticResource EnumConverter}, Mode=TwoWay}"
-                                              SelectionChanged="ComboBox_SelectionChanged">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
                     
-                </DataGrid>
-                <local:SettingsGrid Grid.Row="2"
-                                    Margin="0,6"
-                                    Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}"
-                                    SettingNameColumnHeader="Column/Wall Spacing"
-                                    IsDescriptionColumnVisible="False" />
-            </Grid>
+                    </DataGrid>
+                    <local:SettingsGrid Grid.Row="2"
+                                        Margin="0,6"
+                                        Settings="{Binding ColumnWallSpacing, Converter={StaticResource SimulationSettingsConverter}}"
+                                        SettingNameColumnHeader="Column/Wall Spacing"
+                                        IsDescriptionColumnVisible="False" />
+                </Grid>
+            </ScrollViewer>
         </GroupBox>
         <GroupBox Grid.Row="2"
                   Header="Assembly Properties">
