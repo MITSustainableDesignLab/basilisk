@@ -48,12 +48,19 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(true)]
         public bool IsCoolingOn { get; set; } = true;
 
+        [SimulationSetting(DisplayName = "IsCoolingSetpointConstant")]
+        [DefaultValue(true)]
+        public bool IsCoolingSetpointConstant { get; set; } = true;
+
         [SimulationSetting(DisplayName = "Cooling setpoint", Units = "degC")]
         [DefaultValue(26)]
         public double CoolingSetpoint { get; set; } = 26;
 
         [SimulationSetting(DisplayName = "Cooling schedule")]
         public YearSchedule CoolingSchedule { get; set; }
+
+        [SimulationSetting(DisplayName = "Cooling setpoint schedule")]
+        public YearSchedule CoolingSetpointSchedule { get; set; }
 
         [SimulationSetting(DisplayName = "Cooling limit type")]
         [DefaultValue(IdealSystemLimit.NoLimit)]
