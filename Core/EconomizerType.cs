@@ -10,6 +10,6 @@ namespace Basilisk.Core
     {
         NoEconomizer,
         DifferentialDryBulb,
-        DifferentialEnthalphy
+        DifferentialEnthalpy
     }
 }
