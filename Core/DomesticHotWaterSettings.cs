@@ -8,14 +8,14 @@ namespace Basilisk.Core
     [DataContract(IsReference = true)]
     public class DomesticHotWaterSettings : LibraryComponent
     {
-        [DataMember, DefaultValue(0.85)]
-        public double CoefficientOfPerformance { get; set; } = 0.85;
+        [DataMember, DefaultValue(1.0)]
+        public double CoefficientOfPerformance { get; set; } = 1.0;
 
         [DataMember]
         public double FlowRatePerFloorArea { get; set; } = 0.03;
 
-        [DataMember]
-        public DomesticHotWaterFuelType FuelType { get; set; }
+        [DataMember, DefaultValue(DomesticHotWaterFuelType.Electricity)]
+        public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.Electricity;
 
         [DataMember, DefaultValue(true)]
         public bool IsOn { get; set; } = true;
