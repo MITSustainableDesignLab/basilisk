@@ -40,7 +40,7 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(FuelType.NaturalGas)]
         public FuelType HeatingFuelType { get; set; } = FuelType.NaturalGas;
 
-        [SimulationSetting(DisplayName = "Heating CoP")]
+        [SimulationSetting(DisplayName = "Heating COP")]
         [DefaultValue(1.0)]
         public double HeatingCoeffOfPerf { get; set; } = 1.0;
 
@@ -71,7 +71,7 @@ namespace Basilisk.Controls.InterfaceModels
         [DefaultValue(100)]
         public double MaxCoolFlow { get; set; } = 100;
 
-        [SimulationSetting(DisplayName = "Cooling CoP")]
+        [SimulationSetting(DisplayName = "Cooling COP")]
         [DefaultValue(1.0)]
         public double CoolingCoeffOfPerf { get; set; } = 1.0;
 
