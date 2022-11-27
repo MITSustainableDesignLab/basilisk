@@ -34,7 +34,7 @@ namespace Basilisk.Controls.InterfaceModels
         public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.Electricity;
 
         [SimulationSetting(DisplayName = "COP")]
-        [DefaultValue(1.0)]
+        [DefaultValue(0.85)]
         public double CoefficientOfPerformance { get; set; } = 0.85;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>

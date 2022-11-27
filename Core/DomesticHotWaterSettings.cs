@@ -8,8 +8,8 @@ namespace Basilisk.Core
     [DataContract(IsReference = true)]
     public class DomesticHotWaterSettings : LibraryComponent
     {
-        [DataMember, DefaultValue(1.0)]
-        public double CoefficientOfPerformance { get; set; } = 1.0;
+        [DataMember, DefaultValue(0.85)]
+        public double CoefficientOfPerformance { get; set; } = 0.85;
 
         [DataMember]
         public double FlowRatePerFloorArea { get; set; } = 0.03;
