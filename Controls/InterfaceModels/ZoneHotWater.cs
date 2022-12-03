@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Basilisk.Controls.Attributes;
+using Basilisk.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-
-using Basilisk.Controls.Attributes;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -29,6 +28,14 @@ namespace Basilisk.Controls.InterfaceModels
         [SimulationSetting(DisplayName = "Peak Flow Rate", Units = "m3/h/m2")]
         [DefaultValue(0.03)]
         public double FlowRatePerFloorArea { get; set; } = 0.03;
+
+        [SimulationSetting(DisplayName = "Fuel type")]
+        [DefaultValue(DomesticHotWaterFuelType.NaturalGas)]
+        public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.NaturalGas;
+
+        [SimulationSetting(DisplayName = "COP")]
+        [DefaultValue(0.85)]
+        public double CoefficientOfPerformance { get; set; } = 0.85;
 
         public override IEnumerable<LibraryComponent> AllReferencedComponents =>
             Enumerable
