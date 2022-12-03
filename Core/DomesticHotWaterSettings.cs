@@ -15,7 +15,7 @@ namespace Basilisk.Core
         public double FlowRatePerFloorArea { get; set; } = 0.03;
 
         [DataMember, DefaultValue(DomesticHotWaterFuelType.Electricity)]
-        public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.Electricity;
+        public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.NaturalGas;
 
         [DataMember, DefaultValue(true)]
         public bool IsOn { get; set; } = true;

@@ -30,8 +30,8 @@ namespace Basilisk.Controls.InterfaceModels
         public double FlowRatePerFloorArea { get; set; } = 0.03;
 
         [SimulationSetting(DisplayName = "Fuel type")]
-        [DefaultValue(DomesticHotWaterFuelType.Electricity)]
-        public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.Electricity;
+        [DefaultValue(DomesticHotWaterFuelType.NaturalGas)]
+        public DomesticHotWaterFuelType FuelType { get; set; } = DomesticHotWaterFuelType.NaturalGas;
 
         [SimulationSetting(DisplayName = "COP")]
         [DefaultValue(0.85)]
