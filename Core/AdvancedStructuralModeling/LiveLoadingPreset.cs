@@ -37,10 +37,10 @@ public enum LiveLoadingPreset
     [DisplayText("Warehouse_Light_Storage_6_kPa")]
     WarehouseLightStorage,
 
-    [DisplayText("Libraries_Stack_Rooms_7.18_kPa")]
+    [LegacyChoice(nameof(Other))]
     LibrariesStackRooms,
 
-    [DisplayText("Warehouse_Heavy_Storage_11.97_kPa")]
+    [LegacyChoice(nameof(Other))]
     WarehouseHeavyStorage,
 
     [DisplayText("Other")]
