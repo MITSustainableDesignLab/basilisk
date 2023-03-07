@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Data;
 
@@ -14,7 +15,7 @@ public class EnumConverter : IValueConverter
         return (value, targetType) switch
         {
             (Enum e, Type t) when t == typeof(IEnumerable) =>
-                Enum.GetValues(e.GetType()),
+                e.GetType().GetFields().Where(f => f.GetCustomAttribute<ObsoleteAttribute>() is null).Select(f => f.GetValue(e)),
 
             (Enum e, Type t) when t == typeof(string) =>
                 e.GetType().GetField(value.ToString()).GetCustomAttribute<DisplayTextAttribute>()?.DisplayText ?? value,

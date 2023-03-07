@@ -1,6 +1,7 @@
 ﻿using Basilisk.Core.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 
 namespace Basilisk.Core.AdvancedStructuralModeling;
 
@@ -37,9 +38,11 @@ public enum LiveLoadingPreset
     [DisplayText("Warehouse_Light_Storage_6_kPa")]
     WarehouseLightStorage,
 
+    [Obsolete("This preset is deprecated and should not be used")]
     [DisplayText("Libraries_Stack_Rooms_7.18_kPa")]
     LibrariesStackRooms,
 
+    [Obsolete("This preset is deprecated and should not be used")]
     [DisplayText("Warehouse_Heavy_Storage_11.97_kPa")]
     WarehouseHeavyStorage,
 
