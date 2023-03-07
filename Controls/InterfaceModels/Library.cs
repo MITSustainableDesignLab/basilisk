@@ -9,7 +9,6 @@ using AutoMapper;
 
 using Basilisk.Controls;
 using Basilisk.Controls.Attributes;
-using Basilisk.Controls.Extensions;
 
 namespace Basilisk.Controls.InterfaceModels
 {
@@ -859,7 +858,7 @@ namespace Basilisk.Controls.InterfaceModels
                 LoadingSettings = new AdvancedStructuralModeling.LoadingSettings
                 {
                     LiveLoadingPreset = Core.AdvancedStructuralModeling.LiveLoadingPresetMap.TryGetValue(src.AdvancedModel.LoadingSettings.LiveLoadingPreset) is double _
-                        ? src.AdvancedModel.LoadingSettings.LiveLoadingPreset.GetCanonicalValue()
+                        ? src.AdvancedModel.LoadingSettings.LiveLoadingPreset
                         : Core.AdvancedStructuralModeling.LiveLoadingPreset.Other,
                     LiveLoadingValue = src.AdvancedModel.LoadingSettings.LiveLoadingValue
                 }
