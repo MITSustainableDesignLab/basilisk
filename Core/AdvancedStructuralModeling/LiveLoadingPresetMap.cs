@@ -16,8 +16,6 @@ public static class LiveLoadingPresetMap
         [LiveLoadingPreset.Recreational] = 4.79,
         [LiveLoadingPreset.Retail] = 6.0,
         [LiveLoadingPreset.WarehouseLightStorage] = 6.0,
-        [LiveLoadingPreset.LibrariesStackRooms] = 7.18,
-        [LiveLoadingPreset.WarehouseHeavyStorage] = 11.97,
     };
 
     public static double? TryGetValue(LiveLoadingPreset preset)
