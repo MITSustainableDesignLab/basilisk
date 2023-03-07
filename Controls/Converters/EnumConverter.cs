@@ -15,25 +15,35 @@ public class EnumConverter : IValueConverter
         switch (value, targetType)
         {
             case (Enum e, Type t) when t == typeof(IEnumerable):
-                return EnumValuesToDisplay(e.GetType());
+                return GetEnumValuesToDisplay(e.GetType());
 
             case (Enum e, Type t) when t == typeof(string):
-                var enumType = e.GetType();
-
-                var field = enumType.GetField(value.ToString());
-
-                if (field.GetCustomAttribute<LegacyChoiceAttribute>() is LegacyChoiceAttribute a)
-                {
-                    field = enumType.GetField(a.ReplaceWith);
-                }
+                var field = GetCanonicalEnumField(e);
 
                 return field.GetCustomAttribute<DisplayTextAttribute>()?.DisplayText ?? field.GetValue(e);
+
+            case (Enum e, Type t) when t == typeof(object):
+                return GetCanonicalEnumField(e).GetValue(e);
 
             default:
                 return value;
         }
 
-        IEnumerable<object> EnumValuesToDisplay(Type enumType)
+        FieldInfo GetCanonicalEnumField(Enum value)
+        {
+            var enumType = value.GetType();
+
+            var field = enumType.GetField(value.ToString());
+
+            if (field.GetCustomAttribute<LegacyChoiceAttribute>() is LegacyChoiceAttribute a)
+            {
+                return enumType.GetField(a.ReplaceWith);
+            }
+
+            return field;
+        }
+
+        IEnumerable<object> GetEnumValuesToDisplay(Type enumType)
         {
             foreach (var value in Enum.GetValues(enumType))
             {
