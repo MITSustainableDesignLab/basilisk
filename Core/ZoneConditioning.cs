@@ -12,6 +12,12 @@ namespace Basilisk.Core
         public YearSchedule CoolingSchedule { get; set; }
 
         [DataMember]
+        public YearSchedule CoolingSetpointSchedule { get; set; }
+
+        [DataMember]
+        public YearSchedule HeatingSetpointSchedule { get; set; }
+
+        [DataMember]
         public double CoolingCoeffOfPerf { get; set; }
 
         [DataMember, DefaultValue(26)]
@@ -58,6 +64,12 @@ namespace Basilisk.Core
 
         [DataMember, DefaultValue(true)]
         public bool IsMechVentOn { get; set; } = true;
+
+        [DataMember, DefaultValue(true)]
+        public bool IsCoolingSetpointConstant { get; set; } = true;
+
+        [DataMember, DefaultValue(true)]
+        public bool IsHeatingSetpointConstant { get; set; } = true;
 
         [DataMember, DefaultValue(100)]
         public double MaxCoolFlow { get; set; } = 100;
