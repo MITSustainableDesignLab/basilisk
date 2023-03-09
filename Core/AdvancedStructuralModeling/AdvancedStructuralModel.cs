@@ -12,5 +12,8 @@ public class AdvancedStructuralModel
     public ConstructionSystemSettings ConstructionSystems { get; set; } = new ConstructionSystemSettings();
 
     [DataMember]
+    public FoundationSoilSettings FoundationSoilSettings { get; set; } = new FoundationSoilSettings();
+
+    [DataMember]
     public LoadingSettings LoadingSettings { get; set; } = new LoadingSettings();
 }

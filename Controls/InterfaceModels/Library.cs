@@ -192,6 +192,10 @@ namespace Basilisk.Controls.InterfaceModels
             Mapper
                 .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
             Mapper
+                .CreateMap<AdvancedStructuralModeling.FoundationSoilSettings, Core.AdvancedStructuralModeling.FoundationSoilSettings>()
+                .ForMember(dest => dest.FoundationSoilPreset, opt => opt.MapFrom(src => src.Preset))
+                .ForMember(dest => dest.FoundationSoilValue, opt => opt.MapFrom(src => src.SelectedValue));
+            Mapper
                 .CreateMap<AdvancedStructuralModeling.LoadingSettings, Core.AdvancedStructuralModeling.LoadingSettings>();
             Mapper
                 .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
@@ -279,6 +283,7 @@ namespace Basilisk.Controls.InterfaceModels
                     .ConstructionSystems
                     .All
                     .Append(s.AdvancedModel.ColumnWallSpacing)
+                    .Append(s.AdvancedModel.FoundationSoilSettings)
                     .Append(s.AdvancedModel.LoadingSettings)));
 
         public ICollection<LibraryComponent> OpaqueMaterials { get; set; } = new List<LibraryComponent>();
@@ -853,6 +858,14 @@ namespace Basilisk.Controls.InterfaceModels
                     Floors = CreateSystem("Floors", src.AdvancedModel.ConstructionSystems.Floors),
                     Foundations = CreateSystem("Foundations", src.AdvancedModel.ConstructionSystems.Foundations),
                     LateralSystem = CreateSystem("Lateral system", src.AdvancedModel.ConstructionSystems.LateralSystem)
+                },
+
+                FoundationSoilSettings = new AdvancedStructuralModeling.FoundationSoilSettings
+                {
+                    Preset = Core.AdvancedStructuralModeling.FoundationSoilPresetMap.TryGetValue(src.AdvancedModel.FoundationSoilSettings.FoundationSoilPreset) is double _
+                        ? src.AdvancedModel.FoundationSoilSettings.FoundationSoilPreset
+                        : Core.AdvancedStructuralModeling.FoundationSoilPreset.Other,
+                    SelectedValue = src.AdvancedModel.FoundationSoilSettings.FoundationSoilValue
                 },
 
                 LoadingSettings = new AdvancedStructuralModeling.LoadingSettings

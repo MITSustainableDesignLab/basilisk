@@ -11,6 +11,10 @@ public class AdvancedStructuralModel
 
     public ConstructionSystemSettings ConstructionSystems { get; set; }
 
+    public FoundationSoilSettings FoundationSoilSettings { get; set; }
+
+    public IEnumerable<FoundationSoilSettings> FoundationSoilSettingsList => Enumerable.Repeat(FoundationSoilSettings, 1);
+
     public LoadingSettings LoadingSettings { get; set; } = new LoadingSettings();
 
     public IEnumerable<LoadingSettings> LoadingSettingsList => Enumerable.Repeat(LoadingSettings, 1);
