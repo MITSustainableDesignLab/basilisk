@@ -16,12 +16,12 @@ namespace Basilisk.Core
         }
 
         [DataMember]
-        public IList<YearSchedulePart> Parts { get; set; }
+        public IList<YearSchedulePart> Parts { get; set; } = new List<YearSchedulePart>();
 
         [DataMember, DefaultValue("Fraction")]
-        public string Type { get; set; }
+        public string Type { get; set; } = "Fraction";
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            Parts.Select(part => part.Schedule);
+            Parts.Select(part => part.Schedule).OfType<LibraryComponent>();
     }
 }

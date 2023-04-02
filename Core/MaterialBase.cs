@@ -28,7 +28,7 @@ namespace Basilisk.Core
 
         [DataMember]
         [DefaultValue(new double[] { 1.0 })]
-        public double[] SubstitutionRatePattern { get; set; }
+        public double[] SubstitutionRatePattern { get; set; } = new[] { 1.0 };
 
         [DataMember]
         public double SubstitutionTimestep { get; set; }

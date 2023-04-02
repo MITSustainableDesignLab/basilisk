@@ -14,7 +14,7 @@ namespace Basilisk.Core
         public override IList<MaterialLayer<WindowMaterialBase>> Layers { get; set; } = new List<MaterialLayer<WindowMaterialBase>>();
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            Layers.Select(layer => layer.Material);
+            Layers.Select(layer => layer.Material).OfType<LibraryComponent>();
 
     }
 }

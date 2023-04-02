@@ -21,7 +21,7 @@ namespace Basilisk.Core
         public bool IsOn { get; set; } = true;
 
         [DataMember]
-        public YearSchedule WaterSchedule { get; set; }
+        public YearSchedule? WaterSchedule { get; set; }
 
         [DataMember, DefaultValue(65)]
         public double WaterSupplyTemperature { get; set; } = 65;
@@ -30,6 +30,6 @@ namespace Basilisk.Core
         public double WaterTemperatureInlet { get; set; } = 10;
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            Enumerable.Repeat(WaterSchedule, 1).Where(s => s != null);
+            Enumerable.Repeat(WaterSchedule, 1).OfType<LibraryComponent>();
     }
 }

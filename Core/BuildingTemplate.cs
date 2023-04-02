@@ -12,7 +12,7 @@ namespace Basilisk.Core
     public class BuildingTemplate : LibraryComponent
     {
         [DataMember]
-        public ZoneDefinition Core { get; set; }
+        public ZoneDefinition? Core { get; set; }
 
         [DataMember]
         public int Lifespan { get; set; }
@@ -21,13 +21,13 @@ namespace Basilisk.Core
         public double PartitionRatio { get; set; }
 
         [DataMember]
-        public ZoneDefinition Perimeter { get; set; }
+        public ZoneDefinition? Perimeter { get; set; }
 
         [DataMember]
-        public StructureInformation Structure { get; set; }
+        public StructureInformation? Structure { get; set; }
 
         [DataMember]
-        public WindowSettings Windows { get; set; }
+        public WindowSettings? Windows { get; set; }
 
         [DataMember]
         public double DefaultWindowToWallRatio { get; set; } = 0.4;
@@ -39,16 +39,16 @@ namespace Basilisk.Core
         public int? YearTo { get; set; }
 
         [DataMember]
-        public string[] Country { get; set; }
+        public string[] Country { get; set; } = Array.Empty<string>();
 
         [DataMember]
-        public string[] ClimateZone { get; set; }
+        public string[] ClimateZone { get; set; } = Array.Empty<string>();
 
         [DataMember]
-        public string[] Authors { get; set; }
+        public string[] Authors { get; set; } = Array.Empty<string>();
 
         [DataMember]
-        public string[] AuthorEmails { get; set; }
+        public string[] AuthorEmails { get; set; } = Array.Empty<string>();
 
         [DataMember] 
         public string Version { get; set; } = "v1.0";
@@ -61,7 +61,7 @@ namespace Basilisk.Core
                 var core = Core?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
                 var perim = Perimeter?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
                 var structure = Structure?.ReferencedComponents ?? Enumerable.Empty<LibraryComponent>();
-                var window = Enumerable.Repeat(Windows, 1);
+                var window = Windows is not null ? Enumerable.Repeat(Windows, 1) : Enumerable.Empty<LibraryComponent>();
                 return core.Concat(perim).Concat(structure).Concat(window);
             }
         }

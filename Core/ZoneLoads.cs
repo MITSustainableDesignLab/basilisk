@@ -12,7 +12,7 @@ namespace Basilisk.Core
         public DimmingType DimmingType { get; set; } = DimmingType.Continuous;
 
         [DataMember]
-        public YearSchedule EquipmentAvailabilitySchedule { get; set; }
+        public YearSchedule? EquipmentAvailabilitySchedule { get; set; }
 
         [DataMember, DefaultValue(12)]
         public double EquipmentPowerDensity { get; set; } = 12;
@@ -24,10 +24,10 @@ namespace Basilisk.Core
         public double LightingPowerDensity { get; set; } = 12;
 
         [DataMember]
-        public YearSchedule LightsAvailabilitySchedule { get; set; }
+        public YearSchedule? LightsAvailabilitySchedule { get; set; }
 
         [DataMember]
-        public YearSchedule OccupancySchedule { get; set; }
+        public YearSchedule? OccupancySchedule { get; set; }
 
         [DataMember, DefaultValue(true)]
         public bool IsEquipmentOn { get; set; } = true;
@@ -42,11 +42,11 @@ namespace Basilisk.Core
         public double PeopleDensity { get; set; } = 0.2;
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            new LibraryComponent[]
+            new LibraryComponent?[]
             {
                 EquipmentAvailabilitySchedule,
                 LightsAvailabilitySchedule,
                 OccupancySchedule
-            }.Where(s => s != null);
+            }.OfType<LibraryComponent>();
     }
 }

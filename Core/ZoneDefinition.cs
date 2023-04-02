@@ -12,10 +12,10 @@ namespace Basilisk.Core
     public class ZoneDefinition : LibraryComponent
     {
         [DataMember]
-        public ZoneConditioning Conditioning { get; set; }
+        public ZoneConditioning? Conditioning { get; set; }
 
         [DataMember]
-        public ZoneConstructions Constructions { get; set; }
+        public ZoneConstructions? Constructions { get; set; }
 
         [DataMember, DefaultValue(1)]
         public double DaylightMeshResolution { get; set; } = 1;
@@ -24,25 +24,25 @@ namespace Basilisk.Core
         public double DaylightWorkplaneHeight { get; set; } = 0.8;
 
         [DataMember]
-        public DomesticHotWaterSettings DomesticHotWater { get; set; }
+        public DomesticHotWaterSettings? DomesticHotWater { get; set; }
 
         [DataMember]
-        public OpaqueConstruction InternalMassConstruction { get; set; }
+        public OpaqueConstruction? InternalMassConstruction { get; set; }
 
         [DataMember]
         public double InternalMassExposedPerFloorArea { get; set; }
 
         [DataMember]
-        public ZoneLoads Loads { get; set; }
+        public ZoneLoads? Loads { get; set; }
 
         [DataMember]
-        public ZoneVentilation Ventilation { get; set; }
+        public ZoneVentilation? Ventilation { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents
         {
             get
             {
-                var direct = new LibraryComponent[]
+                var direct = new LibraryComponent?[]
                 {
                     Constructions,
                     Conditioning,
@@ -50,7 +50,8 @@ namespace Basilisk.Core
                     InternalMassConstruction,
                     Loads,
                     Ventilation
-                }.Where(c => c != null);
+                }.OfType<LibraryComponent>();
+
                 return direct.Concat(direct.SelectMany(c => c.ReferencedComponents));
             }
         }

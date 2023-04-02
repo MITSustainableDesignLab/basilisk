@@ -14,7 +14,7 @@ namespace Basilisk.Core
         public double HighLoadRatio { get; set; }
 
         [DataMember]
-        public OpaqueMaterial Material { get; set; }
+        public OpaqueMaterial? Material { get; set; }
 
         [DataMember]
         public double NormalRatio { get; set; }

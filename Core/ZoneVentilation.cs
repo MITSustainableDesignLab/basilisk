@@ -36,7 +36,7 @@ namespace Basilisk.Core
         public double NatVentMinOutdoorAirTemp { get; set; } = 0;
 
         [DataMember]
-        public YearSchedule NatVentSchedule { get; set; }
+        public YearSchedule? NatVentSchedule { get; set; }
 
         [DataMember, DefaultValue(18)]
         public double NatVentZoneTempSetpoint { get; set; } = 18;
@@ -45,7 +45,7 @@ namespace Basilisk.Core
         public double ScheduledVentilationAch { get; set; } = 0.6;
 
         [DataMember]
-        public YearSchedule ScheduledVentilationSchedule { get; set; }
+        public YearSchedule? ScheduledVentilationSchedule { get; set; }
 
         [DataMember, DefaultValue(18)]
         public double ScheduledVentilationSetpoint { get; set; } = 18;
@@ -54,10 +54,10 @@ namespace Basilisk.Core
         public bool IsWindOn { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            new LibraryComponent[]
+            new LibraryComponent?[]
             {
                 NatVentSchedule,
                 ScheduledVentilationSchedule
-            }.Where(s => s != null);
+            }.OfType<LibraryComponent>();
     }
 }

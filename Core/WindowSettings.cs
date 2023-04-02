@@ -15,10 +15,10 @@ namespace Basilisk.Core
         public double AfnTempSetpoint { get; set; } = 20;
 
         [DataMember]
-        public YearSchedule AfnWindowAvailability { get; set; }
+        public YearSchedule? AfnWindowAvailability { get; set; }
 
         [DataMember]
-        public WindowConstruction Construction { get; set; }
+        public WindowConstruction? Construction { get; set; }
 
         [DataMember, DefaultValue(true)]
         public bool IsShadingSystemOn { get; set; }
@@ -33,7 +33,7 @@ namespace Basilisk.Core
         public double OperableArea { get; set; } = 0.8;
 
         [DataMember]
-        public YearSchedule ShadingSystemAvailabilitySchedule { get; set; }
+        public YearSchedule? ShadingSystemAvailabilitySchedule { get; set; }
 
         [DataMember, DefaultValue(180)]
         public double ShadingSystemSetpoint { get; set; } = 180;
@@ -48,7 +48,7 @@ namespace Basilisk.Core
         public WindowType Type { get; set; } = WindowType.External;
 
         [DataMember]
-        public YearSchedule ZoneMixingAvailabilitySchedule { get; set; }
+        public YearSchedule? ZoneMixingAvailabilitySchedule { get; set; }
 
         [DataMember, DefaultValue(2.0)]
         public double ZoneMixingDeltaTemperature { get; set; } = 2.0;
@@ -60,13 +60,14 @@ namespace Basilisk.Core
         {
             get
             {
-                var direct = new LibraryComponent[]
+                var direct = new LibraryComponent?[]
                 {
                     AfnWindowAvailability,
                     Construction,
                     ShadingSystemAvailabilitySchedule,
                     ZoneMixingAvailabilitySchedule,
-                }.Where(c => c != null);
+                }.OfType<LibraryComponent>();
+
                 return direct.Concat(direct.SelectMany(c => c.ReferencedComponents));
             }
         }

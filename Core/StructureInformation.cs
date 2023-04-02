@@ -18,6 +18,6 @@ namespace Basilisk.Core
         public bool UseAdvancedModel { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            MassRatios.Select(m => m.Material);
+            MassRatios.Select(m => m.Material).OfType<LibraryComponent>();
     }
 }

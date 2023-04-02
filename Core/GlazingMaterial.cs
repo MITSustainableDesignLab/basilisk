@@ -65,7 +65,7 @@ namespace Basilisk.Core
 
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as GlazingMaterial);
+            return obj is GlazingMaterial m && Equals(m);
         }
 
         public override int GetHashCode()
