@@ -1,4 +1,5 @@
-﻿using Basilisk.Controls.Attributes;
+﻿#nullable enable
+using Basilisk.Controls.Attributes;
 using Basilisk.Controls.Extensions;
 using Basilisk.Controls.InterfaceModels.AdvancedStructuralModeling;
 using System.Collections.Generic;
