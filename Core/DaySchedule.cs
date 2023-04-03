@@ -20,10 +20,10 @@ namespace Basilisk.Core
         }
 
         [DataMember, DefaultValue("Fraction")]
-        public string Type { get; set; }
+        public string Type { get; set; } = "Fraction";
 
         [DataMember]
-        public IList<double> Values { get; set; }
+        public IList<double> Values { get; set; } = new List<double>();
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
             Enumerable.Empty<LibraryComponent>();

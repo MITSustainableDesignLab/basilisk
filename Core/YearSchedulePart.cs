@@ -23,11 +23,11 @@ namespace Basilisk.Core
         public int ToMonth { get; set; }
 
         [DataMember]
-        public WeekSchedule Schedule { get; set; }
+        public WeekSchedule? Schedule { get; set; }
 
         public override string ToString()
         {
-            return Schedule.Name;
+            return Schedule?.Name ?? string.Empty;
         }
     }
 }

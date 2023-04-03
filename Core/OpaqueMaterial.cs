@@ -23,7 +23,7 @@ namespace Basilisk.Core
         public double MoistureDiffusionResistance { get; set; }
 
         [DataMember]
-        public string Roughness { get; set; }
+        public string? Roughness { get; set; }
 
         [DataMember]
         public double SolarAbsorptance { get; set; }
@@ -58,7 +58,7 @@ namespace Basilisk.Core
 
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as OpaqueMaterial);
+            return obj is OpaqueMaterial m && Equals(m);
         }
 
         public override int GetHashCode()

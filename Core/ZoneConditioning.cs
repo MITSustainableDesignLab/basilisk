@@ -9,7 +9,7 @@ namespace Basilisk.Core
     public class ZoneConditioning : LibraryComponent
     {
         [DataMember]
-        public YearSchedule CoolingSchedule { get; set; }
+        public YearSchedule? CoolingSchedule { get; set; }
 
         [DataMember]
         public double CoolingCoeffOfPerf { get; set; }
@@ -36,7 +36,7 @@ namespace Basilisk.Core
         public FuelType HeatingFuelType { get; set; } = FuelType.NaturalGas;
 
         [DataMember]
-        public YearSchedule HeatingSchedule { get; set; }
+        public YearSchedule? HeatingSchedule { get; set; }
 
         [DataMember, DefaultValue(20)]
         public double HeatingSetpoint { get; set; } = 20;
@@ -72,7 +72,7 @@ namespace Basilisk.Core
         public double MaxHeatingCapacity { get; set; } = 100;
 
         [DataMember]
-        public YearSchedule MechVentSchedule { get; set; }
+        public YearSchedule? MechVentSchedule { get; set; }
 
         [DataMember, DefaultValue(0.001)]
         public double MinFreshAirPerArea { get; set; } = 0.001;
@@ -81,11 +81,11 @@ namespace Basilisk.Core
         public double MinFreshAirPerPerson { get; set; } = 0.001;
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents =>
-            new LibraryComponent[]
+            new LibraryComponent?[]
             {
                 CoolingSchedule,
                 HeatingSchedule,
                 MechVentSchedule
-            }.Where(s => s != null);
+            }.OfType<YearSchedule>();
     }
 }

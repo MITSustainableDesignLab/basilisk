@@ -16,13 +16,13 @@ namespace Basilisk.Core
         public virtual string Category { get; set; }
 
         [DataMember]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         [DataMember]
-        public string DataSource { get; set; }
+        public string? DataSource { get; set; }
 
         [DataMember]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public LibraryComponent()
         {
@@ -42,7 +42,7 @@ namespace Basilisk.Core
 
         public override string ToString()
         {
-            return Name;
+            return Name ?? string.Empty;
         }
 
         internal abstract IEnumerable<LibraryComponent> ReferencedComponents { get; }

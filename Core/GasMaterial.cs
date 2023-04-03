@@ -34,7 +34,7 @@ namespace Basilisk.Core
 
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as GasMaterial);
+            return obj is GasMaterial m && Equals(m);
         }
 
         public override int GetHashCode()

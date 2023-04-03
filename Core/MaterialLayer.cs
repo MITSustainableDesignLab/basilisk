@@ -12,7 +12,7 @@ namespace Basilisk.Core
         where MaterialT : MaterialBase
     {
         [DataMember]
-        public MaterialT Material { get; set; }
+        public MaterialT? Material { get; set; }
 
         [DataMember]
         public double Thickness { get; set; }
@@ -25,16 +25,31 @@ namespace Basilisk.Core
         #region Equality
         public bool Equals(MaterialLayer<MaterialT> other)
         {
-            if (Object.ReferenceEquals(other, null)) { return false; }
-            else if (Object.ReferenceEquals(other, this)) { return true; }
-            // If == is used, dispatch will be to MaterialBase and not MaterialT, so Equals must be
-            // used instead.
-            return this.Material.Equals(other.Material) && this.Thickness == other.Thickness;
+            if (other is null)
+            {
+                return false;
+            }
+            else if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            else if (Material is null)
+            {
+                // This shouldn't ever happen but the nullability checker requires that
+                // we handle it.
+                return other.Material is null && Thickness == other.Thickness;
+            }
+            else
+            {
+                // If == is used, dispatch will be to MaterialBase and not MaterialT,
+                // so Equals must be used instead.
+                return Material.Equals(other.Material) && Thickness == other.Thickness;
+            }
         }
 
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as MaterialLayer<MaterialT>);
+            return obj is MaterialLayer<MaterialT> layer && Equals(layer);
         }
 
         public override int GetHashCode()

@@ -61,7 +61,7 @@ namespace Basilisk.Core
         public ICollection<DomesticHotWaterSettings> DomesticHotWaterSettings { get; set; } = new List<DomesticHotWaterSettings>();
 
         [DataMember(Order = 20)]
-        public ICollection<ZoneVentilation> VentilationSettings { get; set; }
+        public ICollection<ZoneVentilation> VentilationSettings { get; set; } = new List<ZoneVentilation>();
 
         [DataMember(Order = 250)]
         public ICollection<WindowSettings> WindowSettings { get; set; } = new List<WindowSettings>();
@@ -79,7 +79,7 @@ namespace Basilisk.Core
         public ICollection<ZoneDefinition> Zones { get; set; } = new List<ZoneDefinition>();
         #endregion
 
-        public static Library FromJson(string json)
+        public static Library? FromJson(string json)
         {
             return JsonConvert.DeserializeObject<Library>(json);
         }

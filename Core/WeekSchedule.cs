@@ -19,10 +19,10 @@ namespace Basilisk.Core
         }
 
         [DataMember]
-        public DaySchedule[] Days { get; set; }
+        public DaySchedule[] Days { get; set; } = Array.Empty<DaySchedule>();
 
         [DataMember, DefaultValue("Fraction")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         internal override IEnumerable<LibraryComponent> ReferencedComponents => Days;
     }

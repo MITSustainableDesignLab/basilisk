@@ -8,19 +8,19 @@ namespace Basilisk.Core
     public class ZoneConstructions : LibraryComponent
     {
         [DataMember]
-        public OpaqueConstruction Facade { get; set; }
+        public OpaqueConstruction? Facade { get; set; }
 
         [DataMember]
-        public OpaqueConstruction Ground { get; set; }
+        public OpaqueConstruction? Ground { get; set; }
 
         [DataMember]
-        public OpaqueConstruction Partition { get; set; }
+        public OpaqueConstruction? Partition { get; set; }
 
         [DataMember]
-        public OpaqueConstruction Roof { get; set; }
+        public OpaqueConstruction? Roof { get; set; }
 
         [DataMember]
-        public OpaqueConstruction Slab { get; set; }
+        public OpaqueConstruction? Slab { get; set; }
 
         [DataMember]
         public bool IsFacadeAdiabatic { get; set; }
@@ -41,14 +41,15 @@ namespace Basilisk.Core
         {
             get
             {
-                var direct = new LibraryComponent[]
+                var direct = new LibraryComponent?[]
                 {
                     Facade,
                     Ground,
                     Partition,
                     Roof,
                     Slab
-                }.Where(c => c != null);
+                }.OfType<LibraryComponent>();
+
                 return direct.Concat(direct.SelectMany(c => c.ReferencedComponents));
             }
         }

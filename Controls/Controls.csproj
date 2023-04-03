@@ -6,6 +6,7 @@
     <RootNamespace>Basilisk.Controls</RootNamespace>
     <UseWPF>true</UseWPF>
     <LangVersion>10.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

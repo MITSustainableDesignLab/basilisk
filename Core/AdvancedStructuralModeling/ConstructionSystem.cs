@@ -7,8 +7,8 @@ public class ConstructionSystem<TConstructionSystemType>
     where TConstructionSystemType : System.Enum
 {
     [DataMember]
-    public OpaqueMaterial Material { get; set; }
+    public OpaqueMaterial? Material { get; set; }
 
     [DataMember]
-    public TConstructionSystemType ConstructionSystemType { get; set; }
+    public TConstructionSystemType? ConstructionSystemType { get; set; }
 }
