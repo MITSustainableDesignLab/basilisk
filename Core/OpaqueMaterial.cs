@@ -41,7 +41,7 @@ namespace Basilisk.Core
             Enumerable.Empty<LibraryComponent>();
 
         #region Equality
-        public bool Equals(OpaqueMaterial other)
+        public bool Equals(OpaqueMaterial? other)
         {
             if (Object.ReferenceEquals(other, null)) { return false; }
             else if (Object.ReferenceEquals(other, this)) { return true; }
@@ -56,7 +56,7 @@ namespace Basilisk.Core
                 this.VisibleAbsorptance == other.VisibleAbsorptance;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is OpaqueMaterial m && Equals(m);
         }

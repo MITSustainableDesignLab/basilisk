@@ -45,7 +45,7 @@ namespace Basilisk.Core
             Enumerable.Empty<LibraryComponent>();
 
         #region Equality
-        public bool Equals(GlazingMaterial other)
+        public bool Equals(GlazingMaterial? other)
         {
             if (Object.ReferenceEquals(other, null)) { return false; }
             else if (Object.ReferenceEquals(other, this)) { return true; }
@@ -63,7 +63,7 @@ namespace Basilisk.Core
                 this.VisibleTransmittance == other.VisibleTransmittance; 
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is GlazingMaterial m && Equals(m);
         }

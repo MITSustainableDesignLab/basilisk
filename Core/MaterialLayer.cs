@@ -23,7 +23,7 @@ namespace Basilisk.Core
         }
 
         #region Equality
-        public bool Equals(MaterialLayer<MaterialT> other)
+        public bool Equals(MaterialLayer<MaterialT>? other)
         {
             if (other is null)
             {
@@ -47,7 +47,7 @@ namespace Basilisk.Core
             }
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is MaterialLayer<MaterialT> layer && Equals(layer);
         }

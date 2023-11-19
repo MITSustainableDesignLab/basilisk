@@ -25,14 +25,14 @@ namespace Basilisk.Core
             Enumerable.Empty<LibraryComponent>();
 
         #region Equality
-        public bool Equals(GasMaterial other)
+        public bool Equals(GasMaterial? other)
         {
             if (Object.ReferenceEquals(other, null)) { return false; }
             else if (Object.ReferenceEquals(other, this)) { return true; }
             return other.Type == this.Type;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is GasMaterial m && Equals(m);
         }
