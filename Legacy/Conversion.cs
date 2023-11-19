@@ -13,7 +13,7 @@ namespace Basilisk.Legacy
 {
     public static class Conversion
     {
-        static IMapper mapper;
+        private static IMapper mapper;
 
         static Conversion()
         {
