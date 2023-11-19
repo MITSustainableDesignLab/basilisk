@@ -10,7 +10,7 @@ namespace Basilisk.Controls
 {
     public class SettingsCollection : KeyedCollection<string, SimulationSetting>
     {
-        public bool TryGetValue(string propertyName, out SimulationSetting value)
+        public new bool TryGetValue(string propertyName, out SimulationSetting value)
         {
             if (this.Dictionary == null)
             {

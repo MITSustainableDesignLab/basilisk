@@ -13,96 +13,98 @@ namespace Basilisk.Legacy
 {
     public static class Conversion
     {
+        private static IMapper mapper;
+
         static Conversion()
         {
-            Mapper
-                .CreateMap<Legacy.BaseMaterial, Core.MaterialBase>()
-                .ForMember(dest => dest.SubstitutionTimestep, opt => opt.MapFrom(src => src.SubstituionTimeStep))
-                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.MapFrom(src => src.SubstituionRatePattern))
-                .ForMember(dest => dest.TransportDistance, opt => opt.MapFrom(src => src.TransportDist))
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
-            Mapper
-                .CreateMap<Legacy.OpaqueMaterial, Core.OpaqueMaterial>()
-                .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
-            Mapper
-                .CreateMap<Legacy.GlazingMaterial, Core.GlazingMaterial>()
-                .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
-            Mapper
-                .CreateMap<Legacy.GasMaterial, Core.GasMaterial>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore())
-                .ForMember(dest => dest.Conductivity, opt => opt.Ignore())
-                .ForMember(dest => dest.Cost, opt => opt.Ignore())
-                .ForMember(dest => dest.Density, opt => opt.Ignore())
-                .ForMember(dest => dest.EmbodiedCarbon, opt => opt.Ignore())
-                .ForMember(dest => dest.EmbodiedEnergy, opt => opt.Ignore())
-                .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.Ignore())
-                .ForMember(dest => dest.SubstitutionTimestep, opt => opt.Ignore())
-                .ForMember(dest => dest.TransportCarbon, opt => opt.Ignore())
-                .ForMember(dest => dest.TransportDistance, opt => opt.Ignore())
-                .ForMember(dest => dest.TransportEnergy, opt => opt.Ignore());
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg
+                    .CreateMap<Legacy.BaseMaterial, Core.MaterialBase>()
+                    .ForMember(dest => dest.SubstitutionTimestep, opt => opt.MapFrom(src => src.SubstituionTimeStep))
+                    .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.MapFrom(src => src.SubstituionRatePattern))
+                    .ForMember(dest => dest.TransportDistance, opt => opt.MapFrom(src => src.TransportDist))
+                    .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type));
+                cfg
+                    .CreateMap<Legacy.OpaqueMaterial, Core.OpaqueMaterial>()
+                    .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
+                cfg
+                    .CreateMap<Legacy.GlazingMaterial, Core.GlazingMaterial>()
+                    .IncludeBase<Legacy.BaseMaterial, Core.MaterialBase>();
+                cfg
+                    .CreateMap<Legacy.GasMaterial, Core.GasMaterial>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore())
+                    .ForMember(dest => dest.Conductivity, opt => opt.Ignore())
+                    .ForMember(dest => dest.Cost, opt => opt.Ignore())
+                    .ForMember(dest => dest.Density, opt => opt.Ignore())
+                    .ForMember(dest => dest.EmbodiedCarbon, opt => opt.Ignore())
+                    .ForMember(dest => dest.EmbodiedEnergy, opt => opt.Ignore())
+                    .ForMember(dest => dest.SubstitutionRatePattern, opt => opt.Ignore())
+                    .ForMember(dest => dest.SubstitutionTimestep, opt => opt.Ignore())
+                    .ForMember(dest => dest.TransportCarbon, opt => opt.Ignore())
+                    .ForMember(dest => dest.TransportDistance, opt => opt.Ignore())
+                    .ForMember(dest => dest.TransportEnergy, opt => opt.Ignore());
 
-            Mapper
-                .CreateMap<Legacy.OpaqueConstruction, Core.OpaqueConstruction>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Legacy.GlazingConstruction, Core.WindowConstruction>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Legacy.StructureType, Core.StructureInformation>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
-                .ForMember(dest => dest.MassRatios, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.OpaqueConstruction, Core.OpaqueConstruction>()
+                    .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                    .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.GlazingConstruction, Core.WindowConstruction>()
+                    .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                    .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.StructureType, Core.StructureInformation>()
+                    .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                    .ForMember(dest => dest.MassRatios, opt => opt.Ignore());
 
-            Mapper
-                .CreateMap<Legacy.DaySchedule, Core.DaySchedule>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Legacy.WeekSchedule, Core.WeekSchedule>()
-                .ForMember(dest => dest.Days, opt => opt.Ignore())
-                .ForMember(dest => dest.Category, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Legacy.YearSchedule, Core.YearSchedule>()
-                .ForMember(dest => dest.Parts, opt => opt.Ignore())
-                .ForMember(dest => dest.Category, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.DaySchedule, Core.DaySchedule>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.WeekSchedule, Core.WeekSchedule>()
+                    .ForMember(dest => dest.Days, opt => opt.Ignore())
+                    .ForMember(dest => dest.Category, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.YearSchedule, Core.YearSchedule>()
+                    .ForMember(dest => dest.Parts, opt => opt.Ignore())
+                    .ForMember(dest => dest.Category, opt => opt.Ignore());
 
-            Mapper
-                .CreateMap<Legacy.BuildingTemplate, Core.WindowSettings>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
-                .ForMember(dest => dest.Name, opt => opt.ResolveUsing((BuildingTemplate src) => $"{src.Name} windows"))
-                .ForMember(dest => dest.IsShadingSystemOn, opt => opt.MapFrom(src => src.BlindOn))
-                .ForMember(dest => dest.ShadingSystemTransmittance, opt => opt.MapFrom(src => src.BlindTrns))
-                .ForMember(dest => dest.ShadingSystemSetpoint, opt => opt.MapFrom(src => src.BlindSetWatt))
-                .ForMember(dest => dest.Type, opt => opt.ResolveUsing((BuildingTemplate src) =>
-                {
-                    var res = Core.WindowType.External;
-                    Enum.TryParse(src.BlindT.ToString(), true, out res);
-                    return res;
-                }))
-                .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.Construction, opt => opt.Ignore())
-                .ForMember(dest => dest.AfnDischargeC, opt => opt.Ignore())
-                .ForMember(dest => dest.AfnTempSetpoint, opt => opt.Ignore())
-                .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore())
-                .ForMember(dest => dest.IsVirtualPartition, opt => opt.Ignore())
-                .ForMember(dest => dest.IsZoneMixingOn, opt => opt.Ignore())
-                .ForMember(dest => dest.OperableArea, opt => opt.Ignore())
-                .ForMember(dest => dest.ShadingSystemType, opt => opt.Ignore())
-                .ForMember(dest => dest.ZoneMixingDeltaTemperature, opt => opt.Ignore())
-                .ForMember(dest => dest.ZoneMixingFlowRate, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Legacy.BuildingTemplate, Core.WindowSettings>()
+                    .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Type))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom((BuildingTemplate src) => $"{src.Name} windows"))
+                    .ForMember(dest => dest.IsShadingSystemOn, opt => opt.MapFrom(src => src.BlindOn))
+                    .ForMember(dest => dest.ShadingSystemTransmittance, opt => opt.MapFrom(src => src.BlindTrns))
+                    .ForMember(dest => dest.ShadingSystemSetpoint, opt => opt.MapFrom(src => src.BlindSetWatt))
+                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => ParseBlindType(src.BlindT)))
+                    .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.Construction, opt => opt.Ignore())
+                    .ForMember(dest => dest.AfnDischargeC, opt => opt.Ignore())
+                    .ForMember(dest => dest.AfnTempSetpoint, opt => opt.Ignore())
+                    .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore())
+                    .ForMember(dest => dest.IsVirtualPartition, opt => opt.Ignore())
+                    .ForMember(dest => dest.IsZoneMixingOn, opt => opt.Ignore())
+                    .ForMember(dest => dest.OperableArea, opt => opt.Ignore())
+                    .ForMember(dest => dest.ShadingSystemType, opt => opt.Ignore())
+                    .ForMember(dest => dest.ZoneMixingDeltaTemperature, opt => opt.Ignore())
+                    .ForMember(dest => dest.ZoneMixingFlowRate, opt => opt.Ignore());
+            });
 
-            Mapper.AssertConfigurationIsValid();
+            config.AssertConfigurationIsValid();
+
+            mapper = config.CreateMapper();
         }
 
         public static Core.Library Convert(Library legacy)
         {
             var res = new Core.Library()
             {
-                OpaqueMaterials = Mapper.Map<IEnumerable<Core.OpaqueMaterial>>(legacy.OpaqueMaterials).ToList(),
-                GlazingMaterials = Mapper.Map<IEnumerable<Core.GlazingMaterial>>(legacy.GlazingMaterials).ToList(),
-                GasMaterials = Mapper.Map<IEnumerable<Core.GasMaterial>>(legacy.GasMaterials).ToList(),
-                DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(legacy.DaySchedules).ToList()
+                OpaqueMaterials = mapper.Map<IEnumerable<Core.OpaqueMaterial>>(legacy.OpaqueMaterials).ToList(),
+                GlazingMaterials = mapper.Map<IEnumerable<Core.GlazingMaterial>>(legacy.GlazingMaterials).ToList(),
+                GasMaterials = mapper.Map<IEnumerable<Core.GasMaterial>>(legacy.GasMaterials).ToList(),
+                DaySchedules = mapper.Map<IEnumerable<Core.DaySchedule>>(legacy.DaySchedules).ToList()
             };
 
             var lookupOpaqueMat = res.Lookup(lib => lib.OpaqueMaterials);
@@ -305,7 +307,7 @@ namespace Basilisk.Legacy
                 .Select(m => m.Map(getMappedMat))
                 .Where(r => r.Material != null)
                 .ToList();
-            var res = Mapper.Map<Core.StructureInformation>(src);
+            var res = mapper.Map<Core.StructureInformation>(src);
             res.MassRatios = ratios;
             return res;
         }
@@ -315,7 +317,7 @@ namespace Basilisk.Legacy
             where TargetConstructionT : Core.LayeredConstruction<TargetMaterialT>, new()
             where SourceLayerT : BaseLayer
         {
-            var res = Mapper.Map<TargetConstructionT>(src);
+            var res = mapper.Map<TargetConstructionT>(src);
             res.Layers =
                 src
                 .Layers
@@ -333,7 +335,7 @@ namespace Basilisk.Legacy
         {
             var days = src.Days.Select(getMappedDay).ToArray();
             if (days.Any(day => day == null)) { return null; }
-            var res = Mapper.Map<Core.WeekSchedule>(src);
+            var res = mapper.Map<Core.WeekSchedule>(src);
             res.Days = days;
             return res;
         }
@@ -349,7 +351,7 @@ namespace Basilisk.Legacy
             }
             var newWeeks = src.WeekScheduleNames.Select(getMappedWeek).ToArray();
             if (newWeeks.Any(w => w == null)) { return null; }
-            var res = Mapper.Map<Core.YearSchedule>(src);
+            var res = mapper.Map<Core.YearSchedule>(src);
             res.Parts = new List<Core.YearSchedulePart>();
             for (var i = 0; i < src.DayFrom.Count; ++i)
             {
@@ -367,11 +369,18 @@ namespace Basilisk.Legacy
 
         private static Core.WindowSettings Map(this BuildingTemplate src, Func<string, Core.YearSchedule> getMappedYear, Func<string, Core.WindowConstruction> getMappedWindow)
         {
-            var res = Mapper.Map<Core.WindowSettings>(src);
+            var res = mapper.Map<Core.WindowSettings>(src);
             res.AfnWindowAvailability = getMappedYear(src.BlindSchd);
             res.ShadingSystemAvailabilitySchedule = getMappedYear(src.BlindSchd);
             res.ZoneMixingAvailabilitySchedule = getMappedYear(src.BlindSchd);
             res.Construction = getMappedWindow(src.Glazing);
+            return res;
+        }
+
+        private static Core.WindowType ParseBlindType(BlindType blindType)
+        {
+            var res = Core.WindowType.External;
+            Enum.TryParse(blindType.ToString(), true, out res);
             return res;
         }
     }

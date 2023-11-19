@@ -84,13 +84,13 @@ namespace Basilisk.Core
             return JsonConvert.DeserializeObject<Library>(json);
         }
 
-        public static Library FromXml(string path)
+        public static Library? FromXml(string path)
         {
             using (var file = File.OpenRead(path))
             using (var reader = XmlDictionaryReader.CreateTextReader(file, new XmlDictionaryReaderQuotas()))
             {
                 var deserializer = new DataContractSerializer(typeof(Library));
-                return (Library)deserializer.ReadObject(reader);
+                return (Library?)deserializer.ReadObject(reader);
             }
         }
 

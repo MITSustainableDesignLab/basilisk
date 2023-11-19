@@ -35,7 +35,7 @@ namespace Basilisk.Core
             else if ((a.Values == null) != (b.Values == null)) { return false; }
             else if (a.Values == null) { return true; }
             IStructuralEquatable aValues = a.Values.ToArray();
-            IStructuralEquatable bValues = b.Values.ToArray();
+            IStructuralEquatable bValues = b.Values!.ToArray();
             return aValues.Equals(bValues, StructuralComparisons.StructuralEqualityComparer);
         }
     }

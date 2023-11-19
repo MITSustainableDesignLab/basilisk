@@ -14,241 +14,249 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public class Library
     {
+        private static IMapper mapper;
+
         static Library()
         {
-            Mapper
-                .CreateMap<Core.LibraryComponent, LibraryComponent>();
-            Mapper
-                .CreateMap<Core.MaterialBase, MaterialBase>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>();
-            Mapper
-                .CreateMap<Core.OpaqueMaterial, OpaqueMaterial>()
-                .IncludeBase<Core.MaterialBase, MaterialBase>();
-            Mapper
-                .CreateMap<Core.WindowMaterialBase, WindowMaterialBase>()
-                .IncludeBase<Core.MaterialBase, MaterialBase>();
-            Mapper
-                .CreateMap<Core.GlazingMaterial, GlazingMaterial>()
-                .IncludeBase<Core.WindowMaterialBase, WindowMaterialBase>();
-            Mapper
-                .CreateMap<Core.GasMaterial, GasMaterial>()
-                .IncludeBase<Core.WindowMaterialBase, WindowMaterialBase>();
-            Mapper
-                .CreateMap<Core.ConstructionBase, ConstructionBase>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>();
-            Mapper
-                .CreateMap<Core.OpaqueConstruction, OpaqueConstruction>()
-                .IncludeBase<Core.ConstructionBase, ConstructionBase>()
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.WindowConstruction, WindowConstruction>()
-                .IncludeBase<Core.ConstructionBase, ConstructionBase>()
-                .ForMember(dest => dest.Layers, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.StructureInformation, StructureInformation>()
-                .IncludeBase<Core.ConstructionBase, ConstructionBase>()
-                .ForMember(dest => dest.MassRatios, opt => opt.Ignore())
-                .ForMember(dest => dest.AdvancedModel, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.DaySchedule, DaySchedule>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.WeekSchedule, WeekSchedule>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore())
-                .ForMember(dest => dest.Days, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.YearSchedulePart, YearSchedulePart>()
-                .ForMember(dest => dest.Schedule, opt => opt.Ignore());
-            Mapper
-                .CreateMap<Core.YearSchedule, YearSchedule>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore())
-                .ForMember(dest => dest.Parts, opt => opt.Ignore());
-            Mapper.CreateMap<Core.ZoneConstructions, ZoneConstructions>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Facade, opt => opt.Ignore())
-                .ForMember(dest => dest.Ground, opt => opt.Ignore())
-                .ForMember(dest => dest.Partition, opt => opt.Ignore())
-                .ForMember(dest => dest.Roof, opt => opt.Ignore())
-                .ForMember(dest => dest.Slab, opt => opt.Ignore());
-            Mapper.CreateMap<Core.ZoneLoads, ZoneLoads>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.OccupancySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.EquipmentAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.LightsAvailabilitySchedule, opt => opt.Ignore());
-            Mapper.CreateMap<Core.ZoneConditioning, ZoneConditioning>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.HeatingSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.CoolingSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.MechVentSchedule, opt => opt.Ignore());
-            Mapper.CreateMap<Core.ZoneVentilation, ZoneVentilation>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.ScheduledVentilationSchedule, opt => opt.Ignore());
-            Mapper.CreateMap<Core.DomesticHotWaterSettings, ZoneHotWater>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
-            Mapper.CreateMap<Core.ZoneDefinition, ZoneDefinition>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Constructions, opt => opt.Ignore())
-                .ForMember(dest => dest.Loads, opt => opt.Ignore())
-                .ForMember(dest => dest.Conditioning, opt => opt.Ignore())
-                .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
-                .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
-                .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
-            Mapper.CreateMap<Core.WindowSettings, WindowSettings>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Construction, opt => opt.Ignore())
-                .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
-            Mapper.CreateMap<Core.BuildingTemplate, BuildingTemplate>()
-                .IncludeBase<Core.LibraryComponent, LibraryComponent>()
-                .ForMember(dest => dest.Core, opt => opt.Ignore())
-                .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
-                .ForMember(dest => dest.Structure, opt => opt.Ignore())
-                .ForMember(dest => dest.Windows, opt => opt.Ignore());
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg
+                    .CreateMap<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.AllReferencedComponents, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.MaterialBase, MaterialBase>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>();
+                cfg
+                    .CreateMap<Core.OpaqueMaterial, OpaqueMaterial>()
+                    .IncludeBase<Core.MaterialBase, MaterialBase>();
+                cfg
+                    .CreateMap<Core.WindowMaterialBase, WindowMaterialBase>()
+                    .IncludeBase<Core.MaterialBase, MaterialBase>();
+                cfg
+                    .CreateMap<Core.GlazingMaterial, GlazingMaterial>()
+                    .IncludeBase<Core.WindowMaterialBase, WindowMaterialBase>();
+                cfg
+                    .CreateMap<Core.GasMaterial, GasMaterial>()
+                    .IncludeBase<Core.WindowMaterialBase, WindowMaterialBase>();
+                cfg
+                    .CreateMap<Core.ConstructionBase, ConstructionBase>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>();
+                cfg
+                    .CreateMap<Core.OpaqueConstruction, OpaqueConstruction>()
+                    .IncludeBase<Core.ConstructionBase, ConstructionBase>()
+                    .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.WindowConstruction, WindowConstruction>()
+                    .IncludeBase<Core.ConstructionBase, ConstructionBase>()
+                    .ForMember(dest => dest.Layers, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.StructureInformation, StructureInformation>()
+                    .IncludeBase<Core.ConstructionBase, ConstructionBase>()
+                    .ForMember(dest => dest.MassRatios, opt => opt.Ignore())
+                    .ForMember(dest => dest.AdvancedModel, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.DaySchedule, DaySchedule>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.WeekSchedule, WeekSchedule>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore())
+                    .ForMember(dest => dest.Days, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.YearSchedulePart, YearSchedulePart>()
+                    .ForMember(dest => dest.Schedule, opt => opt.Ignore());
+                cfg
+                    .CreateMap<Core.YearSchedule, YearSchedule>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore())
+                    .ForMember(dest => dest.Parts, opt => opt.Ignore());
+                cfg.CreateMap<Core.ZoneConstructions, ZoneConstructions>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Facade, opt => opt.Ignore())
+                    .ForMember(dest => dest.Ground, opt => opt.Ignore())
+                    .ForMember(dest => dest.Partition, opt => opt.Ignore())
+                    .ForMember(dest => dest.Roof, opt => opt.Ignore())
+                    .ForMember(dest => dest.Slab, opt => opt.Ignore());
+                cfg.CreateMap<Core.ZoneLoads, ZoneLoads>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.OccupancySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.EquipmentAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.LightsAvailabilitySchedule, opt => opt.Ignore());
+                cfg.CreateMap<Core.ZoneConditioning, ZoneConditioning>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.HeatingSchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.CoolingSchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.MechVentSchedule, opt => opt.Ignore());
+                cfg.CreateMap<Core.ZoneVentilation, ZoneVentilation>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.ScheduledVentilationSchedule, opt => opt.Ignore());
+                cfg.CreateMap<Core.DomesticHotWaterSettings, ZoneHotWater>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
+                cfg.CreateMap<Core.ZoneDefinition, ZoneDefinition>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Constructions, opt => opt.Ignore())
+                    .ForMember(dest => dest.Loads, opt => opt.Ignore())
+                    .ForMember(dest => dest.Conditioning, opt => opt.Ignore())
+                    .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
+                    .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
+                    .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
+                cfg.CreateMap<Core.WindowSettings, WindowSettings>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Construction, opt => opt.Ignore())
+                    .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
+                cfg.CreateMap<Core.BuildingTemplate, BuildingTemplate>()
+                    .IncludeBase<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.Core, opt => opt.Ignore())
+                    .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
+                    .ForMember(dest => dest.Structure, opt => opt.Ignore())
+                    .ForMember(dest => dest.Windows, opt => opt.Ignore());
 
-            Mapper
-                .CreateMap<LibraryComponent, Core.LibraryComponent>();
-            Mapper
-                .CreateMap<MaterialBase, Core.MaterialBase>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>();
-            Mapper
-                .CreateMap<OpaqueMaterial, Core.OpaqueMaterial>()
-                .IncludeBase<MaterialBase, Core.MaterialBase>();
-            Mapper
-                .CreateMap<WindowMaterialBase, Core.WindowMaterialBase>()
-                .IncludeBase<MaterialBase, Core.MaterialBase>()
-                .ConstructUsing((WindowMaterialBase src) => src is GlazingMaterial ? (Core.WindowMaterialBase)new Core.GlazingMaterial() : new Core.GasMaterial());
-            Mapper
-                .CreateMap<GlazingMaterial, Core.GlazingMaterial>()
-                .IncludeBase<WindowMaterialBase, Core.WindowMaterialBase>();
-            Mapper
-                .CreateMap<GasMaterial, Core.GasMaterial>()
-                .IncludeBase<WindowMaterialBase, Core.WindowMaterialBase>();
-            Mapper
-                .CreateMap<DaySchedule, Core.DaySchedule>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore());
-            Mapper
-                .CreateMap<WeekSchedule, Core.WeekSchedule>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore())
-                .ForMember(dest => dest.Days, opt => opt.Ignore());
-            Mapper
-                .CreateMap<YearSchedulePart, Core.YearSchedulePart>()
-                .ForMember(dest => dest.Schedule, opt => opt.Ignore());
-            Mapper
-                .CreateMap<YearSchedule, Core.YearSchedule>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Category, opt => opt.Ignore())
-                .ForMember(dest => dest.Parts, opt => opt.Ignore());
+                cfg
+                    .CreateMap<LibraryComponent, Core.LibraryComponent>();
+                cfg
+                    .CreateMap<MaterialBase, Core.MaterialBase>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>();
+                cfg
+                    .CreateMap<OpaqueMaterial, Core.OpaqueMaterial>()
+                    .IncludeBase<MaterialBase, Core.MaterialBase>();
+                cfg
+                    .CreateMap<WindowMaterialBase, Core.WindowMaterialBase>()
+                    .IncludeBase<MaterialBase, Core.MaterialBase>()
+                    .ConstructUsing((WindowMaterialBase src) => src is GlazingMaterial ? (Core.WindowMaterialBase)new Core.GlazingMaterial() : new Core.GasMaterial());
+                cfg
+                    .CreateMap<GlazingMaterial, Core.GlazingMaterial>()
+                    .IncludeBase<WindowMaterialBase, Core.WindowMaterialBase>();
+                cfg
+                    .CreateMap<GasMaterial, Core.GasMaterial>()
+                    .IncludeBase<WindowMaterialBase, Core.WindowMaterialBase>();
+                cfg
+                    .CreateMap<DaySchedule, Core.DaySchedule>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore());
+                cfg
+                    .CreateMap<WeekSchedule, Core.WeekSchedule>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore())
+                    .ForMember(dest => dest.Days, opt => opt.Ignore());
+                cfg
+                    .CreateMap<YearSchedulePart, Core.YearSchedulePart>()
+                    .ForMember(dest => dest.Schedule, opt => opt.Ignore());
+                cfg
+                    .CreateMap<YearSchedule, Core.YearSchedule>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Category, opt => opt.Ignore())
+                    .ForMember(dest => dest.Parts, opt => opt.Ignore());
 
-            Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.OpaqueMaterial>>();
-            Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.WindowMaterialBase>>();
-            Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GlazingMaterial>>();
-            Mapper
-                .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GasMaterial>>();
-            Mapper
-                .CreateMap<MassRatios, Core.MassRatios>();
+                cfg
+                    .CreateMap<MaterialLayer, Core.MaterialLayer<Core.OpaqueMaterial>>();
+                cfg
+                    .CreateMap<MaterialLayer, Core.MaterialLayer<Core.WindowMaterialBase>>();
+                cfg
+                    .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GlazingMaterial>>();
+                cfg
+                    .CreateMap<MaterialLayer, Core.MaterialLayer<Core.GasMaterial>>();
+                cfg
+                    .CreateMap<MassRatios, Core.MassRatios>();
 
-            Mapper
-                .CreateMap<ConstructionBase, Core.ConstructionBase>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>();
-            Mapper
-                .CreateMap<OpaqueConstruction, Core.OpaqueConstruction>()
-                .IncludeBase<ConstructionBase, Core.ConstructionBase>();
-            Mapper
-                .CreateMap<WindowConstruction, Core.WindowConstruction>()
-                .IncludeBase<ConstructionBase, Core.ConstructionBase>();
-            Mapper
-                .CreateMap<
-                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>,
-                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>>();
-            Mapper
-                .CreateMap<
-                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>,
-                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>>();
-            Mapper
-                .CreateMap<
-                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>,
-                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
-            Mapper
-                .CreateMap<
-                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>,
-                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>>();
-            Mapper
-                .CreateMap<
-                    AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>, 
-                    Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>>();
-            Mapper
-                .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
-            Mapper
-                .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
-            Mapper
-                .CreateMap<AdvancedStructuralModeling.FoundationSoilSettings, Core.AdvancedStructuralModeling.FoundationSoilSettings>()
-                .ForMember(dest => dest.FoundationSoilPreset, opt => opt.MapFrom(src => src.Preset))
-                .ForMember(dest => dest.FoundationSoilValue, opt => opt.MapFrom(src => src.SelectedValue));
-            Mapper
-                .CreateMap<AdvancedStructuralModeling.LoadingSettings, Core.AdvancedStructuralModeling.LoadingSettings>();
-            Mapper
-                .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
-            Mapper
-                .CreateMap<StructureInformation, Core.StructureInformation>()
-                .IncludeBase<ConstructionBase, Core.ConstructionBase>();
+                cfg
+                    .CreateMap<ConstructionBase, Core.ConstructionBase>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>();
+                cfg
+                    .CreateMap<OpaqueConstruction, Core.OpaqueConstruction>()
+                    .IncludeBase<ConstructionBase, Core.ConstructionBase>();
+                cfg
+                    .CreateMap<WindowConstruction, Core.WindowConstruction>()
+                    .IncludeBase<ConstructionBase, Core.ConstructionBase>();
+                cfg
+                    .CreateMap<
+                        AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>,
+                        Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeBeam>>();
+                cfg
+                    .CreateMap<
+                        AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>,
+                        Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeColumn>>();
+                cfg
+                    .CreateMap<
+                        AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>,
+                        Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFloor>>();
+                cfg
+                    .CreateMap<
+                        AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>,
+                        Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeFoundation>>();
+                cfg
+                    .CreateMap<
+                        AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>,
+                        Core.AdvancedStructuralModeling.ConstructionSystem<Core.AdvancedStructuralModeling.ConstructionSystemTypeLateralSystem>>();
+                cfg
+                    .CreateMap<AdvancedStructuralModeling.ConstructionSystemSettings, Core.AdvancedStructuralModeling.ConstructionSystemSettings>();
+                cfg
+                    .CreateMap<AdvancedStructuralModeling.ColumnWallSpacingSettings, Core.AdvancedStructuralModeling.ColumnWallSpacingSettings>();
+                cfg
+                    .CreateMap<AdvancedStructuralModeling.FoundationSoilSettings, Core.AdvancedStructuralModeling.FoundationSoilSettings>()
+                    .ForMember(dest => dest.FoundationSoilPreset, opt => opt.MapFrom(src => src.Preset))
+                    .ForMember(dest => dest.FoundationSoilValue, opt => opt.MapFrom(src => src.SelectedValue));
+                cfg
+                    .CreateMap<AdvancedStructuralModeling.LoadingSettings, Core.AdvancedStructuralModeling.LoadingSettings>();
+                cfg
+                    .CreateMap<AdvancedStructuralModeling.AdvancedStructuralModel, Core.AdvancedStructuralModeling.AdvancedStructuralModel>();
+                cfg
+                    .CreateMap<StructureInformation, Core.StructureInformation>()
+                    .IncludeBase<ConstructionBase, Core.ConstructionBase>();
 
-            Mapper.CreateMap<ZoneConstructions, Core.ZoneConstructions>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Facade, opt => opt.Ignore())
-                .ForMember(dest => dest.Ground, opt => opt.Ignore())
-                .ForMember(dest => dest.Partition, opt => opt.Ignore())
-                .ForMember(dest => dest.Roof, opt => opt.Ignore())
-                .ForMember(dest => dest.Slab, opt => opt.Ignore());
-            Mapper.CreateMap<ZoneLoads, Core.ZoneLoads>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.OccupancySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.EquipmentAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.LightsAvailabilitySchedule, opt => opt.Ignore());
-            Mapper.CreateMap<ZoneConditioning, Core.ZoneConditioning>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.HeatingSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.CoolingSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.MechVentSchedule, opt => opt.Ignore());
-            Mapper.CreateMap<ZoneVentilation, Core.ZoneVentilation>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.ScheduledVentilationSchedule, opt => opt.Ignore());
-            Mapper.CreateMap<ZoneHotWater, Core.DomesticHotWaterSettings>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
-            Mapper.CreateMap<ZoneDefinition, Core.ZoneDefinition>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Constructions, opt => opt.Ignore())
-                .ForMember(dest => dest.Loads, opt => opt.Ignore())
-                .ForMember(dest => dest.Conditioning, opt => opt.Ignore())
-                .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
-                .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
-                .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
-            Mapper.CreateMap<WindowSettings, Core.WindowSettings>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Construction, opt => opt.Ignore())
-                .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
-                .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
-            Mapper.CreateMap<BuildingTemplate, Core.BuildingTemplate>()
-                .IncludeBase<LibraryComponent, Core.LibraryComponent>()
-                .ForMember(dest => dest.Core, opt => opt.Ignore())
-                .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
-                .ForMember(dest => dest.Structure, opt => opt.Ignore())
-                .ForMember(dest => dest.Windows, opt => opt.Ignore());
+                cfg.CreateMap<ZoneConstructions, Core.ZoneConstructions>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Facade, opt => opt.Ignore())
+                    .ForMember(dest => dest.Ground, opt => opt.Ignore())
+                    .ForMember(dest => dest.Partition, opt => opt.Ignore())
+                    .ForMember(dest => dest.Roof, opt => opt.Ignore())
+                    .ForMember(dest => dest.Slab, opt => opt.Ignore());
+                cfg.CreateMap<ZoneLoads, Core.ZoneLoads>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.OccupancySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.EquipmentAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.LightsAvailabilitySchedule, opt => opt.Ignore());
+                cfg.CreateMap<ZoneConditioning, Core.ZoneConditioning>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.HeatingSchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.CoolingSchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.MechVentSchedule, opt => opt.Ignore());
+                cfg.CreateMap<ZoneVentilation, Core.ZoneVentilation>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.NatVentSchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.ScheduledVentilationSchedule, opt => opt.Ignore());
+                cfg.CreateMap<ZoneHotWater, Core.DomesticHotWaterSettings>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.WaterSchedule, opt => opt.Ignore());
+                cfg.CreateMap<ZoneDefinition, Core.ZoneDefinition>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Constructions, opt => opt.Ignore())
+                    .ForMember(dest => dest.Loads, opt => opt.Ignore())
+                    .ForMember(dest => dest.Conditioning, opt => opt.Ignore())
+                    .ForMember(dest => dest.Ventilation, opt => opt.Ignore())
+                    .ForMember(dest => dest.DomesticHotWater, opt => opt.Ignore())
+                    .ForMember(dest => dest.InternalMassConstruction, opt => opt.Ignore());
+                cfg.CreateMap<WindowSettings, Core.WindowSettings>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Construction, opt => opt.Ignore())
+                    .ForMember(dest => dest.ShadingSystemAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.ZoneMixingAvailabilitySchedule, opt => opt.Ignore())
+                    .ForMember(dest => dest.AfnWindowAvailability, opt => opt.Ignore());
+                cfg.CreateMap<BuildingTemplate, Core.BuildingTemplate>()
+                    .IncludeBase<LibraryComponent, Core.LibraryComponent>()
+                    .ForMember(dest => dest.Core, opt => opt.Ignore())
+                    .ForMember(dest => dest.Perimeter, opt => opt.Ignore())
+                    .ForMember(dest => dest.Structure, opt => opt.Ignore())
+                    .ForMember(dest => dest.Windows, opt => opt.Ignore());
+            });
 
-            Mapper.AssertConfigurationIsValid();
+            config.AssertConfigurationIsValid();
+
+            mapper = config.CreateMapper();
         }
 
         public IEnumerable<LibraryComponent> AllLogicalComponents =>
@@ -307,9 +315,9 @@ namespace Basilisk.Controls.InterfaceModels
         public static Library Create(Core.Library sourceLib)
         {
             System.Diagnostics.Debug.Assert(!sourceLib.OrphanedComponents().Any());
-            var opaqueMats = Mapper.Map<ICollection<OpaqueMaterial>>(sourceLib.OpaqueMaterials).Cast<LibraryComponent>().ToList();
-            var glazingMats = Mapper.Map<ICollection<GlazingMaterial>>(sourceLib.GlazingMaterials).Cast<LibraryComponent>().ToList();
-            var gasMats = Mapper.Map<ICollection<GasMaterial>>(sourceLib.GasMaterials).Cast<LibraryComponent>().ToList();
+            var opaqueMats = mapper.Map<ICollection<OpaqueMaterial>>(sourceLib.OpaqueMaterials).Cast<LibraryComponent>().ToList();
+            var glazingMats = mapper.Map<ICollection<GlazingMaterial>>(sourceLib.GlazingMaterials).Cast<LibraryComponent>().ToList();
+            var gasMats = mapper.Map<ICollection<GasMaterial>>(sourceLib.GasMaterials).Cast<LibraryComponent>().ToList();
 
             var opaqueMatDict = opaqueMats.ToDictionary(mat => mat.Name);
             var windowMatDict = glazingMats.Concat(gasMats).ToDictionary(mat => mat.Name);
@@ -331,7 +339,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .ToDictionary(c => c.Name);
 
             var days =
-                Mapper
+                mapper
                 .Map<ICollection<DaySchedule>>(sourceLib.DaySchedules)
                 .ToDictionary(day => day.Name);
             var weeks =
@@ -339,7 +347,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .WeekSchedules
                 .Select(coreWeek =>
                 {
-                    var mapped = Mapper.Map<WeekSchedule>(coreWeek);
+                    var mapped = mapper.Map<WeekSchedule>(coreWeek);
                     for (var i = 0; i < 7; ++i)
                     {
                         var day = default(DaySchedule);
@@ -357,7 +365,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .YearSchedules
                 .Select(coreYear =>
                 {
-                    var mapped = Mapper.Map<YearSchedule>(coreYear);
+                    var mapped = mapper.Map<YearSchedule>(coreYear);
                     var theseParts =
                         coreYear
                         .Parts
@@ -368,11 +376,11 @@ namespace Basilisk.Controls.InterfaceModels
                             {
                                 return null;
                             }
-                            var part = Mapper.Map<YearSchedulePart>(corePart);
+                            var part = mapper.Map<YearSchedulePart>(corePart);
                             part.Schedule = week;
                             return part;
                         });
-                    var year = Mapper.Map<YearSchedule>(coreYear);
+                    var year = mapper.Map<YearSchedule>(coreYear);
                     year.Parts = new ObservableCollection<YearSchedulePart>(theseParts);
                     return year;
                 })
@@ -413,7 +421,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Zones
                 .Select(z =>
                 {
-                    var res = Mapper.Map<ZoneDefinition>(z);
+                    var res = mapper.Map<ZoneDefinition>(z);
                     res.Constructions = zoneConstructions.GetValueOrDefault(z.Constructions?.Name);
                     res.Loads = zoneLoads.GetValueOrDefault(z.Loads?.Name);
                     res.Conditioning = zoneConditionings.GetValueOrDefault(z.Conditioning?.Name);
@@ -428,7 +436,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .BuildingTemplates
                 .Select(t =>
                 {
-                    var res = Mapper.Map<BuildingTemplate>(t);
+                    var res = mapper.Map<BuildingTemplate>(t);
                     res.Core = zones.GetValueOrDefault(t.Core?.Name);
                     res.Perimeter = zones.GetValueOrDefault(t.Perimeter?.Name);
                     res.Structure = structureDefinitions.GetValueOrDefault(t.Structure?.Name);
@@ -487,12 +495,12 @@ namespace Basilisk.Controls.InterfaceModels
         {
             var newLib = new Core.Library()
             {
-                OpaqueMaterials = Mapper.Map<IEnumerable<Core.OpaqueMaterial>>(OpaqueMaterials.Cast<OpaqueMaterial>()).ToList(),
-                GlazingMaterials = Mapper.Map<IEnumerable<Core.GlazingMaterial>>(GlazingMaterials.Cast<GlazingMaterial>()).ToList(),
-                GasMaterials = Mapper.Map<IEnumerable<Core.GasMaterial>>(GasMaterials.Cast<GasMaterial>()).ToList(),
-                OpaqueConstructions = Mapper.Map<IEnumerable<Core.OpaqueConstruction>>(OpaqueConstructions.Cast<OpaqueConstruction>()).ToList(),
-                WindowConstructions = Mapper.Map<IEnumerable<Core.WindowConstruction>>(WindowConstructions.Cast<WindowConstruction>()).ToList(),
-                StructureDefinitions = Mapper.Map<IEnumerable<Core.StructureInformation>>(StructureDefinitions.Cast<StructureInformation>()).ToList(),
+                OpaqueMaterials = mapper.Map<IEnumerable<Core.OpaqueMaterial>>(OpaqueMaterials.Cast<OpaqueMaterial>()).ToList(),
+                GlazingMaterials = mapper.Map<IEnumerable<Core.GlazingMaterial>>(GlazingMaterials.Cast<GlazingMaterial>()).ToList(),
+                GasMaterials = mapper.Map<IEnumerable<Core.GasMaterial>>(GasMaterials.Cast<GasMaterial>()).ToList(),
+                OpaqueConstructions = mapper.Map<IEnumerable<Core.OpaqueConstruction>>(OpaqueConstructions.Cast<OpaqueConstruction>()).ToList(),
+                WindowConstructions = mapper.Map<IEnumerable<Core.WindowConstruction>>(WindowConstructions.Cast<WindowConstruction>()).ToList(),
+                StructureDefinitions = mapper.Map<IEnumerable<Core.StructureInformation>>(StructureDefinitions.Cast<StructureInformation>()).ToList(),
                 DaySchedules = new List<Core.DaySchedule>(),
                 WeekSchedules = new List<Core.WeekSchedule>(),
                 YearSchedules = new List<Core.YearSchedule>()
@@ -568,14 +576,14 @@ namespace Basilisk.Controls.InterfaceModels
                 }
             }
 
-            newLib.DaySchedules = Mapper.Map<IEnumerable<Core.DaySchedule>>(DaySchedules.Cast<DaySchedule>()).ToList();
+            newLib.DaySchedules = mapper.Map<IEnumerable<Core.DaySchedule>>(DaySchedules.Cast<DaySchedule>()).ToList();
             var dayDict = newLib.DaySchedules.ToDictionary(s => s.Name);
             newLib.WeekSchedules =
                 WeekSchedules
                 .Cast<WeekSchedule>()
                 .Select(week =>
                 {
-                    var mapped = Mapper.Map<Core.WeekSchedule>(week);
+                    var mapped = mapper.Map<Core.WeekSchedule>(week);
                     if (week.Days == null)
                     {
                         throw new InvalidOperationException("A week with a null days collection cannot be saved.");
@@ -594,7 +602,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<YearSchedule>()
                 .Select(year =>
                 {
-                    var mapped = Mapper.Map<Core.YearSchedule>(year);
+                    var mapped = mapper.Map<Core.YearSchedule>(year);
                     if (year.Parts == null)
                     {
                         throw new InvalidOperationException("Internal error: A year with a null parts collection cannot be saved.");
@@ -604,7 +612,7 @@ namespace Basilisk.Controls.InterfaceModels
                         .Parts
                         .Select(part =>
                         {
-                            var mappedPart = Mapper.Map<Core.YearSchedulePart>(part);
+                            var mappedPart = mapper.Map<Core.YearSchedulePart>(part);
                             mappedPart.Schedule = weekDict[part.Schedule.Name];
                             return mappedPart;
                         })
@@ -622,7 +630,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<ZoneConstructions>()
                 .Select(zc =>
                 {
-                    var res = Mapper.Map<Core.ZoneConstructions>(zc);
+                    var res = mapper.Map<Core.ZoneConstructions>(zc);
                     res.Facade = knownOpaqueConstructions.GetValueOrDefault(zc.Facade?.Name);
                     res.Ground = knownOpaqueConstructions.GetValueOrDefault(zc.Ground?.Name);
                     res.Partition = knownOpaqueConstructions.GetValueOrDefault(zc.Partition?.Name);
@@ -636,7 +644,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<ZoneLoads>()
                 .Select(zl =>
                 {
-                    var res = Mapper.Map<Core.ZoneLoads>(zl);
+                    var res = mapper.Map<Core.ZoneLoads>(zl);
                     res.OccupancySchedule = knownSchedules.GetValueOrDefault(zl.OccupancySchedule?.Name);
                     res.LightsAvailabilitySchedule = knownSchedules.GetValueOrDefault(zl.LightsAvailabilitySchedule?.Name);
                     res.EquipmentAvailabilitySchedule = knownSchedules.GetValueOrDefault(zl.EquipmentAvailabilitySchedule?.Name);
@@ -648,7 +656,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<ZoneConditioning>()
                 .Select(zc =>
                 {
-                    var res = Mapper.Map<Core.ZoneConditioning>(zc);
+                    var res = mapper.Map<Core.ZoneConditioning>(zc);
                     res.HeatingSchedule = knownSchedules.GetValueOrDefault(zc.HeatingSchedule?.Name);
                     res.CoolingSchedule = knownSchedules.GetValueOrDefault(zc.CoolingSchedule?.Name);
                     res.MechVentSchedule = knownSchedules.GetValueOrDefault(zc.MechVentSchedule?.Name);
@@ -660,7 +668,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<ZoneVentilation>()
                 .Select(v =>
                 {
-                    var res = Mapper.Map<Core.ZoneVentilation>(v);
+                    var res = mapper.Map<Core.ZoneVentilation>(v);
                     res.ScheduledVentilationSchedule = knownSchedules.GetValueOrDefault(v.ScheduledVentilationSchedule?.Name);
                     res.NatVentSchedule = knownSchedules.GetValueOrDefault(v.NatVentSchedule?.Name);
                     return res;
@@ -671,7 +679,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<ZoneHotWater>()
                 .Select(w =>
                 {
-                    var res = Mapper.Map<Core.DomesticHotWaterSettings>(w);
+                    var res = mapper.Map<Core.DomesticHotWaterSettings>(w);
                     res.WaterSchedule = knownSchedules.GetValueOrDefault(w.WaterSchedule?.Name);
                     return res;
                 })
@@ -682,7 +690,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<WindowSettings>()
                 .Select(w =>
                 {
-                    var res = Mapper.Map<Core.WindowSettings>(w);
+                    var res = mapper.Map<Core.WindowSettings>(w);
                     res.AfnWindowAvailability = knownSchedules.GetValueOrDefault(w.AfnWindowAvailability?.Name);
                     res.ZoneMixingAvailabilitySchedule = knownSchedules.GetValueOrDefault(w.ZoneMixingAvailabilitySchedule?.Name);
                     res.ShadingSystemAvailabilitySchedule = knownSchedules.GetValueOrDefault(w.ShadingSystemAvailabilitySchedule?.Name);
@@ -701,7 +709,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<ZoneDefinition>()
                 .Select(z =>
                 {
-                    var res = Mapper.Map<Core.ZoneDefinition>(z);
+                    var res = mapper.Map<Core.ZoneDefinition>(z);
                     res.Constructions = knownConstructionSets.GetValueOrDefault(z.Constructions?.Name);
                     res.Loads = knownLoads.GetValueOrDefault(z.Loads?.Name);
                     res.Conditioning = knownConditionings.GetValueOrDefault(z.Conditioning?.Name);
@@ -719,7 +727,7 @@ namespace Basilisk.Controls.InterfaceModels
                 .Cast<BuildingTemplate>()
                 .Select(t =>
                 {
-                    var res = Mapper.Map<Core.BuildingTemplate>(t);
+                    var res = mapper.Map<Core.BuildingTemplate>(t);
                     res.Core = knownZones.GetValueOrDefault(t.Core?.Name);
                     res.Perimeter = knownZones.GetValueOrDefault(t.Perimeter?.Name);
                     res.Structure = knownStructures.GetValueOrDefault(t.Structure?.Name);
@@ -758,7 +766,7 @@ namespace Basilisk.Controls.InterfaceModels
             where DestT : LayeredConstruction
             where MaterialT : Core.MaterialBase
         {
-            var dest = Mapper.Map<DestT>(src);
+            var dest = mapper.Map<DestT>(src);
             var layers =
                 src
                 .Layers
@@ -820,7 +828,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         private static StructureInformation BuildStructureDefinition(Core.StructureInformation src, Dictionary<string, LibraryComponent> matDict)
         {
-            var dest = Mapper.Map<StructureInformation>(src);
+            var dest = mapper.Map<StructureInformation>(src);
             var massRatios =
                 src
                 .MassRatios
@@ -893,7 +901,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         private static WindowSettings BuildWindowSettings(Core.WindowSettings src, Dictionary<string, WindowConstruction> windowsConstructions, Dictionary<string, YearSchedule> years)
         {
-            var dest = Mapper.Map<WindowSettings>(src);
+            var dest = mapper.Map<WindowSettings>(src);
             dest.AfnWindowAvailability = years.GetValueOrDefault(src.AfnWindowAvailability?.Name);
             dest.ZoneMixingAvailabilitySchedule = years.GetValueOrDefault(src.ZoneMixingAvailabilitySchedule?.Name);
             dest.ShadingSystemAvailabilitySchedule = years.GetValueOrDefault(src.ShadingSystemAvailabilitySchedule?.Name);
@@ -903,7 +911,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         private static ZoneConstructions BuildZoneConstructions(Core.ZoneConstructions src, Dictionary<string, OpaqueConstruction> constructions)
         {
-            var dest = Mapper.Map<ZoneConstructions>(src);
+            var dest = mapper.Map<ZoneConstructions>(src);
             dest.Facade = constructions.GetValueOrDefault(src.Facade?.Name);
             dest.Ground = constructions.GetValueOrDefault(src.Ground?.Name);
             dest.Partition = constructions.GetValueOrDefault(src.Partition?.Name);
@@ -914,7 +922,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         private static ZoneLoads BuildZoneLoads(Core.ZoneLoads src, Dictionary<string, YearSchedule> schedules)
         {
-            var dest = Mapper.Map<ZoneLoads>(src);
+            var dest = mapper.Map<ZoneLoads>(src);
             dest.OccupancySchedule = schedules.GetValueOrDefault(src.OccupancySchedule?.Name);
             dest.LightsAvailabilitySchedule = schedules.GetValueOrDefault(src.LightsAvailabilitySchedule?.Name);
             dest.EquipmentAvailabilitySchedule = schedules.GetValueOrDefault(src.EquipmentAvailabilitySchedule?.Name);
@@ -923,7 +931,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         private static ZoneConditioning BuildZoneConditionings(Core.ZoneConditioning src, Dictionary<string, YearSchedule> schedules)
         {
-            var dest = Mapper.Map<ZoneConditioning>(src);
+            var dest = mapper.Map<ZoneConditioning>(src);
             dest.HeatingSchedule = schedules.GetValueOrDefault(src.HeatingSchedule?.Name);
             dest.CoolingSchedule = schedules.GetValueOrDefault(src.CoolingSchedule?.Name);
             dest.MechVentSchedule = schedules.GetValueOrDefault(src.MechVentSchedule?.Name);
@@ -932,7 +940,7 @@ namespace Basilisk.Controls.InterfaceModels
         
         private static ZoneVentilation BuildVentilation(Core.ZoneVentilation src, Dictionary<string, YearSchedule> schedules)
         {
-            var dest = Mapper.Map<ZoneVentilation>(src);
+            var dest = mapper.Map<ZoneVentilation>(src);
             dest.ScheduledVentilationSchedule = schedules.GetValueOrDefault(src.ScheduledVentilationSchedule?.Name);
             dest.NatVentSchedule = schedules.GetValueOrDefault(src.NatVentSchedule?.Name);
             return dest;
@@ -940,7 +948,7 @@ namespace Basilisk.Controls.InterfaceModels
 
         private static ZoneHotWater BuildHotWater(Core.DomesticHotWaterSettings src, Dictionary<string, YearSchedule> schedules)
         {
-            var dest = Mapper.Map<ZoneHotWater>(src);
+            var dest = mapper.Map<ZoneHotWater>(src);
             dest.WaterSchedule = schedules.GetValueOrDefault(src.WaterSchedule?.Name);
             return dest;
         }

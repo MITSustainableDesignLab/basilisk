@@ -14,11 +14,13 @@ namespace Basilisk.Controls.InterfaceModels
 {
     public abstract class LibraryComponent : INotifyPropertyChanged
     {
+        private static IMapper mapper;
+
         private string name;
 
         static LibraryComponent()
         {
-            Mapper.CreateMap<Core.LibraryComponent, LibraryComponent>();
+            mapper = new MapperConfiguration(cfg => cfg.CreateMap<Core.LibraryComponent, LibraryComponent>()).CreateMapper();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
