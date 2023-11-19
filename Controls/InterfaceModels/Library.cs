@@ -21,7 +21,8 @@ namespace Basilisk.Controls.InterfaceModels
             var config = new MapperConfiguration(cfg =>
             {
                 cfg
-                    .CreateMap<Core.LibraryComponent, LibraryComponent>();
+                    .CreateMap<Core.LibraryComponent, LibraryComponent>()
+                    .ForMember(dest => dest.AllReferencedComponents, opt => opt.Ignore());
                 cfg
                     .CreateMap<Core.MaterialBase, MaterialBase>()
                     .IncludeBase<Core.LibraryComponent, LibraryComponent>();
