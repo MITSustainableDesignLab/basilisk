@@ -13,7 +13,8 @@
         Height="850" Width="1000"
         Closing="Window_Closing"
         x:Name="top"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="icon32.ico">
     <!-- HOW TO USE BINDING DIAGNOSTICS:
          Use in binding expression like {Binding Path=Whatever, diag:PresentationTraceSources.TraceLevel=High} -->
     <Window.DataContext>

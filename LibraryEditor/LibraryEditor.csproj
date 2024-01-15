@@ -10,11 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="icon32.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Controls\Controls.csproj" />
     <ProjectReference Include="..\Legacy\Legacy.csproj" />
   </ItemGroup>
   
   <ItemGroup>
+    <Resource Include="icon32.ico" />
     <Resource Include="Icons\icon-newlib-full.png" />
     <Resource Include="Icons\icon-add-full.png" />
     <Resource Include="Icons\icon-delete-full.png" />

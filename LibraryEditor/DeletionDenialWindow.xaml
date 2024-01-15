@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Cannot delete component"
         Width="360" Height="350"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="icon32.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

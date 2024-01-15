@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Height="300" Width="300"
         Title="{Binding EditorTitle, Mode=OneTime}"
-        local:DialogCloser.DialogResult="{Binding DialogResult}">
+        local:DialogCloser.DialogResult="{Binding DialogResult}"
+        Icon="icon32.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

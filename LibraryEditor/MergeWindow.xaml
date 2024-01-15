@@ -10,7 +10,8 @@
         Height="400"
         Width="515"
         ResizeMode="NoResize"
-        local:DialogCloser.DialogResult="{Binding PerformMerge}">
+        local:DialogCloser.DialogResult="{Binding PerformMerge}"
+        Icon="icon32.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

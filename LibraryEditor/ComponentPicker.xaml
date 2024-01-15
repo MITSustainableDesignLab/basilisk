@@ -9,7 +9,8 @@
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="Select component" Height="300" Width="300"
-        local:DialogCloser.DialogResult="{Binding DialogResult}">
+        local:DialogCloser.DialogResult="{Binding DialogResult}"
+        Icon="icon32.ico">
     <Window.DataContext>
         <vm:ComponentPickerViewModel />
     </Window.DataContext>
