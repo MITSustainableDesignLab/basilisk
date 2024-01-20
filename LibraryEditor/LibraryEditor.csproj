@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -29,19 +29,5 @@
     <Resource Include="Icons\icon-save-full.png" />
     <Resource Include="Icons\icon-saveas-full.png" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="Copy &quot;$(IntermediateOutputPath)apphost.exe&quot; &quot;$(OutDir)$(AssemblyName).exe&quot;" />
-  </Target>
-
-  <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeAppHostExe</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-
-  <Target Name="IncludeAppHostExe">
-    <ItemGroup>
-      <BuildOutputInPackage Include="$(OutDir)$(AssemblyName).exe" />
-	</ItemGroup>
-  </Target>
 
 </Project>
