@@ -18,6 +18,7 @@ public static class TypeExtensions
 
         foreach (var prop in type.GetProperties())
         {
+            if (!prop.CanWrite) { continue; }
             if (localDefaults.TryGetValue(prop.Name, out var def) ||
                 sourceDefaults.TryGetValue(prop.Name, out def))
             {
